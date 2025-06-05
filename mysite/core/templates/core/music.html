@@ -1,0 +1,278 @@
+{% extends "base.html" %}
+{% load static %}
+{% load tailwind_filters %}
+{% block title %}Music{% endblock  %}
+{% block content %}
+    {% include "partials/nav.html" %}
+    <style>
+        .swiper {
+            width: 100%;
+            padding: 0.5rem 0.5rem;
+        }
+        .swiper-slide {
+           width:150px;
+           height:auto;
+        }
+        .swiper-button-next,
+        .swiper-button-prev {
+            color:rgb(255, 255, 255);
+            background: rgba(0, 0, 0, 0.34);
+            padding: 15px;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+        }
+        .swiper-button-next::after,
+        .swiper-button-prev::after {
+            font-size: 1.2rem;
+        }
+    </style>
+
+    <!-- Music-header -->
+    <div class="px-[0px] md:px-0 w-[100%] md:w-[80%] m-auto">
+        <div class="w-[100%] px-[0.5rem]">
+            <div class="border-b border-slate-300 w-full flex justify-start items-start">
+                <div class="flex gap-[20px]">
+                    <p class="mobile-back-btn">
+                        <a class="uppercase text-[13px] no-underline font-semibold text-[#3b5361] text-nowrap" href="{% url 'home' %}">
+                            <i class="fa-solid fa-house-chimney"></i>
+                            Home
+                        </a>
+                    </p>
+                    <div class="dropdown">
+                        <button id="albumTrigger1" class="uppercase text-[13px] no-underline font-semibold text-[#3b5361] text-nowrap" type="button">
+                            <i class="fa-solid fa-plus-circle"></i>
+                            Album
+                        </button>
+                         <!-- Modal -->
+                         <div class="hidden fixed top-0 left-0 w-[100%] bg-[#000000] bg-opacity-20 h-[100vh] z-[1000]" id="albumTrigger1DropDown1">
+                            <div class="w-[100%] md:w-[50%] m-auto fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] bg-slate-50 shadow rounded-[1rem]">
+                                <div class="">
+                                    <div class="flex justify-between items-center border-b border-slate-200 p-[1rem]">
+                                        <h1 class="text-[23px] font-medium text-slate-700" id="exampleModalLabel">
+                                            <i class="fa-solid fa-headphones"></i>
+                                            Create an Album
+                                        </h1>
+                                        <button type="button" id="closeBtn" class="btn-close text-[18px]" >
+                                            <i class="fa-solid fa-close"></i>
+                                        </button>
+                                    </div>
+                                    <div class="p-[1rem]">
+                                        <form action="" method="post" enctype="multipart/form-data">
+                                            {% csrf_token %}
+                                            {{ a_form|crispy }}
+                                            <input type="hidden" name="a_form" value="a_form">
+                                            <div class="md:flex gap-[10px] justify-center items-center flex-row">
+                                                <input type="submit" name="a_form" value="Upload Album" class="w-full cursor-pointer text-slate-50 hover:bg-slate-500 bg-[#3D5361] rounded-full py-[10px] px-[5rem]">
+                                                <button type="button" class="text-[#3D5361] w-full border border-[#3D5361] border-opacity-20 rounded-full my-[10px] md:my-0 py-[10px] px-[5rem]">Close</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                       
+                    </div>
+                    <div class="">
+                        <button id="albumTrigger2" type="button" class="uppercase text-[13px] no-underline font-semibold text-[#3b5361] text-nowrap">
+                            <i class="fa-solid fa-music "></i>
+                            Add Artist
+                        </button>
+                        <!-- Modal -->
+                        <div class="hidden fixed top-0 left-0 w-[100%] bg-[#000000] bg-opacity-20 h-[100vh] z-[1000]" id="albumTrigger1DropDown2">
+                            <div class="w-[100%] md:w-[50%] m-auto fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] bg-slate-50 shadow rounded-[1rem]">
+                                <div class="">
+                                    <div class="flex justify-between items-center border-b border-slate-200 p-[1rem]">
+                                        <h1 class="text-[23px] font-medium text-slate-700" id="exampleModalLabel">
+                                            <i class="fa-solid fa-headphones"></i>
+                                            Add an Artist
+                                        </h1>
+                                        <button type="button" id="closeBtn" class="btn-close text-[18px]" >
+                                            <i class="fa-solid fa-close"></i>
+                                        </button>
+                                    </div>
+                                    <div class="p-[1rem]">
+                                        <form action="" method="post" enctype="multipart/form-data">
+                                            {% csrf_token %}
+                                            {{ form|crispy }}
+                                            <input type="hidden" name="form" value="form">
+                                            <div class="md:flex gap-[10px] justify-center items-center flex-row">
+                                                <input type="submit" value="Post Artist" class="w-full cursor-pointer text-slate-50 hover:bg-slate-500 bg-[#3D5361] rounded-full py-[10px] px-[5rem]">
+                                                <button type="button" class="text-[#3D5361] w-full border border-[#3D5361] my-[10px] md:my-0 border-opacity-20 rounded-full py-[10px] px-[5rem]">Close</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+     
+
+            <!-- Music-main-section -->
+            <div class="mt-[2rem]">
+                <div class="flex justify-between">
+                    <h2 class="text-[18px] md:text-[22px] ml-[0.5rem] font-medium">Popular Artists</h2>
+                    <p class="text-[#fff]">
+                        <a class="no-underline text-[#ec2929a9] font-semibold text-[14px] font-verdana  text-nowrap" href="{% url "all-artist" %}">Show all
+                            <i class="fa-solid fa-arrow-up-right-from-square ml-[0.5rem]"></i>
+                        </a>
+                    </p>
+                </div>
+                <div class="swiper mySwiper bg-white">
+                    <div class="swiper-wrapper">
+                        {% for artist_upload in artist_uploads %}
+                            <div class="swiper-slide w-[100%] min-w-[250px] text-[#3b5361] shadow rounded-[10px]">
+                                <div class="relative rounded-[10px] hover:bg-slate-200 p-[3px]">
+                                    <div class="absolute right-[10px] top-[10px] bg-yellow-300 flex justify-center items-center w-[40px] h-[40px] rounded-full">
+                                        <a href="{% url 'artist-detail' artist_upload.id %}" class="no-underline hover:text-slate-700 text-slate-800"><i class="fa-solid fa-play"></i></a>
+                                    </div>
+                                    <div class="">
+                                        <div class="h-[150px] rounded-[50%] w-[150px]">
+                                            {% if artist_upload.artist_profile %}
+                                                <img src="{{ artist_upload.artist_profile.url }}" class="rounded-[50%] w-[150px] h-[150px] object-cover object-center" alt="...">
+                                            {% endif %}
+                                        </div>
+                                        <div class="px-[0.5rem]">
+                                            <h3 class="text-slate-700 text-[18px]">{{ artist_upload.artist }}</h3>
+                                            <p class="text-rose-500 font-medium text-[14px]">{{ artist_upload.artist_genre }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>    
+                        {% endfor %}                 
+                    </div>
+                    <!-- Add navigation arrows -->
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                </div>
+            </div>
+
+            <div class="mt-[2rem]">
+                <div class="flex justify-between">
+                    <h2 class="text-[18px] md:text-[22px] ml-[0.5rem] font-medium">Popular albums and singles</h2>
+                    <p class="text-[#fff]">
+                        <a class="no-underline text-[#ec2929a9] font-semibold text-[14px] font-verdana  text-nowrap" href="{% url "all-album" %}">
+                            Show all
+                            <i class="fa-solid fa-arrow-up-right-from-square ml-[0.5rem]"></i>
+                        </a>
+                    </p>
+                </div>
+                <div class="swiper mySwiper bg-white">
+                    <div class="swiper-wrapper">
+                        {% for album in albums %}
+                            <div class="swiper-slide no-underline w-[100%] min-w-[250px] text-[#3b5361] shadow rounded-[10px]">
+                                <div class="relative rounded-[10px] hover:bg-slate-200 p-[3px]">
+                                    <div class="absolute right-[10px] top-[10px] bg-yellow-300 flex justify-center items-center w-[40px] h-[40px] rounded-full ">
+                                        <a href="{% url "album-detail" album.id %}" class="no-underline hover:text-slate-700 text-slate-800"><i class="fa-solid fa-play "></i></a>
+                                    </div>
+                                    <div class="">
+                                        <div class="h-[150px] rounded-[50%] w-[150px]">
+                                            {% if album.cover_image %}
+                                                <img src="{{ album.cover_image.url }}" class="rounded-[10px] w-[150px] h-[150px] object-cover object-center" alt="...">
+                                            {% endif %}
+                                        </div>
+                                        <div class="px-[0.5rem]">
+                                            <h3 class="text-slate-700 text-[18px]">{{ album.title }}</h3>
+                                            <p class="text-rose-500 font-medium text-[14px]">{{ album.artist }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>    
+                        {% endfor %}                 
+                    </div>
+                    <!-- Add navigation arrows -->
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include "partials/footer.html" %}
+
+    <!-- Add Swiper JS -->
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script>
+        const swiper = new Swiper('.mySwiper', {
+            slidesPerView: 'auto',
+            spaceBetween: 8,
+            centeredSlides: false,
+            grabCursor: true,
+            freeMode: true,
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            breakpoints: {
+                640: {
+                    spaceBetween: 8,
+                },
+                1024: {
+                    spaceBetween: 8,
+                },
+            },
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Album modals functionality
+            const albumTrigger1 = document.getElementById('albumTrigger1');
+            const albumDropDown1 = document.getElementById('albumTrigger1DropDown1');
+            const albumTrigger2 = document.getElementById('albumTrigger2');
+            const albumDropDown2 = document.getElementById('albumTrigger1DropDown2');
+            const closeBtns = document.querySelectorAll('.btn-close');
+    
+            // Add unique IDs to your HTML elements first
+            // Album Trigger 1 (Create Album)
+            if(albumTrigger1 && albumDropDown1) {
+                albumTrigger1.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    albumDropDown1.classList.toggle('hidden');
+                    albumDropDown2.classList.add('hidden');
+                });
+            }
+    
+            // Album Trigger 2 (Add Artist)
+            if(albumTrigger2 && albumDropDown2) {
+                albumTrigger2.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    albumDropDown2.classList.toggle('hidden');
+                    albumDropDown1.classList.add('hidden');
+                });
+            }
+    
+            // Close buttons
+            closeBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    albumDropDown1.classList.add('hidden');
+                    albumDropDown2.classList.add('hidden');
+                });
+            });
+    
+            // Close modals when clicking outside
+            document.addEventListener('click', function(e) {
+                if(!e.target.closest('.dropdown') && 
+                   !e.target.closest('#albumTrigger1DropDown1') &&
+                   !e.target.closest('#albumTrigger1DropDown2')) {
+                    albumDropDown1.classList.add('hidden');
+                    albumDropDown2.classList.add('hidden');
+                }
+            });
+    
+            // Close on escape key
+            document.addEventListener('keydown', function(e) {
+                if(e.key === 'Escape') {
+                    albumDropDown1.classList.add('hidden');
+                    albumDropDown2.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+    {% endblock content %}
+
+

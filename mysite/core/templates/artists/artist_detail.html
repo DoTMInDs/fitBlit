@@ -1,0 +1,258 @@
+{% extends "base.html" %}
+{% load static %}
+{% load tailwind_filters %}
+{% block title %}artist{% endblock  %}
+{% block content %}
+    {% include "partials/nav.html" %}
+    <!-- Music-header -->
+    <div class="px-[0.5rem] md:px-0 w-[100%] md:w-[80%] m-auto">
+        <div class="">
+            <button onclick="goBack()" class="mb-[1rem] rounded-full text-[#3D5361]">
+                <i class="fa-solid fa-circle-arrow-left mr-[0.2rem]"></i>
+                Back
+            </button>
+            <div class="border-b-[1px] border-slate-200 w-full flex justify-start items-start ">
+                <div class="flex gap-[20px]">
+                    <p class="mobile-back-btn">
+                        <a class="uppercase text-[13px] no-underline font-semibold text-[#3b5361] text-nowrap " href="{% url 'music-page' %}">
+                            <i class="fa-solid fa-house"></i>
+                            Home
+                        </a>
+                    </p>
+                    <div class="relative">
+                        <button id="musicBtn" class="uppercase text-[13px] no-underline font-semibold text-[#3b5361] text-nowrap dropdown-toggle" type="button">
+                            <i class="fa-solid fa-headphones-simple"></i>
+                            My Music
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </button>
+                        <ul id="musicDropDown" class="hidden absolute top-[30px] bg-slate-50 rounded p-[0.3rem] w-[150px] border border-slate-200">
+                            <li class="p-[0.5rem] hover:bg-slate-100 text-slate-500"><a class="text-[14px]" href="{% url "all-album" %}">All Album</a></li>
+                            <li class="p-[0.5rem] hover:bg-slate-100 text-slate-500"><a class="text-[14px]" href="{% url 'all-songs' %}">All Song</a></li>
+                        </ul>
+                    </div>
+                    <div class="">
+                        {% if artist_uploads.user == user %}
+                        <button id="addSongBtn" type="button" class="text-nowrap text-[13px]  text-[#3D5361]">
+                            <i class="fa-solid fa-music"></i>
+                            Add Song
+                        </button>
+                        
+                        <!-- Modal -->
+                        <div id="addSongDropdown" class="hidden fixed top-0 left-0 w-[100%] bg-[#000000] bg-opacity-20 h-[100vh] z-[1000]">
+                            <div class="w-[100%] md:w-[50%] m-auto fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] bg-slate-50 shadow rounded">
+                                <div class="">
+                                    <div class="flex justify-between items-center border-b border-slate-200 p-[1rem]">
+                                        <h1 class="text-[25px] text-slate-700" id="exampleModalLabel">
+                                            <i class="fa-solid fa-headphones"></i>
+                                            Post your song
+                                        </h1>
+                                        <button type="button" id="closeBtn" class="btn-close text-[18px]" >
+                                            <i class="fa-solid fa-close"></i>
+                                        </button>
+                                    </div>
+                                    <form action="" method="post" enctype="multipart/form-data" class="p-[1rem]">
+                                        {% csrf_token %}
+                                        {{ song_form|crispy }}
+                                        <input type="hidden" name="cover_image" value="cover_image">
+                                        <input type="hidden" name="song_form" value="song_form">
+                                        <div class="md:flex gap-[10px] justify-center items-center flex-row">
+                                            <input type="submit" value="Upload Song" class="w-[100%] m-auto text-[#fefefefe] cursor-pointer hover:bg-slate-500 transition duration-300 bg-[#3D5361] rounded-full py-[10px] px-[5rem]">
+                                            <button type="button" class="w-[100%] m-auto text-[#3D5361] border border-[#3D5361] my-[10px] md:my-0 border-opacity-20 rounded-full py-[10px] px-[5rem]">Cancel</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="mt-[1.5rem]" style="overflow: hidden;">
+                <div class="album_detail_bg rounded-t-[10px]">
+                    <div class="md:flex md:flex-row flex-col justify-start items-center w-[95%] gap-[3rem] h-[350px] p-[1.5rem]">
+                        <div class="w-[300px] md:w-[250px] h-[200px] md:h-[280px] rounded">
+                            {% if artist_uploads.artist_image %}
+                                <img src="{{ artist_uploads.artist_image.url }}" alt="" class="w-[100%] h-[100%] object-center object-cover rounded">
+                            {% endif %}
+                        </div>
+                        <div class="py-[0.5rem] flex flex-col">
+                            <p class="text-slate-50"><i class="fa-solid fa-circle-check" style="color: #00c291;"></i> {{ artist_uploads.artist_genre }}</p>
+                            <h1 class="text-[2rem] text-nowrap md:text-[6rem] font-bold text-slate-50">{{ artist_uploads.artist }}</h1>
+                            <div class="flex gap-[0.3rem] items-center">
+                                <div class="w-[30px] h-[30px] rounded-full">
+                                    <img src="{{ artist_uploads.artist_profile.url }}" alt="" class="w-[100%] rounded-full object-cover object-center">
+                                </div>
+                                <p  class="font-bold text-slate-50">{{ artist_uploads.artist_genre }} </p> 
+                                <span class="text-slate-50">- {{artist_uploads.posted_on|date:"Y"}} - {{ album.songs.count }} songs</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- Music-main-section -->
+    <div class="px-[0.5rem] md:px-0  w-[100%] md:w-[80%] m-auto">
+        <div class="p-[1rem] border border-slate-200 shadow rounded-b-[10px]">
+            <div class="mb-[1rem]">
+                <h2 class="text-[18px] font-bold">Popular Songs</h2>
+            </div>
+            {% for song in songs %}
+            <div class="">
+                <div id="songListBtn" class="no-underline text-slate-600 transition duration-300 mb-[0.5rem] hover:shadow-md cursor-pointer">
+                    <div class="flex gap-[7px]">
+                        <div class="w-[80px] h-[60px] rounded shadow">
+                            {% if song.cover_image %}
+                                <img src="{{ song.cover_image.url }}" alt="song cover image" class="w-[100%] h-[100%] rounded object-center object-cover">                            
+                            {% endif %} 
+                        </div>
+                        <div class="">
+                            <p class="text-[14px] m-0 p-0 font-medium text-[#3b5361]">{{ song.title }} - {{ song.genre }}</p>
+                            {% if song.album.title %}
+                                <p class="text-[13px] m-0 p-0 font-regular text-slate-500">{{ song.album.title }} - {{ song.album.release_date }}</p>
+                            {% else %}
+                                <p class="text-[13px] m-0 p-0 font-regular text-slate-500">Single - {{ song.artist}}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>   
+                <!-- Modal -->
+                <div class="fixed songDownList hidden top-0 left-0 w-full h-[100vh] bg-black bg-opacity-20" id="songListDropDown" >
+                    <div class="flex absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] border border-slate-200 rounded-[1rem] shadow-sm z-[40] w-[300px] mt-[0.5rem]">
+                        <div class="bg-slate-50 rounded border border-slate-200">
+                            <div class="">     
+                                <div class="shadow">
+                                    {% if song.artist.artist_profile %}
+                                    <img src="{{ song.artist.artist_profile.url }}" alt="artist profile" class="w-[100%] rounded">
+                                    {% endif %} 
+                                </div>
+                                <p class="mt-[10px] pl-[1rem] text-center text-red-500 font-regular">Start listening with a click or hit the Download button to download</p>
+                                <div class="p-[1rem]">
+                                    {% if song.song_file %}
+                                        <audio src="{{ song.song_file.url }}" controls class=""></audio>  
+                                    {% endif %}   
+                                </div>                                  
+                            </div>
+                            <div class="p-[1rem]">
+                                <div class="">
+                                    <div class="text-[16px] text-slate-700 text-nowrap flex justify-between max-w-[250px]">
+                                        <p class="">{{song.artist}} </p>
+                                        <span class="text-slate-500">{{song.artist.artist_genre}}</span>
+                                    </div>
+                                    <div class="text-[16px] text-slate-700 text-nowrap flex justify-between max-w-[250px]">
+                                        <p class="">{{song.album.title}} </p>
+                                        <span class="text-slate-500">{{song.album.release_date}}</span>
+                                    </div>
+                                    <div class="text-[16px] text-slate-700 text-nowrap flex justify-between max-w-[250px]">
+                                        <p class="">{{ song.title }} </p>
+                                        <span class="text-slate-500">{{ song.genre }}</span>
+                                    </div>
+                                </div>
+                                <div class="flex gap-[0.5rem] mt-[20px]">
+                                    <button type="button" class="closeSongBtn block py-[0.5rem] text-slate-600 w-[100%] bg-[#fcfcfc] border-opacity-20 border border-slate-400 rounded-full">Cancel</button>
+                                    <a class="block py-[0.5rem] w-[100%] hover:bg-slate-200 transition duration-300 flex justify-center items-center border-opacity-30 border border-slate-400 rounded-full" href="{{ song.song_file.url }}" download>
+                                        <button class="">
+                                            <i class="fa-solid fa-cloud-arrow-down"></i>
+                                            Download
+                                        </button>  
+                                    </a>                                       
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+   
+    {% include "partials/footer.html" %}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Music dropdown toggle
+            const musicBtn = document.getElementById('musicBtn');
+            const musicDropDown = document.getElementById('musicDropDown');
+            
+            if(musicBtn && musicDropDown) {
+                musicBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    musicDropDown.classList.toggle('hidden');
+                    // Close other dropdowns
+                    document.getElementById('addSongDropdown').classList.add('hidden');
+                    document.querySelectorAll('.song-dropdown').forEach(d => d.classList.add('hidden'));
+                });
+            }
+        
+            // Add Song dropdown toggle
+            const addSongBtn = document.getElementById('addSongBtn');
+            const addSongDropdown = document.getElementById('addSongDropdown');
+            const closeBtn = document.getElementById('closeBtn');
+        
+            if(addSongBtn && addSongDropdown) {
+                addSongBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    addSongDropdown.classList.toggle('hidden');
+                    // Close other dropdowns
+                    musicDropDown.classList.add('hidden');
+                    document.querySelectorAll('.song-dropdown').forEach(d => d.classList.add('hidden'));
+                });
+            }
+            // Close add song modal
+            if(closeBtn) {
+                closeBtn.addEventListener('click', function() {
+                    addSongDropdown.classList.add('hidden');
+                });
+            }
+        
+            // Song list dropdowns
+            document.querySelectorAll('#songListBtn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const dropdown = this.nextElementSibling;
+                    dropdown.classList.toggle('hidden');
+                    
+                    // Close other dropdowns
+                    musicDropDown.classList.add('hidden');
+                    addSongDropdown.classList.add('hidden');
+                    document.querySelectorAll('.song-dropdown').forEach(d => {
+                        if(d !== dropdown) d.classList.add('hidden');
+                    });
+                });
+            });
+
+            // Close button for song modals
+            document.querySelectorAll('.closeSongBtn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    this.closest('.songDownList').classList.add('hidden');
+                });
+            });
+        
+            // Close all dropdowns when clicking outside
+            document.addEventListener('click', function(e) {
+                if(!e.target.closest('.relative') && !e.target.closest('#addSongDropdown')) {
+                    musicDropDown.classList.add('hidden');
+                    addSongDropdown.classList.add('hidden');
+                    document.querySelectorAll('.song-dropdown').forEach(d => d.classList.add('hidden'));
+                }
+            });
+        
+            // Close dropdowns on window resize
+            window.addEventListener('resize', function() {
+                musicDropDown.classList.add('hidden');
+                addSongDropdown.classList.add('hidden');
+                document.querySelectorAll('.song-dropdown').forEach(d => d.classList.add('hidden'));
+            });
+        });
+        
+        // Back button functionality
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+{% endblock content %}
+
+

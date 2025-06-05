@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load static %}
+{% load tailwind_filters %}
+{% block title %}Dashboard{% endblock  %}
+{% block content %}
+    {% include "partials/nav.html" %}
+    <div class=" w-[100%]">
+        <div class="p-[20px] border border-slate-200 rounded  w-[100%] md:w-[80%] m-auto ">
+            <div class="mb-[1rem]">
+                Are you sure you want to delete <small class="font-bold text-[18px] text-rose-500 capitalize">{{ articles.title }}?</small> it will be permanently removed.
+                This action cannot be undone.
+            </div>
+            <form action="" method="post" clas="">
+                {% csrf_token %}
+                <div class="flex-col md:flex-row flex gap-[10px] justify-start items-start ">
+                    <button class="md:w-[40%] w-[100%] text-[#fefefefe] bg-[#3D5361] rounded-full py-[10px] px-[5rem]">
+                        <a href="{% url "user-dashboard" %}" class="text-[#fefefe] no-underline capitalize">cancel</a>
+                    </button>
+                    <button type="submit" class="md:w-[40%] w-[100%] text-[#fefefefe] bg-[#FF0000] rounded-full py-[10px] px-[5rem]"> Yes, Delete</button>
+                </div>
+            </form>
+        </div> 
+    </div>
+
+{% endblock %}

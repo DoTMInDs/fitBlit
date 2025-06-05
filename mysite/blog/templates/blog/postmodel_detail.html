@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% load static %}
+{% load tailwind_filters %}
+{% block title %}{{post_mod.title}}{% endblock  %}
+{% block content %}
+    {% include "partials/nav.html" %}
+    <div class=" flex justify-between h-full px-[0.5rem] md:px-0  w-[100%] md:w-[80%] m-auto mobile-padding mobile-profile-modal">
+       <div class="   w-[100%] px-[0.5rem]">
+           <button onclick="goBack()" class="mobile-back-btn mb-[2rem] rounded-full py-[6px] px-[18px] text-[#fefefefe] bg-[#3D5361] text-[13px]">
+               <i class="fa-solid fa-arrow-left mr-[0.5rem]"></i>
+               Back
+           </button>
+        <div class=" w-[100%] md:w-[100%] ">
+            <div class="shadow-md rounded border-t-[3px] border-[#3D5361]">
+                <div class="bg-[#fff] p-[10px]">
+                    <div class="flex justify-between items-center">
+                        <p class="font-medium text-nowrap">
+                            <i class="fa-solid fa-clock"></i>
+                            <small class="font-semibold text-[#EC9595]"> {{ post_mod.created_on }} </small></p>
+                        <p class="font-semibold text-nowrap">
+                            <i class="fa-regular fa-address-book"></i>
+                            Columnist: 
+                            <small class="font-medium text-[#EC9595] capitalize"> {{ user}} </small>
+                        </p>
+                    </div>
+                    <div class="py-[20px]">
+                        <h4 class=""> {{ post_mod.title }} </h4>
+                        <div class="flex gap-[5px] justify-start items-start md:flex-col">                               
+                            <p class="card-text flex items-center text-nowrap gap-[5px] text-[13px] text-[#444] font-semibold"><i class="fa-solid fa-user"></i> {{ post_mod.author }} </p> 
+                            <p class="text-[13px] text-[#444]n text-nowrap font-semibold">
+                                <i class="fa-solid fa-comments px-[2px]"></i>
+                                {{post_mod.post_comment_count}}
+                                 Comments
+                            </p>
+                            <p class="text-truncate"><small class="text-[12px] px-[8px] py-[3px] font-medium bg-[#3D5361] text-[#fcfcfcfc] rounded-full">{{ post_mod.slug }}</small></p>
+                        </div>
+                    </div>
+                    <div class="row gap-0">
+                        <div class="col-md-4">
+                            {% if post_mod.image %}
+                                <img src="{{post_mod.image.url}}" class="card-img-left" alt="...">
+                            {% endif %}
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <div class="flex items-center gap-[10px]">
+                                    <p class="card-text"><small>{{post_mod.content}}</small></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>                                   
+                </div> 
+            </div>
+           <div class="w-[100%] md:w-[100%] mt-[20px] mobile-profile-modal">
+                <div class=" md:mb-[0px] w-[100%] max-w-[500px]  mb-[20px] shadow-md rounded border-t-[3px] border-[#3D5361]">
+                    <div class=" bg-[#fff] p-[10px] relative h-[200px]  transition-all overflow-hidden">
+                        <p class="text-[#EC9595] font-semibold">
+                            Write your <i class="fa-solid fa-comments px-[2px]"></i> Comments 
+                        </p>
+                        <div class="py-[20px]">
+                            <form action="" method="post">
+                                {% csrf_token %}
+                                    {{ c_form|crispy }}
+                                <input type="submit" value="comment" class="text-[#fefefefe] bg-[#3D5361] w-full rounded-full py-[6px] px-[18px]">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-[20px] w-[100%]  shadow-md h-[350px] rounded border-t-[3px] border-[#3D5361]">
+                    <div class="bg-[#fff]  p-[10px] relative transition-all overflow-hidden">
+                        <p class="text-[#EC9595] font-semibold">
+                            <i class="fa-solid fa-comments px-[2px]"></i>
+                            View Comments: {{post_mod.post_comment_count}}  
+                        </p>
+                        <div  class=" bg-white">
+                            <div style="height:250px; overflow-y: scroll;" class="card card-body my-[20px]">
+                                {% for comment in post_mod.postcomment_set.all %}
+                                    <div class="flex gap-[20px]">
+                                        {% if comment.post_user.profilemodel.image %}
+                                            <img class="w-[30px] h-[30px] rounded-[50%] object-cover object-center mr-[10px]" src=" {{ comment.post_user.profilemodel.image.url }} " alt="">                                    
+                                        {% endif %}
+                                        <p class="flex flex-col text-[15px] text-[#6b6565]"> {{ comment.post_content }}
+                                            <small class="text-[10px] text-[#a09e9e] capitalize">{{ comment.post_user }}</small>
+                                        </p>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>    
+                    </div>
+                </div>
+           </div>
+        </div>
+       </div>        
+    </div>
+
+    {% include "partials/footer.html" %}
+{% endblock %}

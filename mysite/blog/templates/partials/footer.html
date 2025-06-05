@@ -1,0 +1,45 @@
+<footer class="bg-[#3D5361] text-[#fefefefe] py-[2rem] mt-[2rem] footer">
+    <div class="md:max-w-[80%] m-auto max-w-[100%] px-[2rem]"><h3 class="text-[1.5rem] font-bold">FitBlog</h3></div>
+    <div class="md:max-w-[80%] m-auto max-w-[100%] px-[2rem] flex justify-between ">
+        <div class=" ">
+            <div class="text-[1rem] flex flex-col gap-[10px]">
+                <div class="  ">
+                    <a href="{% url "news-page" %}" class="no-underline text-[#fefefe]">
+                        <i class="fa-solid fa-newspaper mr-[10px]"></i>
+                        Latest News
+                    </a>
+                </div>
+                <div class="  ">
+                   <a href="{% url "music-page" %}" class="no-underline text-[#fefefe]">
+                    <i class="fa-solid fa-music mr-[10px]"></i>
+                    Music
+                   </a>
+                </div>
+                <div class="  ">
+                   <a href="{% url "business-page" %}" class="no-underline text-[#fefefe]">
+                    <i class="fa-solid fa-cart-shopping mr-[10px]"></i>
+                    Market Store
+                   </a>
+                </div>
+               
+            </div>
+        </div>
+        <div class="flex flex-col  gap-[10px] ">
+            <a href="#!" class="flex items-center no-underline gap-[1rem] text-[#fefefefe]">
+                <i class="fa-brands fa-github fa-lg md:fa-xl"></i>
+                GitHub
+            </a>
+            <a href="#!" class="flex items-center no-underline gap-[1rem] text-[#fefefefe]">
+                <i class="fa-brands fa-linkedin fa-lg md:fa-xl"></i>
+                LinkedIn
+            </a>
+            <a href="#!" class="flex items-center no-underline gap-[1rem] text-[#fefefefe]">
+                <i class="fa-brands fa-gitlab fa-lg md:fa-xl"></i>
+                GitLab
+            </a>
+        </div>
+    </div>
+    <div class="container mx-auto mt-[2rem] text-center">
+        <p class="text-[0.875rem]">&copy; 2023 FitBlog. All rights reserved.</p>
+    </div>
+</footer>

@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+{% load static %}
+{% load tailwind_filters %}
+{% block title %}Album {{albums.artist}}{% endblock  %}
+{% block content %}
+    {% include "partials/nav.html" %}
+    <!-- Album-header -->
+    <div class="px-[0.5rem] md:px-0 w-[100%] md:w-[80%] m-auto mobile-padding">
+        <div class="mb-[80px]">
+            <button onclick="goBack()" class="mobile-back-btn rounded-full py-[6px] hover:shadow-md  px-[18px] text-[#3D5361]">
+                <i class="fa-solid fa-circle-arrow-left mr-[0.3rem]"></i>
+                Back
+            </button>
+            <div class="mt-[1.5rem]">
+                <div class="album_detail_bg rounded-t-[10px]">
+                    <div class="md:flex md:flex-row flex-col justify-start items-center w-[95%] gap-[3rem] h-[350px] p-[1.5rem]">
+                        <div class="w-[300px] md:w-[250px] h-[200px] md:h-[280px] rounded">
+                            {% if album.cover_image %}
+                                <img src="{{ album.cover_image.url }}" alt="" class="w-[100%] h-[100%] object-center object-cover rounded">
+                            {% endif %}
+                        </div>
+                        <div class="py-[0.5rem] flex flex-col">
+                            <p class="text-slate-50">Album</p>
+                            <h1 class="text-[2rem] text-nowrap md:text-[6rem] font-bold text-slate-50">{{ album.title }}</h1>
+                            <div class="flex gap-[0.3rem] items-center">
+                                <div class="w-[30px] h-[30px] rounded-full">
+                                    <img src="{{ album.artist.artist_profile.url }}" alt="" class="w-[100%] rounded-full object-cover object-center">
+                                </div>
+                                <p  class="text-slate-50 font-medium">{{album.artist}} </p> 
+                                <span class="text-slate-50">- {{album.release_date|date:"Y"}} - {{ album.songs.count }} songs</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-[#eee5e52d] rounded-b-[10px] border-opacity-20 border border-slate-600 p-[1rem] w-full shadow-sm">
+                    {% if album.artist.user == user %}
+                        <button id="albumSongBtn" type="button" class="hover:bg-slate-200 p-[0.5rem] rounded-full hover:shadow-md flex items-center text-[#3D5361]">
+                            <i class="fa-solid fa-plus-circle text-[1.5rem] text-slate-500 mr-[10px] "></i>
+                            Add Song
+                        </button>
+                    {% endif %}
+                    <div class=" mt-[1rem]">
+                        <div class="border-b border-slate-200 px-[1rem] flex justify-between items-center">
+                            <div class="flex gap-[1rem] md:gap-[3rem] items-center">
+                                <p class="font-bold text-[1.5rem] mt-[0.5rem]">#</p>
+                                <h5 class="text-[1.2rem] font-bold text-[#3D5361]"> Title</h5>
+                            </div>
+                            <div class="md:mr-[4.5rem] mr-[2rem]"><i class="fa-solid fa-clock"></i></div>
+                        </div>
+
+                        {% for song in album.songs.all %}
+                        <div class="flex justify-between items-center hover:bg-slate-100 ">
+                            <div class="flex items-center gap-[1rem] md:gap-[3rem] py-[1rem]">
+                                <div class="text-slate-500 hover:text-slate-700"><a href="#!"><i class="fa-solid fa-play"></i></a></div>
+                                <div class="">
+                                    <h5 class=" text-[1.2rem] font-bold text-[#3D5361] m-0 p-0"> {{song.title}}</h5>
+                                    <p class="text-[1rem] text-[#666666] m-0 p-0 hover:underline"><a href="#!" class="">@{{song.artist}}</a></p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-[1rem] md:gap-[3rem] py-[1rem]">
+                                <p class="text-slate-500 hover:text-slate-700"><a href="#!"><i class="fa-solid fa-download"></i></a></p>
+                                <p class="text-[0.9rem] font-bold text-[#666666]">{{song.album.release_date|date:"yy"}}</p>
+                                <p class="text-slate-500 hover:text-slate-700"><a href="#!"><i class="fa-solid fa-ellipsis"></i></a></p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+ 
+
+    <!-- Modal -->
+    <div id="albumSongDropDown" class="hidden fixed top-0 left-0 w-[100%] h-screen bg-[#000000] bg-opacity-20">
+        <div class="mobile-album-song w-[100%] md:w-[50%] m-auto fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] bg-slate-50 shadow rounded-[1rem]">
+            <div class="modal-content">
+                <div class="flex justify-between items-center mb-[1rem] border-b border-slate-200 p-[1rem]">
+                    <h1 class="modal-title " id="exampleModalLabel">Post your Song <i class="fa-solid fa-headphones ml-[10px] mt-[3px]"></i></h1>
+                    <button type="button" class="closeBtn cursor-pointer" >
+                        <i class="fa-solid fa-close text-[22px]"></i>
+                    </button>
+                </div>
+                <div class="p-[1rem]">
+                    <form action="" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ song_form|crispy }}
+                        <input type="hidden" name="song_form" value="song_form">
+                        <div class="md:flex gap-[10px] justify-center items-center flex-row">
+                            <button type="button" class=" w-[100%] text-[#3D5361] border border-[#3D5361] border-opacity-20 rounded-full my-[10px] md:my-0 py-[10px] px-[5rem]">Cancel</button>
+                            <input type="submit" value="Upload Song" class="w-[100%] cursor-pointer text-slate-50 hover:bg-slate-500 bg-slate-600 rounded-full py-[10px] px-[5rem]">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    {% include "partials/footer.html" %}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Album Song Modal Toggle
+            const albumSongBtn = document.getElementById('albumSongBtn');
+            const albumSongDropdown = document.getElementById('albumSongDropDown');
+            const closeBtns = document.querySelectorAll('.closeBtn');
+    
+            // Toggle modal with albumSongBtn
+            if(albumSongBtn && albumSongDropdown) {
+                albumSongBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    albumSongDropdown.classList.toggle('hidden');
+                });
+            }
+    
+            // Close modal with close button
+            closeBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    albumSongDropdown.classList.add('hidden');
+                });
+            });
+    
+            // Close modal on escape key
+            document.addEventListener('keydown', function(e) {
+                if(e.key === 'Escape') {
+                    albumSongDropdown.classList.add('hidden');
+                }
+            });
+        });
+    
+        // Back button functionality
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+{% endblock content %}
+

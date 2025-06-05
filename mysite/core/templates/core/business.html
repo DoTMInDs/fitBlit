@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+{% load static %}
+{% load tailwind_filters %}
+{% block title %}Buy & Sell{% endblock  %}
+{% block content %}
+    {% include "partials/nav.html" %}
+    <div class="px-[0px] md:px-0  w-[100%] md:w-[80%] m-auto">
+        <div class="w-[100%] px-[0.5rem]">
+            <div class="border-b border-slate-100 w-full flex justify-start items-start">
+                <div class="flex gap-[20px] ">
+                    <p class="">
+                        <a class="uppercase no-underline font-semibold text-[#3b5361] text-[13px] text-nowrap" href="{% url 'home' %}">
+                            <i class="fa-solid fa-house-chimney"></i>
+                            Home
+                        </a>
+                    </p>
+                    <div class="dropdown">
+                        <button id="productTrigger" class="uppercase  font-semibold text-[#3b5361] text-[13px] text-nowrap" type="button" >
+                            <i class="fa-solid fa-plus-circle"></i>
+                            product
+                        </button>
+                         <!-- Modal -->
+                         <div class="hidden fixed top-0 left-0 w-[100%] bg-[#000000] bg-opacity-20 h-[100vh] z-[1000]" id="productModal">
+                            <div class="w-[100%] md:w-[50%] m-auto bg-slate-50 shadow rounded max-h-[100vh] overflow-hidden ">
+                                <div class="h-[100vh] overflow-y-auto ">
+                                    <div class="flex justify-between items-center border-b border-slate-200 p-[1rem]">
+                                        <h1 class="text-[25px] text-slate-700" id="exampleModalLabel">
+                                            <i class="fa-solid fa-shopping-cart"></i>
+                                            Post your Ads
+                                        </h1>
+                                        <button type="button" class="modal-close text-[18px]" >
+                                            <i class="fa-solid fa-close"></i>
+                                        </button>
+                                    </div>
+                                    <div class="p-[1rem]">
+                                        {% if messages %}
+                                            {% for message in messages %}
+                                                <div class="alert text-rose-400 {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                                                    {{ message }}
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
+                                        <form action="" method="post" enctype="multipart/form-data">
+                                            {% csrf_token %}
+                                            {{ form|crispy }}
+                                            {{ image_formset.management_form }}
+                                            {% for imageform in image_formset %}
+                                                <div class="form-group">
+                                                    {{ imageform.image.label_tag }}
+                                                    {{ imageform.image }}
+                                                </div>
+                                            {% endfor %}
+                                            <input type="hidden" multiple name="images" value="images">
+                                            <input type="hidden" name="a_form" value="a_form">
+                                            <div class="mt-[1rem] mobile-profile-modal md:flex gap-[10px] justify-center items-center flex-row">
+                                                <input type="submit" name="a_form" value="Upload Product" class="w-[100%] m-auto text-[#3D5361] border border-[#3D5361] my-[10px] md:my-0 border-opacity-20 rounded-full py-[10px] px-[5rem]">
+                                                <button type="button" class="modal-close w-[100%] m-auto text-[#fefefefe] cursor-pointer hover:bg-slate-500 transition duration-300 bg-[#3D5361] rounded-full py-[10px] px-[5rem]">Close</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-full flex justify-between mt-[1rem]">
+                <div class="item-grid w-full">
+                    {% for item in items %}
+                        <div class="relative">
+                            <div class="absolute right-[10px] top-[10px]">
+                                {% if item.user == request.user %} 
+                                    <a href="{% url "delete-item" item.id %}" class="text-red-600 bg-rose-200 shadow-md rounded-[10px] p-[0.3rem] px-[0.8rem]">
+                                        <i class="fa-solid fa-trash-can"></i>                                         
+                                    </a> 
+                                {% endif %}
+                            </div>
+                            <div class="shadow-md rounded-[10px]">
+                                <div class="rounded-[10px]">
+                                    {% if item.image %}
+                                        <img src="{{ item.image.url }}" class="w-[100%] object-center object-cover rounded-[10px]" alt="item image">
+                                    {% endif %}
+                                </div>
+                                <div class="overflow-hidden p-[0.5rem]">
+                                    <h2 class="text-teal-500 text-[18px] font-bold ">GHS{{ item.price }}</h2>
+                                    <h3 class="text-slate-600 text-[15px] font-semibold">{{ item.title }}</h3>
+                                    <p class="text-[#3b5361] text-[14px] font-regular my-[0.4rem]">{{ item.description|truncatewords:8 }}</p>
+                                    <p class="text-[#3b5361] text-[13px] font-regular flex items-center gap-[0.5rem]">
+                                        <i class="fa fa-solid fa-location-dot"></i>
+                                        {{ item.location }}
+                                    </p>
+                                </div>
+                                <div class="flex items-center justify-between gap-[0.5rem] border-t border-slate-200 p-[0.5rem]">
+                                    <div class="flex gap-[3px] items-center">
+                                        <small class="bg-slate-200 p-[0.3rem] text-nowrap text-[#3b5361] rounded-[3px] text-[10px]">{{item.item_status}}</small>
+                                        {% if item.item_type %}
+                                            <small class="bg-slate-200 p-[0.3rem] text-nowrap text-[#3b5361] rounded-[3px] text-[10px]">{{item.item_type}}</small>
+                                            {% else %}
+                                            <small class=""></small>
+                                        {% endif %}
+                                    </div>
+                                    <button class="bg-slate-200 p-[0.3rem]  text-nowrap text-[#3b5361] rounded-[3px] text-[10px]">
+                                        <a href="{% url "item-detail" item.id %}" class="flex gap-[0.3rem] items-center no-underline text-[#3b5361] uppercase">
+                                            <i class="fa fa-solid fa-eye"></i>                                                    
+                                            View
+                                        </a>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}                 
+                </div>
+            </div>
+        </div>
+    </div>
+
+   
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Product Modal Toggle
+            const productBtn = document.getElementById('productTrigger');
+            const productModal = document.getElementById('productModal');
+            const closeBtns = document.querySelectorAll('.modal-close');
+    
+            // Toggle modal
+            if(productBtn && productModal) {
+                productBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    productModal.classList.toggle('hidden');
+                });
+            }
+    
+            // Close modal
+            closeBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    productModal.classList.add('hidden');
+                });
+            });
+    
+            // Close when clicking outside
+            document.addEventListener('click', function(e) {
+                if(!e.target.closest('#productModal') && 
+                   !e.target.closest('#productTrigger')) {
+                    productModal.classList.add('hidden');
+                }
+            });
+    
+            // Close on ESC key
+            document.addEventListener('keydown', function(e) {
+                if(e.key === 'Escape') {
+                    productModal.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+
+{% comment %} {% include "partials/footer.html" %} {% endcomment %}
+{% endblock content %}

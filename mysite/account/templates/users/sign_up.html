@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load static %}
+{% load tailwind_filters %}
+{% block title %}
+Register
+{% endblock  %}
+{% block content %}
+    <div class="flex justify-center items-center  w-full">
+        <form action="" method="post" class="md:w-[450px] w-[100%] p-[30px] rounded border border-slate-300 bg-slate-50  ">
+            <div class="">
+                <h1 class="text-[28px] text-slate-500 font-medium my-[20px] text-center">Sign Up</h1>
+            </div>
+            {% csrf_token %}
+            <div class="">
+                <div class="my-[1rem] border border-slate-300 rounded  bg-white flex items-center px-[1rem]">
+                    <i class="fa fa-regular fa-user text-slate-400"></i>
+                    <input type="text" id="id_username" name="username" class="py-[0.5rem] px-[10px] bg-transparent border-transparent outline-none w-full placeholder:text-slate-400" placeholder="Enter username..." required>
+                </div>
+                <div class="my-[1rem] border border-slate-300 rounded  bg-white flex items-center px-[1rem]">
+                    <i class="fa fa-regular fa-envelope text-slate-400"></i>
+                    <input type="email" id="id_email" name="email" class="py-[0.5rem] px-[10px] bg-transparent border-transparent outline-none w-full placeholder:text-slate-400" placeholder="Enter email..." required>
+                </div>
+                <div class="my-[1rem] border border-slate-300 rounded w-full bg-white flex items-center px-[1rem]">
+                    <i class="fa fa-solid fa-lock text-slate-400"></i>
+                    <input type="password" id="id_password1" name="password1" class=" bg-transparent border-transparent outline-none w-full py-[0.5rem] px-[10px] placeholder:text-slate-400" placeholder="Enter password..." required>
+                    <i id="toggleEye" class="fa fa-solid fa-eye-slash cursor-pointer text-slate-400" onclick="togglePassword1()"></i>
+                </div>
+                <div class="my-[1rem] border border-slate-300 rounded w-full bg-white flex items-center px-[1rem]">
+                    <i class="fa fa-solid fa-lock text-slate-400"></i>
+                    <input type="password" id="id_password2" name="password2" class=" bg-transparent border-transparent outline-none w-full py-[0.5rem] px-[10px] placeholder:text-slate-400" placeholder="Confirm password..." required>
+                    <i id="toggleEye2" class="fa fa-solid fa-eye-slash cursor-pointer text-slate-400" onclick="togglePassword2()"></i>
+                </div>
+            </div>   
+            <button type="submit" class="rounded text-[#fff] bg-slate-500 px-[30px] py-[10px] w-full mt-[30px]">Sign Up</button>
+            <p class=" py-[20px] text-gray-500 text-center">Already have an account? <a href="{% url "login" %}" class="text-rose-500  hover:text-[#595454]">LogIn</a></p>
+        </form>
+    </div>
+
+    <script>
+        function togglePassword1() {
+            const passwordInput1 = document.getElementById('id_password1');
+            const eyeIcon = document.querySelector('#toggleEye');
+    
+            if(passwordInput1.type === 'password') {
+                passwordInput1.type = 'text';
+                eyeIcon.classList.replace('fa-eye-slash', 'fa-eye');
+            } else {
+                passwordInput1.type = 'password';
+                eyeIcon.classList.replace('fa-eye', 'fa-eye-slash');
+            }
+        }
+    
+        function togglePassword2() {
+            const passwordInput2 = document.getElementById('id_password2');
+            const eyeIcon2 = document.querySelector('#toggleEye2');
+    
+            if(passwordInput2.type === 'password') {
+                passwordInput2.type = 'text';
+                eyeIcon2.classList.replace('fa-eye-slash', 'fa-eye');
+            } else {
+                passwordInput2.type = 'password';
+                eyeIcon2.classList.replace('fa-eye', 'fa-eye-slash');
+            }
+        }
+    </script>
+{% endblock  %}
+

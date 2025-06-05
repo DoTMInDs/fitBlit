@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load static %}
+{% load tailwind_filters %}
+{% block title %}sports detail{% endblock  %}
+{% block content %}
+    {% include "partials/nav.html" %}
+    <div class="mt-[12rem]">
+        <div class="container">
+            <h3>{{posts.title}}</h3>
+        </div>
+    </div>
+
+    {% include "partials/footer.html" %}
+{% endblock  %}

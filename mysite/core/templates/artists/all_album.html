@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load static %}
+{% load tailwind_filters %}
+{% block title %}all Artist{% endblock  %}
+{% block content %}
+    {% include "partials/nav.html" %}
+
+       <!-- Music-main-section -->
+       <div class="px-[0px] md:px-0 w-[100%] md:w-[80%] m-auto ">
+        <div class="w-[100%] ">
+            <button onclick="goBack()" class="rounded-full py-[6px] px-[18px] text-[#3D5361] text-[13px]">
+                <i class="fa-solid fa-circle-arrow-left mr-[0.5rem]"></i>
+                Back
+            </button>
+            <div class="flex justify-between ml-[0.5rem]">
+                <h2 class="text-[18px] font-bold">Popular Album</h2>
+            </div>
+
+            <div class="w-full">
+                <div class="music-grid">
+                    {% for album in albums %}
+                        <div class="relative rounded-[10px] shadow hover:bg-slate-200 p-[3px] ">
+                            <div class="absolute right-[10px] top-[10px] bg-yellow-300 flex justify-center items-center w-[40px] h-[40px] rounded-full ">
+                                <a href="{% url "album-detail" album.id %}" class="no-underline hover:text-slate-700 text-slate-800"><i class="fa-solid fa-play "></i></a>
+                            </div>
+                            <div class="">
+                                <div class="h-[200px] rounded-[10px] ">
+                                    {% if album.cover_image %}
+                                        <img src="{{ album.cover_image.url }}" class=" w-[100%] h-[100%] rounded-[10px] object-center object-cover" alt="...">
+                                    {% endif %}
+                                </div>
+                                <div class="px-[0.5rem]">
+                                    <h3 class="text-slate-700 text-[18px]">{{ album.title }}</h3>
+                                    <p class="text-rose-500 font-medium text-[14px]">{{ album.artist }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}                 
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include "partials/footer.html" %}
+{% endblock %}
+

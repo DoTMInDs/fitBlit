@@ -1,0 +1,89 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+html{
+    scroll-behavior: smooth;
+}
+body{
+    overflow-x: hidden;
+    font-family: 'Montserrat','Montserrat Alternates', 'Roboto', 'Quicksand','Outfit', sans-serif;
+}
+#staticBackdrop1 {
+    display: none;
+    z-index: 1000;
+}
+#staticBackdrop1.account {
+    display: block;
+}
+#staticBackdrop2 {
+    display: none;
+    z-index: 1000;
+}
+#staticBackdrop2.account2 {
+    display: block;
+}
+#postModal {
+    transition: opacity 0.3s ease;
+    z-index: 99999;
+}
+.hidden {
+    display: none !important;
+}
+.main-nav {
+    display: block;
+}
+.nav-acct-side .search-mobile{
+    display: flex;
+}
+@media screen and (max-width: 768px) {
+    .main-nav {
+        display: none;
+    }
+    .nav-acct-side .search-mobile{
+        display: none;
+    }
+    
+}
+
+.news-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(350px, 1fr));
+    gap: 1rem;
+}
+.dash-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(300px, 1fr));
+    gap: 1rem;
+}
+.item-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(280px, 1fr));
+    gap: 1rem;
+}
+.music-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(250px, 1fr));
+    gap: 1rem;
+}
+.album_detail_bg{
+    background: linear-gradient(rgb(61, 83, 97),rgb(82, 24, 24));
+    width: 100%;
+    height: 350px;
+    /* border-radius: 10px; */
+}
+.songHiddenDropDown {
+    display: none !important;
+}
+#musicDropDown {
+    z-index: 50;
+}
+#addSongDropdown {
+    z-index: 1000;
+}
+.song-dropdown {
+    position: relative;
+    z-index: 40;
+}
+

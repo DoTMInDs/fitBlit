@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% load static %}
+{% load tailwind_filters %}
+{% block title %}Items{% endblock  %}
+{% block content %}
+    {% include "partials/nav.html" %}
+
+       <!-- Music-main-section -->
+       <div class="px-[0px] md:px-0  w-[100%] md:w-[80%] m-auto mobile-padding">
+        <div class="w-[100%] px-[0.5rem]">
+            <button onclick="goBack()" class=" rounded-full pb-[0.5rem] ml-[0.3rem] text-[#3D5361] text-[13px] mobile-back-btn">
+                <i class="fa-solid fa-circle-arrow-left mr-[0.5rem]"></i>
+                Back
+            </button>
+            <div class="flex justify-between mobile-product-text">
+                <h2 class="text-[18px] font-bold">All Product</h2>
+            </div>
+
+            <div class="w-full flex justify-between mt-[1rem] mobile-ads-container">
+                <div class="item-grid w-full">
+                    {% for item in items %}
+                        <div class=" relative no-underline w-[100%]">
+                            <div class="absolute right-[10px] top-[10px]">
+                                {% if item.user == request.user %} 
+                                    <a href="{% url "delete-item" item.id %}" class="text-rose-600 shadow-md bg-rose-200 rounded-[10px] p-[0.3rem] px-[0.8rem]">
+                                        <i class="fa-solid fa-trash-can "></i>                                         
+                                    </a> 
+                                {% endif %}
+                            </div>
+                            <div class="rounded-[10px] shadow-md hover:shadow-lg transition duration-300">
+                                <div class="rounded-[10px]">
+                                    {% if item.image %}
+                                        <img src="{{ item.image.url }}" class="w-[100%] object-center object-cover rounded-[10px]" alt="item image">
+                                    {% endif %}
+                                </div>
+                                <div class=" overflow-hidden p-[0.5rem]">
+                                    <h2 class="text-teal-500 text-[18px] font-bold ">GHS{{ item.price }}</h2>
+                                    <h3 class="text-slate-600 text-[15px] font-semibold">{{ item.title }}</h3>
+                                    <p class="text-[#3b5361] text-[14px] font-regular">{{ item.content|truncatewords:8 }}</p>
+                                    <p class="text-[#3b5361] text-[13px] font-regular flex items-center gap-[0.5rem]">
+                                        <i class="fa fa-solid fa-location-dot"></i>
+                                        {{ item.location }}
+                                    </p>
+                                </div>
+                                <div class="flex items-center justify-between gap-[0.5rem] border-t border-slate-200 p-[0.5rem]">
+                                    <div class="flex gap-[3px] items-center">
+                                        <small class="bg-slate-200 p-[0.3rem] text-nowrap text-[#3b5361] rounded-[3px] text-[10px]">{{item.item_status}}</small>
+                                        {% if item.item_type %}
+                                            <small class="bg-slate-200 p-[0.3rem] text-nowrap text-[#3b5361] rounded-[3px] text-[10px]">{{item.item_type}}</small>
+                                            {% else %}
+                                            <small class=""></small>
+                                        {% endif %}
+                                    </div>
+                                    <button class="bg-slate-200 p-[0.3rem] flex gap-[0.3rem] items-center text-nowrap text-[#3b5361] rounded-[3px] text-[10px]">
+                                        <i class="fa fa-solid fa-eye"></i>
+                                        <a href="{% url "item-detail" item.id %}" class="no-underline text-[#3b5361] uppercase">View</a>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}                 
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include "partials/footer.html" %}
+{% endblock %}
+

@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+{% load static %}
+{% load tailwind_filters %}
+{% block title %}News{% endblock  %}
+{% block content %}
+    {% include "partials/nav.html" %}
+    <div class="px-[0.5rem] md:px-0  w-[100%] md:w-[80%] m-auto space_buttom">
+        <div class="flex gap-2">
+            <div class="w-[100%] mb-[30px] ">
+                <div class="bg-slate-100 shadow border border-slate-200 rounded">
+                    <h2 class="p-[5px] text-slate-500 text-[15px]">General News</h2> 
+                </div>
+                <div class="w-full flex justify-between mt-[1rem] ">
+                    <div class="news-grid w-full">
+                        {% for article in article_page_obj %}
+                            <div class="mb-[1rem] shadow-md rounded-[10px] ">
+                                <div class="p-[1rem]">
+                                    <h5 class="text-[18px] font-medium"> {{ article.title }} </h5> 
+                                    <div class="flex justify-between items-center mb-[1rem]">
+                                        <p class=" text-nowrap text-[14px] text-[#444] font-semibold">
+                                            <i class="fa-solid fa-clock"></i>
+                                            <small>{{article.dated_on|date:"M. d, Y" }}</small>
+                                        </p>
+                                        <p class="text-[13px] text-[#444] font-semibold text-nowrap">
+                                            <i class="fa-solid fa-comments px-[2px]"></i>
+                                            {{article.article_comment_count}}
+                                             Comments
+                                        </p>
+                                        <p class=" flex text-nowrap items-center gap-[5px] text-[13px] text-[#444] font-semibold">
+                                            <a href="{% url "profile" %}" class="hover:underline">
+                                                <i class="fa-solid fa-user"></i> 
+                                                {{ article.author }} 
+                                            </a>
+                                        </p> 
+                                    </div>
+                                    <div class=" flex gap-3" style="overflow:hidden;">
+                                        <div class="w-[100%] min-w-[100px] h-[80px] rounded shadow flex justify-center items-center">
+                                            {% if article.image %}
+                                                <img src="{{article.image.url}}" class="rounded w-[100px] h-[100%] object-center object-cover" alt="...">
+                                            {% endif %}
+                                        </div>
+                                        <p class="text-[18px] text-slate-700"><small >{{article.article_content|truncatewords:8}}</small></p>
+                                    </div>
+                                </div>
+                                <div class="border-t border-slate-200 p-[1rem] px-[1rem] pb-[1rem] flex justify-between items-center">
+                                    <button class="rounded-full py-[6px] px-[18px] hover:bg-slate-200 transition duration-200 text-slate-600">
+                                       <a href="{% url "blog-post-detail" article.id %}" class="">
+                                            <i class="fa-solid fa-eye mr-[0.5rem]"></i>
+                                            Detail
+                                       </a>
+                                    </button>                               
+                                    <div class="">
+                                        {% if article.author == request.user %}
+                                            <button class="w-[50px] h-[50px] rounded-[10px] shadow-md hover:bg-slate-200 transition duration-200">
+                                                <a href="{% url "user-dashboard-edit" article.id %}" class="flex justify-center items-center text-slate-600 rounded-full p-[0.5rem]">
+                                                    <i class="fa-regular fa-pen-to-square"></i>
+                                                </a>
+                                            </button>
+                                            <button class="w-[50px] h-[50px] rounded-[10px] shadow-md bg-rose-200 transition duration-200">
+                                                <a href="{% url "user-post-delete" article.id %}" class="flex justify-center items-center text-rose-600  rounded-full p-[0.3rem]">
+                                                    <i class="fa-solid fa-trash-can"></i>                                         
+                                                </a>
+                                            </button>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div> 
+                        {% endfor %}  
+                    </div>
+                </div>
+            </div>
+            <div class="md:block ">
+                <div class="min-w-[400px] w-[100%]">
+                    <div class=" bg-[#777777] rounded">
+                        <h2 class="p-[5px] text-[#fefefefe] text-[15px]">Spotlight</h2>
+                    </div>
+                    <div class=" bg-[#ffffff] mt-[1rem]">
+                        <div class="flex flex-col w-full">
+                            {% for blog_post in posts %}
+                                <a href="{% url "blog-postmodel-detail" blog_post.id %}" class="flex link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
+                                    <div class="shadow rounded-md w-full mt-[1rem]">
+                                        <div class="">
+                                            {% if blog_post.image %}
+                                                <img src="{{blog_post.image.url}}" class=" rounded-t w-[100%] h-[100%] object-cover object-center" alt="...">
+                                            {% endif %}
+                                        </div>
+                                        <div class="px-[0.5rem]">
+                                            <h5 class="card-title mt-[10px]  py-0 "> {{ blog_post.title|truncatewords:2 }}</h5>
+                                            <p class="card-text text-[14px] py-0 my-0">
+                                                <i class="fa-solid fa-clock pr-[2px]"></i>
+                                                <small>{{blog_post.created_on}}</small>
+                                            </p>
+                                            <p class="text-[14px] text-[#444] py-0 my-0 font-semibold">
+                                                <i class="fa-solid fa-comments pr-[2px]"></i>
+                                                {{blog_post.post_comment_count}}
+                                                    Comments
+                                            </p>
+                                            <div class="mb-[6px]">
+                                                <p class="card-text flex items-center gap-[5px] text-[14px] text-[#444] font-semibold"><i class="fa-solid fa-user"></i> {{ blog_post.author }} </p> 
+                                            </div> 
+                                        </div>
+                                    </div>
+                                </a> 
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+               
+            </div>
+        </div>
+
+    </div>
+
+     <!-- Pagination for Articles -->
+     <div class="pagination flex justify-center items-center">
+        <div class="flex items-center gap-[0.5rem]">
+            {% if article_page_obj.has_previous %}
+                <a href="?article_page={{ article_page_obj.previous_page_number }}" class="text-[#3b5361] flex items-center gap-[0.5rem] no-underline text-nowrap text-[14px]">
+                    <i class="fa fa-solid fa-arrow-left mx-[0.3rem]"></i>
+                    Prev
+                </a>
+                {% else %}
+                <a class="text-[#3b5361] flex items-center gap-[0.5rem] no-underline text-nowrap text-[14px] disabled">
+                    <i class="fa fa-solid fa-arrow-left mx-[0.3rem]"></i>
+                    Prev
+                </a>
+            {% endif %}
+            {% for num in article_page_obj.paginator.page_range %}
+                <div class="flex items-center gap-[0.3rem]">
+                    {% if article_page_obj.number == num %}
+                        <li class="list-none">
+                            <a class="no-underline text-[#fefefe] font-semibold text-[10px] md:text-[14px] bg-slate-400 py-[0.3rem] px-[0.5rem] text-center w-[25px] h-[25px] rounded-full" href="?article_page={{ num }}">{{ num }}</a>
+                        </li>
+                    {% else %}
+                        <li class="list-none">
+                            <a class="no-underline text-[#3b5361] font-semibold text-[10px] md:text-[14px] hover:bg-slate-200 py-[0.3rem] px-[0.5rem] text-center w-[25px] h-[25px] rounded-full" href="?article_page={{ num }}">{{ num }}</a>
+                        </li>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            {% if article_page_obj.has_next %}
+                <a href="?article_page={{ article_page_obj.next_page_number }}" class="text-[#3b5361] text-nowrap no-underline flex items-center gap-[0.5rem] text-[14px]">
+                    Next
+                    <i class="fa fa-solid fa-arrow-right mx-[0.3rem]"></i>
+                </a>
+            {% else %}
+                <a class="text-[#3b5361] text-nowrap no-underline flex items-center gap-[0.5rem] text-[14px]">
+                    Next
+                    <i class="fa fa-solid fa-arrow-right mx-[0.3rem]"></i>
+                </a>
+            {% endif %}
+        </div>
+    </div>
+
+
+    {% include "partials/footer.html" %}
+    {% endblock content %}
+    

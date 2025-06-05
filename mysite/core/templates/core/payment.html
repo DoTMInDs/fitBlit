@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load static %}
+{% load tailwind_filters %}
+{% block title %}Payment{% endblock %}
+{% block content %}
+    <div class="container">
+        <h2>Make a Payment</h2>
+        <form action="" method="post" id="payment-form">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button type="submit" class="btn btn-primary">Pay</button>
+        </form>
+    </div>
+
+   
+{% endblock %}

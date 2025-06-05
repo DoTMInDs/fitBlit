@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load static %}
+{% load tailwind_filters %}
+{% block title %}Edit post page{% endblock  %}
+{% block content %}
+    {% include "partials/nav.html" %}
+    <div class="flex justify-center items-center w-full h-[100%]">
+        <div class="md:mb-[20px] mb-[80px] md:w-[80%] w-[100%]  m-auto">
+            <form action="" method="POST" enctype="multipart/form-data" class="m-auto p-[30px] rounded bg-slate-50 border border-slate-300">
+                <h1 class="text-center text-[22px] font-semibold mb-[1rem]">Edit Post</h1>
+                {% csrf_token %}
+                {{ form|crispy }}
+                <button class="transition duration-300 w-[100%] text-[#fefefefe] bg-[#3D5361] rounded-full py-[10px] px-[5rem]" type="submit">
+                    <i class="fa-solid fa-floppy-disk"></i>
+                    Save
+                </button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
