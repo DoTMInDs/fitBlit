@@ -69,7 +69,7 @@ INSTALLED_APPS = [
     'crispy_tailwind',
     'tailwind',
     'theme',
-    # 'django_browser_reload',
+    'django_browser_reload',
     
     'pwa',
 ]
@@ -90,7 +90,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # "django_browser_reload.middleware.BrowserReloadMiddleware",
+    "django_browser_reload.middleware.BrowserReloadMiddleware",
 ]
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
