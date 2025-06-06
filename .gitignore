@@ -6,7 +6,7 @@ db.sqlite3
 .qodo
 
 staticfiles
-theme/
 __pycache__/
 # Ignore Python cache files
 *.py[cod]
+node_modules
