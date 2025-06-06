@@ -37,6 +37,7 @@ body{
 .nav-acct-side .search-mobile{
     display: flex;
 }
+
 @media screen and (max-width: 768px) {
     .main-nav {
         display: none;
@@ -44,7 +45,9 @@ body{
     .nav-acct-side .search-mobile{
         display: none;
     }
-    
+    .spotlight{
+        display: none;
+    }
 }
 
 .news-grid{

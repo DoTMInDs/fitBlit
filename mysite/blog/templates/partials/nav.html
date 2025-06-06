@@ -6,8 +6,8 @@
         <div class="flex items-center justify-between md:w-[80%] m-auto ">
             <div class="flex items-center cursor-pointer">
                 <a href="{% url "home" %}" class="no-underline gap-[0.5rem] flex items-center">
-                    <img src="{% static 'images/fitblog-logo.png' %}" height="64px" class="w-[30px] ">
-                    <h4 class=" text-[#444444] font-medium">FitBlog</h4>
+                    <img src="{% static 'images/fitblog-logo.png' %}" height="64px" class="w-[40px] h-[40px] rounded-full">
+                    <h4 class=" text-teal-600 font-semibold">FitBlog</h4>
                 </a>
             </div>
             <div class="main-nav ">
@@ -52,11 +52,11 @@
                 </form>
                 <div class="relative">
                     {% if user.is_authenticated %}
-                        <button id="dropdownNavbarLink" data-dropdown-toggle="dropdownNavbar" class="cursor-pointer flex gap-[0.5rem] items-center text-[#3D5361] rounded-full py-[6px] px-[18px] text-[13px]  hover:text-[#3D5261] text-nowrap">
-                            <img class="w-[40px] h-[40px] rounded-[50%] object-cover object-center mr-[10px]" src="{% static "images/default.png" %} " alt="Default Profile Image">
+                        <button id="dropdownNavbarLink" data-dropdown-toggle="dropdownNavbar" class="cursor-pointer flex gap-[0.5rem] items-center bg-[#3D5361] rounded-full w-[40px] h-[40px] text-[13px]  hover:text-[#3D5261] text-nowrap">
+                            <span class="font-bold text-xl flex justify-center items-center text-[#FFFFFF] w-[40px] h-[40px] rounded-full border border-slate-200 shadow">{{ user.username|first|upper }}</span>
                         </button>
                         <!--ProfileModel-->
-                        <div id="dropdownNavbar" class=" border border-slate-200 rounded-[15px] w-[250px] shadow-lg bg-slate-50 absolute right-0">
+                        <div id="dropdownNavbar" class=" border border-slate-200 hidden rounded-[15px] w-[250px] shadow-lg bg-slate-50 absolute right-0">
                             <div class="" aria-labelledby="dropdownLargeButton">
                                 <div class="flex items-center gap-[1rem] border-b borer-slate-300 px-[1rem]">
                                     <div class="">
@@ -137,36 +137,36 @@
         </div>
         <!--Mobile-responsive-->
         <div class="">
-            <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-search">
+            <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1 " id="navbar-search">
                 <form method="get" action="" class="relative mt-3 md:hidden">
                     <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                         <svg class="w-4 h-4 text-gray-500 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
                         </svg>
                     </div>
-                    <input type="search" name="search" id="search-navbar" class="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search...">
+                    <input type="search" name="search" id="search-navbar" class="block w-full p-2 py-[0.8rem] ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500" placeholder="Search...">
                 </form>
-                <ul class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
-                    <li class="text-[#fefefe] border-b border-[#62879e4b] py-[1.2rem] px-[1rem] hover:bg-[#6a7f8d28]">
+                <ul class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white ">
+                    <li class="text-[#3b5362] border-b border-[#62879e4b] py-[1.2rem] px-[1rem] hover:bg-[#6a7f8d28]">
                         <i class="fa-regular fa-newspaper mr-[0.5rem]"></i>
-                        <a class="no-underline text-[#fefefe] text-[15px]" href="{% url "news-page" %}">News</a>
+                        <a class="no-underline  text-[15px]" href="{% url "news-page" %}">News</a>
                     </li>
-                    <li class="text-[#fefefe] border-b border-[#62879e4b] py-[1.2rem] px-[1rem] hover:bg-[#6a7f8d28]">
+                    <li class="text-[#3b5362] border-b border-[#62879e4b] py-[1.2rem] px-[1rem] hover:bg-[#6a7f8d28]">
                         <i class="fa-solid fa-cart-shopping mr-[0.5rem]"></i>
-                        <a class="no-underline text-[#fefefe] text-[15px]" href="{% url "business-page" %}">Market Store</a>
+                        <a class="no-underline  text-[15px]" href="{% url "business-page" %}">Market Store</a>
                     </li>
-                    <li class="text-[#fefefe] border-b border-[#62879e4b] py-[1.2rem] px-[1rem] hover:bg-[#6a7f8d28]">
+                    <li class="text-[#3b5362] border-b border-[#62879e4b] py-[1.2rem] px-[1rem] hover:bg-[#6a7f8d28]">
                         <i class="fa-solid fa-music mr-[0.5rem]"></i>
-                        <a class="no-underline text-[#fefefe] text-[15px]" href="{% url "music-page" %}">Music</a>
+                        <a class="no-underline  text-[15px]" href="{% url "music-page" %}">Music</a>
                     </li>
                     {% if not user.is_authenticated %}
-                    <li class="text-[#fefefe] border-b border-[#62879e4b] py-[1.2rem] px-[1rem] hover:bg-[#6a7f8d28]">
+                    <li class="text-[#3b5362] border-b border-[#62879e4b] py-[1.2rem] px-[1rem] hover:bg-[#6a7f8d28]">
                         <i class="fa-solid fa-user mr-[0.5rem]"></i>
-                        <a class="no-underline text-[#fefefe] text-[15px]" href="{% url "login" %}">Sign In</a>
+                        <a class="no-underline  text-[15px]" href="{% url "login" %}">Sign In</a>
                     </li>
-                    <li class="text-[#fefefe] border-b border-[#62879e4b] py-[1.2rem] px-[1rem] hover:bg-[#6a7f8d28]">
+                    <li class="text-[#3b5362] border-b border-[#62879e4b] py-[1.2rem] px-[1rem] hover:bg-[#6a7f8d28]">
                         <i class="fa-solid fa-right-from-bracket mr-[0.5rem]"></i>
-                        <a class="no-underline text-[#fefefe] text-[15px]" href="{% url "sign_up" %}">Sign Up</a>
+                        <a class="no-underline  text-[15px]" href="{% url "sign_up" %}">Sign Up</a>
                     </li>
                     {% endif %}
                 </ul>
