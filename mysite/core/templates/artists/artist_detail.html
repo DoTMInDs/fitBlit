@@ -32,13 +32,13 @@
                     </div>
                     <div class="">
                         {% if artist_uploads.user == user %}
-                        <button id="addSongBtn" type="button" class="text-nowrap text-[13px]  text-[#3D5361]">
+                        <button data-modal-target="add-song-modal" data-modal-toggle="add-song-modal" type="button" class="text-nowrap text-[13px]  text-[#3D5361]">
                             <i class="fa-solid fa-music"></i>
                             Add Song
                         </button>
                         
                         <!-- Modal -->
-                        <div id="addSongDropdown" class="hidden fixed top-0 left-0 w-[100%] bg-[#000000] bg-opacity-20 h-[100vh] z-[1000]">
+                        <div id="add-song-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                             <div class="w-[100%] md:w-[50%] m-auto fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] bg-slate-50 shadow rounded">
                                 <div class="">
                                     <div class="flex justify-between items-center border-b border-slate-200 p-[1rem]">
@@ -46,8 +46,11 @@
                                             <i class="fa-solid fa-headphones"></i>
                                             Post your song
                                         </h1>
-                                        <button type="button" id="closeBtn" class="btn-close text-[18px]" >
-                                            <i class="fa-solid fa-close"></i>
+                                        <button type="button" data-modal-hide="add-song-modal" class="closeBtn cursor-pointer">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path opacity="0.5" d="M12 22C7.286 22 4.929 22 3.464 20.535C2 19.072 2 16.714 2 12C2 7.286 2 4.929 3.464 3.464C4.93 2 7.286 2 12 2C16.714 2 19.071 2 20.535 3.464C22 4.93 22 7.286 22 12C22 16.714 22 19.071 20.535 20.535C19.072 22 16.714 22 12 22Z" fill="black"/>
+                                                <path d="M8.97001 8.97C9.11064 8.82955 9.30126 8.75066 9.50001 8.75066C9.69876 8.75066 9.88939 8.82955 10.03 8.97L12 10.94L13.97 8.97C14.0387 8.89631 14.1215 8.83721 14.2135 8.79622C14.3055 8.75523 14.4048 8.73319 14.5055 8.73141C14.6062 8.72963 14.7062 8.74816 14.7996 8.78588C14.893 8.8236 14.9778 8.87974 15.049 8.95096C15.1203 9.02218 15.1764 9.10702 15.2141 9.2004C15.2519 9.29379 15.2704 9.39382 15.2686 9.49452C15.2668 9.59523 15.2448 9.69454 15.2038 9.78654C15.1628 9.87854 15.1037 9.96134 15.03 10.03L13.06 12L15.03 13.97C15.1037 14.0387 15.1628 14.1215 15.2038 14.2135C15.2448 14.3055 15.2668 14.4048 15.2686 14.5055C15.2704 14.6062 15.2519 14.7062 15.2141 14.7996C15.1764 14.893 15.1203 14.9778 15.049 15.049C14.9778 15.1203 14.893 15.1764 14.7996 15.2141C14.7062 15.2518 14.6062 15.2704 14.5055 15.2686C14.4048 15.2668 14.3055 15.2448 14.2135 15.2038C14.1215 15.1628 14.0387 15.1037 13.97 15.03L12 13.06L10.03 15.03C9.88784 15.1625 9.69979 15.2346 9.50549 15.2312C9.31119 15.2277 9.1258 15.149 8.98839 15.0116C8.85098 14.8742 8.77226 14.6888 8.76884 14.4945C8.76541 14.3002 8.83753 14.1122 8.97001 13.97L10.94 12L8.97001 10.03C8.82956 9.88938 8.75067 9.69875 8.75067 9.5C8.75067 9.30125 8.82956 9.11063 8.97001 8.97Z" fill="black"/>
+                                            </svg>
                                         </button>
                                     </div>
                                     <form action="" method="post" enctype="multipart/form-data" class="p-[1rem]">
@@ -55,7 +58,7 @@
                                         {{ song_form|crispy }}
                                         <input type="hidden" name="cover_image" value="cover_image">
                                         <input type="hidden" name="song_form" value="song_form">
-                                        <div class="md:flex gap-[10px] justify-center items-center flex-row">
+                                        <div class="md:flex gap-[10px] justify-center items-center flex-row mt-[1rem]">
                                             <input type="submit" value="Upload Song" class="w-[100%] m-auto text-[#fefefefe] cursor-pointer hover:bg-slate-500 transition duration-300 bg-[#3D5361] rounded-full py-[10px] px-[5rem]">
                                             <button type="button" class="w-[100%] m-auto text-[#3D5361] border border-[#3D5361] my-[10px] md:my-0 border-opacity-20 rounded-full py-[10px] px-[5rem]">Cancel</button>
                                         </div>
