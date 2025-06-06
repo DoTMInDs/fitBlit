@@ -69,7 +69,7 @@ INSTALLED_APPS = [
     'crispy_tailwind',
     'tailwind',
     'theme',
-    'django_browser_reload',
+    # 'django_browser_reload',
     
     'pwa',
 ]
