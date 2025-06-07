@@ -195,7 +195,7 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
 
-PWA_APP_NAME = 'FitBlog'
+PWA_APP_NAME = 'FitBlit'
 PWA_APP_DESCRIPTION = "A blog App with Music and Shopping integrated"
 PWA_APP_THEME_COLOR = '#0A0302'
 PWA_APP_BACKGROUND_COLOR = '#ffffff'
@@ -206,7 +206,7 @@ PWA_APP_START_URL = '/'
 PWA_APP_STATUS_BAR_COLOR = 'default'
 PWA_APP_ICONS = [
     {
-        'src': '/static/images/main-logo-new.png',
+        'src': '/static/images/big-esse-pwa-logo2.png',
         'sizes': '160x160'
     },
     {
@@ -216,7 +216,7 @@ PWA_APP_ICONS = [
 ]
 PWA_APP_ICONS_APPLE = [
    {
-        'src': '/static/images/main-logo-new.png',
+        'src': '/static/images/big-esse-pwa-logo2.png',
         'sizes': '160x160'
     },
    {
