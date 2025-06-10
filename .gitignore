@@ -1,6 +1,6 @@
 .venv/
 media/
-.env*
+# .env*
 .qodo/
 db.sqlite3
 .qodo
