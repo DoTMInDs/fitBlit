@@ -1,4 +1,5 @@
 #!/bin/bash
+set -o errexit
 
 python mysite/manage.py collectstatic --no-input
 python mysite/manage.py migrate
