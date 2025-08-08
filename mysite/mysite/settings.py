@@ -195,12 +195,13 @@ CLOUDINARY_STORAGE = {
 STATIC_ROOT = os.path.join(BASE_DIR / 'staticfiles')
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = 'smpt.gmail.com'
-EMAIL_HOST_USER = 'esmondabban3@gmail.com'
-EMAIL_HOST_PASSWORD = 'Dhonnie33@@'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.zoho.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL =  os.getenv('DEFAULT_FROM_EMAIL')
 
 
 PWA_APP_NAME = 'FitBlit'
