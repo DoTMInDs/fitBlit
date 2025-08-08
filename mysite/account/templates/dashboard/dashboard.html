@@ -1,107 +1,510 @@
 {% extends "base.html" %}
 {% load static %}
 {% load tailwind_filters %}
-{% block title %}Dashboard{% endblock  %}
+{% block title %}Dashboard - FitBlit{% endblock %}
 {% block content %}
     {% include "dashboard/dashboard_nav.html" %}
-    <div class="w-full flex justify-between px-[0.5rem] md:px-0 md:w-[80%] m-auto">
-        <div class="w-full">
-            <div class="dash-grid">
-                {% for article in article_page_obj %}
-                    <div class="shadow-md rounded-[10px]">                            
-                        <div class="p-[10px]">
-                            <h5 class="text-[18px] font-medium"> {{ article.title }} </h5> 
-                            <div class="flex justify-between items-center mb-[1rem]">
-                                <p class="card-text text-[13px] text-[#444] font-semibold">
-                                    <i class="fa-solid fa-clock"></i>
-                                    <small>{{ article.dated_on|date:"M. d, Y" }}</small>
-                                </p>
-                                <p class="text-[13px] text-[#444] font-semibold">
-                                    <i class="fa-solid fa-comments px-[2px]"></i>
-                                    {{article.article_comment_count}}
-                                    Comments
-                                </p>
-                                <p class="flex items-center gap-[5px] text-nowrap text-[13px] text-[#444] font-semibold">
-                                    <a href="{% url "profile" %}" 
-                                        class="text-slate-600 hover:underline">
-                                        <i class="fa-solid fa-user"></i> 
-                                        {{ article.author }} 
-                                    </a>
-                                </p> 
-                            </div>
-                            <div class=" flex gap-3">
-                                <div class="w-[100%] min-w-[100px] h-[80px] rounded shadow flex justify-center items-center">
-                                    {% if article.image %}
-                                        <img src="{{ article.image.url }}" class="rounded w-[100px] h-[100%] object-center object-cover"  alt="...">
-                                    {% endif %}
-                                </div>
-                                <p class="">
-                                    {{article.article_content|truncatewords:12}}
-                                </p>
-                            </div>                               
-                        </div>     
-                        <div class="border-t border-slate-200 p-[1rem] px-[1rem] pb-[1rem] ">                  
-                            {% if article.author == request.user %}
-                                <div class="flex gap-[10px] justify-end items-end">
-                                    <button class="w-[50px] h-[50px] rounded-[10px] shadow-md hover:bg-slate-200 transition duration-200">
-                                        <a href="{% url "user-dashboard-edit" article.id %}" class="flex justify-center items-center text-slate-600 rounded-full p-[0.5rem]">
-                                            <i class="fa-regular fa-pen-to-square text-[18px]"></i>
-                                        </a>
-                                    </button>
-                                    <button class="w-[50px] h-[50px] rounded-[10px] shadow-md bg-rose-100 transition duration-300">
-                                        <a href="{% url "user-post-delete" article.id %}" class="flex justify-center items-center text-rose-600  rounded-full p-[0.3rem]">
-                                            <i class="fa-solid fa-trash-can text-[18px]"></i>                                         
-                                        </a>
-                                    </button>
-                                </div>
-                            {% endif %}
-                        </div> 
-                    </div> 
-                {% endfor %}
-            </div>      
-        </div>      
-    </div>
-
-    <!-- Pagination for Articles -->
-    <div class="pagination flex justify-center items-center mt-[1rem]">
-        <div class="flex items-center gap-[0.5rem]">
-            {% if article_page_obj.has_previous %}
-                <a href="?article_page={{ article_page_obj.previous_page_number }}" class="text-[#3b5361] flex items-center gap-[0.5rem] no-underline text-nowrap ">
-                    <i class="fa fa-solid fa-arrow-left mx-[0.3rem]"></i>
-                    Prev
-                </a>
-                {% else %}
-                <p class="text-[#3b5361] flex items-center gap-[0.5rem] no-underline text-nowrap disabled">
-                    <i class="fa fa-solid fa-arrow-left mx-[0.3rem]"></i>
-                    Prev
-                </p>
-            {% endif %}
-            {% for num in article_page_obj.paginator.page_range %}
-                <div class="flex items-center gap-[0.3rem]">
-                    {% if article_page_obj.number == num %}
-                        <li class="list-none">
-                            <a class="no-underline text-[#fefefe] font-semibold text-[10px] bg-slate-400 py-[0.3rem] px-[0.5rem] text-center w-[25px] h-[25px] rounded-full" href="?article_page={{ num }}">{{ num }}</a>
-                        </li>
-                    {% else %}
-                        <li class="list-none">
-                            <a class="no-underline text-[#3b5361] font-semibold text-[10px] hover:bg-slate-200 py-[0.3rem] px-[0.5rem] text-center w-[25px] h-[25px] rounded-full" href="?article_page={{ num }}">{{ num }}</a>
-                        </li>
-                    {% endif %}
+    <!-- Messages Display -->
+    {% if messages %}
+        <div class="fixed top-4 right-4 z-50 space-y-2" id="message-container">
+            {% for message in messages %}
+                <div class="{% if message.tags == 'error' %}bg-red-50 border border-red-200 text-red-700{% elif message.tags == 'success' %}bg-green-50 border border-green-200 text-green-700{% elif message.tags == 'warning' %}bg-yellow-50 border border-yellow-200 text-yellow-700{% else %}bg-blue-50 border border-blue-200 text-blue-700{% endif %} p-4 rounded-lg shadow-lg max-w-sm">
+                    <div class="flex items-center">
+                        {% if message.tags == 'error' %}
+                            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                            </svg>
+                        {% elif message.tags == 'success' %}
+                            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                            </svg>
+                        {% elif message.tags == 'warning' %}
+                            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                            </svg>
+                        {% else %}
+                            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                            </svg>
+                        {% endif %}
+                        <span class="text-sm font-medium">{{ message }}</span>
+                    </div>
                 </div>
             {% endfor %}
-            {% if article_page_obj.has_next %}
-                <a href="?article_page={{ article_page_obj.next_page_number }}" class="text-[#3b5361] text-nowrap no-underline flex items-center gap-[0.5rem]">
-                    Next
-                    <i class="fa fa-solid fa-arrow-right mx-[0.3rem]"></i>
-                </a>
-            {% else %}
-                <p class="text-[#3b5361] text-nowrap no-underline flex items-center gap-[0.5rem]">
-                    Next
-                    <i class="fa fa-solid fa-arrow-right mx-[0.3rem]"></i>
-                </p>
-            {% endif %}
+        </div>
+    {% endif %}
+
+    
+    <!-- Dashboard Header -->
+    <div class="bg-gradient-to-br from-teal-500 via-teal-600 to-teal-700 px-4 py-8 md:py-12">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center md:text-left">
+                <h1 class="text-3xl md:text-4xl font-bold text-white mb-2">Your Dashboard</h1>
+                <p class="text-teal-100 text-lg">Manage your articles and content</p>
+            </div>
         </div>
     </div>
 
-    {% include "partials/footer.html" %}
+    <!-- Dashboard Content -->
+    <div class="max-w-7xl mx-auto px-4 py-6 md:py-8">
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Total Articles</p>
+                        <p class="text-2xl font-bold text-gray-900">{{ article_page_obj.paginator.count }}</p>
+                    </div>
+                    <div class="w-12 h-12 bg-gradient-to-br from-teal-500 to-teal-600 rounded-xl flex items-center justify-center">
+                        <i class="fa-solid fa-newspaper text-white text-lg"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Published</p>
+                        <p class="text-2xl font-bold text-gray-900">{{ article_page_obj.paginator.count }}</p>
+                    </div>
+                    <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center">
+                        <i class="fa-solid fa-check text-white text-lg"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Total Comments</p>
+                        <p class="text-2xl font-bold text-gray-900">0</p>
+                    </div>
+                    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
+                        <i class="fa-solid fa-comments text-white text-lg"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Articles Grid -->
+        <div class="space-y-6">
+            {% for article in article_page_obj %}
+                <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition duration-300">
+                    <!-- Article Header -->
+                    <div class="p-6 pb-4">
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="flex-1">
+                                <h3 class="text-xl font-bold text-gray-900 mb-2 line-clamp-2">{{ article.title }}</h3>
+                                <div class="flex items-center space-x-4 text-sm text-gray-500">
+                                    <div class="flex items-center space-x-1">
+                                        <i class="fa-solid fa-clock text-gray-400"></i>
+                                        <span>{{ article.dated_on|date:"M d, Y" }}</span>
+                                    </div>
+                                    <div class="flex items-center space-x-1">
+                                        <i class="fa-solid fa-comments text-gray-400"></i>
+                                        <span>{{ article.article_comment_count }} Comments</span>
+                                    </div>
+                                    <div class="flex items-center space-x-1">
+                                        <i class="fa-solid fa-user text-gray-400"></i>
+                                        <span>{{ article.author }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Article Image -->
+                            {% if article.image %}
+                                <div class="ml-4 flex-shrink-0">
+                                    <img src="{{ article.image.url }}" alt="{{ article.title }}" 
+                                         class="w-20 h-20 md:w-24 md:h-24 rounded-xl object-cover shadow-md">
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Article Content -->
+                        <p class="text-gray-600 line-clamp-3">{{ article.article_content|truncatewords:20 }}</p>
+                    </div>
+                    
+                    <!-- Article Actions -->
+                    {% if article.author == request.user %}
+                        <div class="border-t border-gray-100 p-6 pt-4">
+                            <div class="flex items-center justify-end space-x-3">
+                                <a href="{% url 'user-dashboard-edit' article.id %}" 
+                                   class="flex items-center space-x-2 px-4 py-2 text-gray-700 bg-gray-50 rounded-xl hover:bg-gray-100 transition duration-300">
+                                    <i class="fa-regular fa-pen-to-square text-sm"></i>
+                                    <span class="text-sm font-medium">Edit</span>
+                                </a>
+                                <button data-modal-target="popup-modal-{{article.id}}" data-modal-toggle="popup-modal-{{article.id}}" 
+                                   class="flex items-center space-x-2 px-4 py-2 text-red-600 bg-red-50 rounded-xl hover:bg-red-100 transition duration-300">
+                                    <i class="fa-solid fa-trash-can text-sm"></i>
+                                    <span class="text-sm font-medium">Delete</span>
+                                </button>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            {% empty %}
+                <!-- Empty State -->
+                <div class="text-center py-12">
+                    <div class="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fa-solid fa-newspaper text-gray-400 text-3xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">No articles yet</h3>
+                    <p class="text-gray-600 mb-6">Start creating your first article to see it here</p>
+                    <button data-modal-target="post-modal" data-modal-toggle="post-modal" 
+                            class="bg-gradient-to-r from-teal-500 to-teal-600 text-white px-6 py-3 rounded-xl font-semibold hover:from-teal-600 hover:to-teal-700 transition duration-300 shadow-lg hover:shadow-xl">
+                        <i class="fa-solid fa-plus mr-2"></i>
+                        Create Your First Article
+                    </button>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if article_page_obj.has_other_pages %}
+            <div class="mt-8 flex justify-center">
+                <nav class="flex items-center space-x-2 bg-white rounded-2xl shadow-lg border border-gray-100 px-4 py-2">
+                    {% if article_page_obj.has_previous %}
+                        <a href="?article_page={{ article_page_obj.previous_page_number }}" 
+                           class="flex items-center space-x-1 px-3 py-2 text-gray-600 hover:text-teal-600 transition duration-300">
+                            <i class="fa-solid fa-chevron-left text-sm"></i>
+                            <span class="text-sm font-medium">Previous</span>
+                        </a>
+                    {% else %}
+                        <span class="flex items-center space-x-1 px-3 py-2 text-gray-400">
+                            <i class="fa-solid fa-chevron-left text-sm"></i>
+                            <span class="text-sm font-medium">Previous</span>
+                        </span>
+                    {% endif %}
+
+                    <div class="flex items-center space-x-1">
+                        {% for num in article_page_obj.paginator.page_range %}
+                            {% if article_page_obj.number == num %}
+                                <span class="w-8 h-8 bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-lg flex items-center justify-center text-sm font-semibold">
+                                    {{ num }}
+                                </span>
+                            {% elif num > article_page_obj.number|add:'-3' and num < article_page_obj.number|add:'3' %}
+                                <a href="?article_page={{ num }}" 
+                                   class="w-8 h-8 text-gray-600 hover:text-teal-600 rounded-lg flex items-center justify-center text-sm font-medium hover:bg-gray-50 transition duration-300">
+                                    {{ num }}
+                                </a>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+
+                    {% if article_page_obj.has_next %}
+                        <a href="?article_page={{ article_page_obj.next_page_number }}" 
+                           class="flex items-center space-x-1 px-3 py-2 text-gray-600 hover:text-teal-600 transition duration-300">
+                            <span class="text-sm font-medium">Next</span>
+                            <i class="fa-solid fa-chevron-right text-sm"></i>
+                        </a>
+                    {% else %}
+                        <span class="flex items-center space-x-1 px-3 py-2 text-gray-400">
+                            <span class="text-sm font-medium">Next</span>
+                            <i class="fa-solid fa-chevron-right text-sm"></i>
+                        </span>
+                    {% endif %}
+                </nav>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Post Modal -->
+    <div id="post-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div class="relative p-4 w-full max-w-2xl max-h-full">
+            <!-- Modal content -->
+            <div class="relative bg-white rounded-xl shadow-xl">
+                <!-- Modal header -->
+                <div class="relative bg-teal-600 p-6 rounded-t-xl flex justify-between items-center">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                            </svg>
+                        </div>
+                        <div class="ml-4">
+                            <h2 class="text-xl font-bold text-white">Create New Article</h2>
+                            <p class="text-teal-100 text-sm">Share your story with the community</p>
+                        </div>
+                    </div>
+                    <button type="button" class="text-white bg-transparent hover:bg-white hover:text-teal-600 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center transition-all" data-modal-hide="post-modal">
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                        </svg>
+                        <span class="sr-only">Close modal</span>
+                    </button>
+                </div>
+                
+                <!-- Modal body -->
+                <div class="p-6 overflow-y-auto max-h-[calc(90vh-120px)]">
+                    <!-- Messages Display -->
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="mb-4 p-4 rounded-lg {% if message.tags == 'error' %}bg-red-50 border border-red-200 text-red-700{% else %}bg-green-50 border border-green-200 text-green-700{% endif %}">
+                                <div class="flex items-center">
+                                    {% if message.tags == 'error' %}
+                                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                                        </svg>
+                                    {% else %}
+                                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                        </svg>
+                                    {% endif %}
+                                    {{ message }}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    
+                    <!-- Article Form -->
+                    <form action="{% url 'user-dashboard' %}" method="post" enctype="multipart/form-data" class="space-y-6" id="articleForm">
+                        {% csrf_token %}
+                        
+                        <!-- Main Form Fields -->
+                        <div class="space-y-6">
+                            <!-- Article Title -->
+                            <div>
+                                <label for="title" class="block mb-2 text-sm font-medium text-gray-900">
+                                    <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+                                    </svg>
+                                    Article Title
+                                </label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+                                        </svg>
+                                    </div>
+                                    <input type="text" name="title" id="title" required
+                                           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full pl-10 p-2.5" 
+                                           placeholder="Enter article title">
+                                </div>
+                            </div>
+
+                            <!-- Sub Title -->
+                            <div>
+                                <label for="sub_title" class="block mb-2 text-sm font-medium text-gray-900">
+                                    <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                    </svg>
+                                    Sub Title (Optional)
+                                </label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                        </svg>
+                                    </div>
+                                    <input type="text" name="sub_title" id="sub_title"
+                                           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full pl-10 p-2.5" 
+                                           placeholder="Enter sub title (optional)">
+                                </div>
+                            </div>
+
+                            <!-- Slug Field -->
+                            <div>
+                                <label for="slug" class="block mb-2 text-sm font-medium text-gray-900">
+                                    <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                    </svg>
+                                    Slug (Optional)
+                                </label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                        </svg>
+                                    </div>
+                                    <input type="text" name="slug" id="slug"
+                                           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full pl-10 p-2.5" 
+                                           placeholder="Enter slug (optional)">
+                                </div>
+                            </div>
+
+                            <!-- Article Content -->
+                            <div>
+                                <label for="article_content" class="block mb-2 text-sm font-medium text-gray-900">
+                                    <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                    </svg>
+                                    Article Content
+                                </label>
+                                <div class="relative">
+                                    <div class="absolute top-3 left-0 flex items-center pl-3 pointer-events-none">
+                                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                        </svg>
+                                    </div>
+                                    <textarea name="article_content" id="article_content" rows="6" required
+                                              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full pl-10 p-2.5" 
+                                              placeholder="Write your article content here..."></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Article Image -->
+                            <div>
+                                <label for="image" class="block mb-2 text-sm font-medium text-gray-900">
+                                    <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                    </svg>
+                                    Article Image (Optional)
+                                </label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                        </svg>
+                                    </div>
+                                    <input type="file" name="image" id="image" 
+                                           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full pl-10 p-2.5" 
+                                           accept="image/*">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <input type="hidden" name="create_article" value="create_article">
+                        
+                        <!-- Form Actions -->
+                        <div class="flex space-x-3 pt-4">
+                            <button type="submit" name="create_article" 
+                                    class="flex-1 inline-flex items-center justify-center px-6 py-3 bg-teal-600 text-white text-sm font-medium rounded-lg hover:bg-teal-700 transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
+                                    id="submitBtn">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" id="uploadIcon">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                                </svg>
+                                <span id="submitText">Create Article</span>
+                                <svg class="hidden w-5 h-5 animate-spin ml-2" fill="none" viewBox="0 0 24 24" id="loadingIcon">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                            </button>
+                            <button type="button" 
+                                    class="flex-1 inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-all focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+                                    data-modal-hide="post-modal">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                </svg>
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Delete post Modal-->
+    {% for article in article_page_obj %}
+    <div id="popup-modal-{{article.id}}" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div class="relative p-4 w-full max-w-md max-h-full">
+            <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
+                <button type="button" class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="popup-modal-{{article.id}}">
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+                <div class="p-4 md:p-5 text-center">
+                    <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                    </svg>
+                    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Are you sure you want to delete this post?</h3>
+                    <form action="" method="post" clas="">
+                        {% csrf_token %}
+                        <button type="submit" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+                            Yes, I'm sure
+                        </button>
+                        <button data-modal-hide="popup-modal-{{article.id}}" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">No, cancel</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+
+    <style>
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .line-clamp-3 {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    </style>
+
+
+    <script>
+        // Auto-trigger toasts for Django messages
+        document.addEventListener('DOMContentLoaded', function() {
+            // Wait for toast system to be available
+            const waitForToast = () => {
+                if (window.showToast) {
+                    // Check for Django messages in the page
+                    const djangoMessages = document.querySelectorAll('#message-container .p-4, .alert, .messages li, [class*="alert-"]');
+                    
+                    djangoMessages.forEach(messageEl => {
+                        const message = messageEl.textContent.trim();
+                        let type = 'info';
+                        
+                        // Determine type based on classes
+                        if (messageEl.classList.contains('bg-red-50') || messageEl.classList.contains('error')) {
+                            type = 'error';
+                        } else if (messageEl.classList.contains('bg-green-50') || messageEl.classList.contains('success')) {
+                            type = 'success';
+                        } else if (messageEl.classList.contains('bg-yellow-50') || messageEl.classList.contains('warning')) {
+                            type = 'warning';
+                        }
+                        
+                        // Show toast notification
+                        window.showToast(message, type);
+                        
+                        // Hide original message after a short delay
+                        setTimeout(() => {
+                            messageEl.style.display = 'none';
+                        }, 100);
+                    });
+                } else {
+                    // Retry after a short delay if toast system isn't ready
+                    setTimeout(waitForToast, 100);
+                }
+            };
+            
+            // Start the process
+            waitForToast();
+        });
+
+        // Form submission with loading state
+        document.addEventListener('DOMContentLoaded', function() {
+            const articleForm = document.getElementById('articleForm');
+            const submitBtn = document.getElementById('submitBtn');
+            const submitText = document.getElementById('submitText');
+            const uploadIcon = document.getElementById('uploadIcon');
+            const loadingIcon = document.getElementById('loadingIcon');
+
+            if (articleForm && submitBtn) {
+                articleForm.addEventListener('submit', function(e) {
+                    // Show loading state
+                    submitBtn.disabled = true;
+                    submitText.textContent = 'Creating...';
+                    uploadIcon.classList.add('hidden');
+                    loadingIcon.classList.remove('hidden');
+                    
+                    // Add loading styles
+                    submitBtn.classList.add('opacity-75', 'cursor-not-allowed');
+                    
+                    // Optional: Add a small delay to show the loading state
+                    setTimeout(() => {
+                        // Form will submit normally
+                    }, 100);
+                });
+            }
+        });
+    </script>
 {% endblock %}

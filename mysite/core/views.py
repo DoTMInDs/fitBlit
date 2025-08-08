@@ -130,14 +130,20 @@ def item_detail(request, pk):
 
 @login_required
 def delete_item(request, pk):
-    items = Item.objects.get(id=pk)
-    if request.method == 'POST':
-        items.delete()
+    item = get_object_or_404(Item, id=pk)
+    
+    # Check if the user owns this item
+    if item.user != request.user:
+        messages.error(request, 'You do not have permission to delete this item.')
         return redirect('business-page')
-    context = {
-        'items': items,
-    }
-    return render(request, 'all-details/delete_item.html', context)
+    
+    if request.method == 'POST':
+        item.delete()
+        messages.success(request, 'Item deleted successfully!')
+        return redirect('business-page')
+    
+    # If it's a GET request, redirect to business page
+    return redirect('business-page')
 
 def OpinionsPage(request):
     return render(request, 'core/opinions.html')
@@ -154,7 +160,7 @@ def MusicPage(request):
     else:
         artist_uploads = Artist.objects.all()
         albums = Album.objects.all()
-    
+    artists = Artist.objects.all().order_by('artist')
     form = ArtistPostForm()   
     a_form = AlbumForm() 
 
@@ -183,7 +189,7 @@ def MusicPage(request):
         "albums": albums,
         "form": form,
         "a_form": a_form,
-        
+        "artists": artists,
     }
     return render(request, 'core/music.html', context)
 

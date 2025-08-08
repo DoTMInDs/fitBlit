@@ -1,218 +1,297 @@
 {% extends "base.html" %}
 {% load static %}
 {% load tailwind_filters %}
-{% block title %}Home{% endblock  %}
+{% block title %}{{ item.title }}{% endblock  %}
 {% block content %}
     {% include "partials/nav.html" %}
-    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
-    <style>
-        .swiper {
-            width: 100%;
-            padding: 0.5rem 0.5rem;
-        }
-        .swiper-slide {
-           width:150px;
-           height:auto;
-        }
-        .swiper-button-next,
-        .swiper-button-prev {
-            color:rgb(255, 255, 255);
-            background: rgba(0, 0, 0, 0.34);
-            padding: 15px;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-        }
-        .swiper-button-next::after,
-        .swiper-button-prev::after {
-            font-size: 1.2rem;
-        }
-    </style>
-    <div class="px-[0.5rem] md:px-0  w-[100%] md:w-[80%] m-auto mobile-padding">
-        <div class="w-[100%] ">
-           <div class="flex gap-[1rem] items-center ">
-                <button onclick="goBack()" class="mobile-back-btn mb-[1rem] rounded-full ml-[0.3rem] text-[#3D5361] text-[13px]">
-                    <i class="fa-solid fa-circle-arrow-left mr-[0.5rem]"></i>
-                    Back
-                </button>
-                {% comment %} {% if item.user == request.user %} {% endcomment %}
-                    <button id="productEditTrigger" class="mb-[1rem] hover:bg-slate-100 transition duration-200 rounded-full p-[0.5rem] uppercase font-semibold text-[#3b5361] mb-[0.5px] text-[13px] text-nowrap" type="button">
-                        <i class="fa-solid fa-edit"></i>
-                        Edit product
+    
+    <!-- Mobile-First Product Detail Page -->
+    <div class="min-h-screen bg-gray-50">
+        <!-- Header with Back Button -->
+        <div class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-10">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16">
+                    <button onclick="goBack()" 
+                            class="inline-flex items-center px-3 py-2 text-sm font-medium text-teal-700 bg-white border border-teal-300 rounded-lg hover:bg-teal-50 transition-colors">
+                        <i class="fa-solid fa-arrow-left mr-2"></i>
+                        Back
                     </button>
-                {% comment %} {% endif %} {% endcomment %}
-                 <!-- Modal -->
-                <div class="hidden fixed top-0 left-0 w-[100%] bg-[#000000] bg-opacity-20 h-[100vh] z-[1000]" id="productEditModal">
-                    <div class="w-[100%] md:w-[50%] m-auto bg-slate-50 shadow rounded max-h-[100vh] overflow-hidden">
-                        <div class="h-[100vh] overflow-y-auto py-[50px]">
-                            <div class="flex justify-between items-center border-b border-slate-200 p-[1rem]">
-                                <h1 class="text-[25px] text-slate-700" id="exampleModalLabel">
-                                    <i class="fa-solid fa-edit"></i>
-                                    Edit your Product
-                                </h1>
-                                <button type="button" class="edit-modal-close text-[18px]" >
-                                    <i class="fa-solid fa-close"></i>
-                                </button>
-                            </div>
-                            <div class="p-[1rem]">
-                                <form action="" method="post" enctype="multipart/form-data">
-                                    {% csrf_token %}
-                                    {{ e_form|crispy }}
-
-                                    <div class="my-[1rem] border-opacity-20 rounded p-[1rem] border border-slate-500 w-[100%]">
-                                        {{image_form|crispy}}
-                                    </div>
-                                    
-                                    <input type="hidden" name="e_form" value="e_form">
-                                    <div class="md:flex gap-[10px] justify-center items-center flex-row mobile-profile-modal">
-                                        <input type="submit" value="Save product" class="w-[100%] m-auto text-[#fefefefe] cursor-pointer hover:bg-slate-500 transition duration-300 bg-[#3D5361] rounded-full py-[10px] px-[5rem]">
-                                        <button type="button" class="edit-modal-close w-[100%] m-auto text-[#3D5361] border border-[#3D5361] my-[10px] md:my-0 border-opacity-20 rounded-full py-[10px] px-[5rem]">Cancel</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
+                    <div class="flex items-center space-x-2">
+                        <button class="p-2 rounded-full hover:bg-teal-50 transition-colors">
+                            <i class="fa-regular fa-heart text-teal-600"></i>
+                        </button>
+                        <button class="p-2 rounded-full hover:bg-teal-50 transition-colors">
+                            <i class="fa-solid fa-share text-teal-600"></i>
+                        </button>
+                        {% if item.user == request.user %}
+                            <button id="productEditTrigger" 
+                                    class="inline-flex items-center px-3 py-2 text-sm font-medium text-teal-700 bg-white border border-teal-300 rounded-lg hover:bg-teal-50 transition-colors">
+                                <i class="fa-solid fa-edit mr-2"></i>
+                                Edit
+                            </button>
+                        {% endif %}
                     </div>
                 </div>
-           </div>
-            <div class="md:flex gap-[0.5rem]  flex-row mobile-ads-container">
-                <div class="border border-slate-300 rounded md:mb-0 mb-[0.5rem]">
-                    <div class="">
-                        <div class="md:w-[80%] w-[100%] rounded-[10px]">
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Product Images Section -->
+                <div class="lg:col-span-2">
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                        <!-- Main Product Image -->
+                        <div class="relative">
                             {% if item.image %}
-                                <img src="{{ item.image.url }}" class="w-[100%] object-center object-cover rounded-[10px]" alt="item image">
+                                <div class="aspect-square overflow-hidden">
+                                    <img src="{{ item.image.url }}" 
+                                         class="w-full h-full object-cover" 
+                                         alt="{{ item.title }}">
+                                </div>
+                            {% endif %}
+                            
+                            <!-- Image Gallery -->
+                            {% if item.images.all %}
+                                <div class="p-4 border-t border-gray-100">
+                                    <div class="flex space-x-2 overflow-x-auto">
+                                        {% for image in item.images.all %}
+                                            <div class="flex-shrink-0">
+                                                <img src="{{ image.image.url }}" 
+                                                     class="w-20 h-20 rounded-lg object-cover border-2 border-gray-200 hover:border-teal-500 transition-colors cursor-pointer" 
+                                                     alt="Product image">
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
                             {% endif %}
                         </div>
-                        <div class="swiper mySwiper">
-                            <div class="swiper-wrapper h-[60px]">
-                                {% for image in item.images.all %}
-                                    <div class="swiper-slide w-[150px] h-[60px] rounded-[10px] flex justify-center items-center border border-slate-200 rounded">
-                                        {% if image.image %}
-                                            <img src="{{ image.image.url }}" class="w-[100%] h-[100%] rounded-[10px] object-center object-cover " alt="item image">
-                                        {% endif %}
+
+                        <!-- Product Info -->
+                        <div class="p-4 sm:p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center space-x-4 text-sm text-gray-600">
+                                    <div class="flex items-center">
+                                        <i class="fa-solid fa-location-dot mr-2"></i>
+                                        <span>{{ item.location }}</span>
                                     </div>
-                                {% endfor %}
+                                    <div class="flex items-center">
+                                        <i class="fa-solid fa-calendar mr-2"></i>
+                                        <span>{{ item.date_posted|date:"M d, Y" }}</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center text-sm text-gray-600">
+                                    <i class="fa-solid fa-eye mr-2"></i>
+                                    <span>45 views</span>
+                                </div>
                             </div>
-                             <!-- Add navigation arrows -->
-                            <div class="swiper-button-next"></div>
-                            <div class="swiper-button-prev"></div>
+
+                            <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
+                                {{ item.title }}
+                            </h1>
+
+                            <div class="prose prose-gray max-w-none">
+                                <p class="text-gray-700 text-base leading-relaxed">
+                                    {{ item.description }}
+                                </p>
+                            </div>
+
+                            <!-- Product Tags -->
+                            <div class="mt-6 flex flex-wrap gap-2">
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gradient-to-r from-teal-500 to-cyan-500 text-white">
+                                    {{ item.item_type }}
+                                </span>
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gradient-to-r from-emerald-500 to-teal-500 text-white">
+                                    {{ item.item_status }}
+                                </span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="p-[1rem] ">
-                        <p class="text-[#999999] font-semibold text-[13px] font-regular flex items-center gap-[0.5rem] m-0 p-0">
-                            <i class="fa fa-solid fa-location-dot"></i>
-                            {{ item.location }}, {{ item.date_posted }}
-                        </p>
-                        <p class="text-[#999999] font-semibold text-[13px] font-regular flex items-center gap-[0.5rem] m-0 p-0">
-                            <i class="fa fa-solid fa-eye"></i>
-                            45 views
-                        </p>
-                        <h3 class="text-slate-600 text-[25px] mt-[1rem] font-semibold">{{ item.title }}</h3>
-                        <p class="text-[15px] text-[#3b5361]">{{ item.description }}</p>
                     </div>
                 </div>
-                <div class=" ">
-                    <div class="p-[1rem]  mb-[10px] border border-slate-300 rounded">
-                        <div class=" ">
-                            <h1 class="text-[2rem] font-semibold text-[#3b5361]">GHS {{ item.price }}</h1>
-                            <p class="bg-slate-100 p-[0.5rem] rounded text-[13px] w-[100px] text-center">Negotiable</p>
-                            <p class="border border-slate-100 p-[0.5rem] rounded text-[13px]">Market price: GHS {{ item.market_price }}</p>                            
+
+                <!-- Product Actions & Seller Info -->
+                <div class="space-y-6">
+                    <!-- Price Card -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                        <div class="p-4 sm:p-6">
+                            <div class="mb-4">
+                                <h2 class="text-3xl font-bold text-gray-900 mb-2">
+                                    GHS {{ item.price }}
+                                </h2>
+                                <div class="flex items-center space-x-2 mb-4">
+                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-emerald-500 to-teal-500 text-white">
+                                        Negotiable
+                                    </span>
+                                    <span class="text-sm text-gray-600">
+                                        Market: GHS {{ item.market_price }}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="space-y-3">
+                                <button class="w-full inline-flex items-center justify-center px-4 py-3 bg-gradient-to-r from-teal-500 to-cyan-500 text-white text-sm font-medium rounded-lg hover:from-teal-600 hover:to-cyan-600 transition-all">
+                                    <i class="fa-solid fa-phone mr-2"></i>
+                                    {{ item.contact }}
+                                </button>
+                                <button class="w-full inline-flex items-center justify-center px-4 py-3 border border-teal-300 text-teal-700 text-sm font-medium rounded-lg hover:bg-teal-50 transition-colors">
+                                    <i class="fa-solid fa-phone mr-2"></i>
+                                    Call Now
+                                </button>
+                                <button class="w-full inline-flex items-center justify-center px-4 py-3 border border-teal-300 text-teal-700 text-sm font-medium rounded-lg hover:bg-teal-50 transition-colors">
+                                    <i class="fa-solid fa-message mr-2"></i>
+                                    Send Message
+                                </button>
+                            </div>
                         </div>
                     </div>
-                    <div class="p-[1rem]  border border-slate-300 rounded">
-                        <div class=" flex items-center gap-[10px]">
-                            <div class=" w-[50px] h-[50px] rounded-[50%]">
-                                {% if item.user.profilemodel.image %}
-                                    <img src="{{item.user.profilemodel.image.url}}" class="w-[50px] h-[50px]  rounded-[50%]" alt="user image">
-                                {% else %}
-                                    <img src="{% static "images/default.png" %}" class="w-[50px] h-[50px]  rounded-[50%]" alt="user image">
-                                {% endif %}
-                            </div>
-                            <div class="user_content">
-                                <h2 class="text-[16px] font-semibold m-0 p-0 text-[#3b5361]">{{ item.user }}</h2>
-                                <small class="text-[10px] text-[#3b5361]">Tyically replies within minuites</small>
+
+                    <!-- Seller Info -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                        <div class="p-4 sm:p-6">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-4">Seller Information</h3>
+                            <div class="flex items-center space-x-3">
+                                <div class="flex-shrink-0">
+                                    {% if item.user.profilemodel.image %}
+                                        <img src="{{ item.user.profilemodel.image.url }}" 
+                                             class="w-12 h-12 rounded-full object-cover" 
+                                             alt="{{ item.user.username }}">
+                                    {% else %}
+                                        <img src="{% static 'images/default.png' %}" 
+                                             class="w-12 h-12 rounded-full object-cover" 
+                                             alt="{{ item.user.username }}">
+                                    {% endif %}
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <h4 class="text-sm font-medium text-gray-900">
+                                        {{ item.user }}
+                                    </h4>
+                                    <p class="text-sm text-gray-600">
+                                        Typically replies within minutes
+                                    </p>
+                                </div>
                             </div>
                         </div>
-                        <button class="block w-[100%] my-[1rem] text-center py-[0.6rem] rounded bg-[#3b5361] text-[#fefefe]">{{item.contact}}</button>
-                        <button class="block w-[100%] my-[1rem] text-center py-[0.6rem] rounded border border-slate-600 text-[#3b5361] "><i class="fa fa-solid fa-phone mr-[0.3rem]"></i> Call Now</button>
                     </div>
-                    <div class="p-[1rem] my-[10px]  border border-slate-300 rounded">
-                        <h3 class="text-[#3b5361] text-center font-bold text-[18px]">Safety Tips</h3>
-                        <ul class="list-disc text-[13px] ml-[1rem] font-semibold text-slate-500">
-                            <li>Avoid sending any prepayments</li>
-                            <li>Meet with the seller at a safe public place</li>
-                            <li>Inspect what you're going to buy to make sure it's what you need</li>
-                            <li>Check all the docs and only pay if you're satisfied</li>
-                        </ul>
+
+                    <!-- Safety Tips -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                        <div class="p-4 sm:p-6">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                                <i class="fa-solid fa-shield-alt mr-2 text-teal-600"></i>
+                                Safety Tips
+                            </h3>
+                            <ul class="space-y-2 text-sm text-gray-700">
+                                <li class="flex items-start">
+                                    <i class="fa-solid fa-check text-teal-600 mr-2 mt-1"></i>
+                                    <span>Avoid sending any prepayments</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa-solid fa-check text-teal-600 mr-2 mt-1"></i>
+                                    <span>Meet with the seller at a safe public place</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa-solid fa-check text-teal-600 mr-2 mt-1"></i>
+                                    <span>Inspect what you're going to buy to make sure it's what you need</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa-solid fa-check text-teal-600 mr-2 mt-1"></i>
+                                    <span>Check all the docs and only pay if you're satisfied</span>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Edit Product Modal -->
+    <div class="hidden fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-50" id="productEditModal">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-hidden">
+                <div class="flex items-center justify-between p-6 border-b border-gray-200">
+                    <h2 class="text-xl font-semibold text-gray-900">
+                        <i class="fa-solid fa-edit mr-2 text-teal-600"></i>
+                        Edit Product
+                    </h2>
+                    <button type="button" class="edit-modal-close p-2 rounded-full hover:bg-teal-50 transition-colors">
+                        <i class="fa-solid fa-times text-teal-600"></i>
+                    </button>
+                </div>
+                <div class="p-6 overflow-y-auto max-h-[calc(90vh-120px)]">
+                    <form action="" method="post" enctype="multipart/form-data" class="space-y-6">
+                        {% csrf_token %}
+                        <div class="space-y-4">
+                            {{ e_form|crispy }}
+                        </div>
+                        <div class="border border-gray-200 rounded-lg p-4">
+                            <h3 class="text-lg font-medium text-gray-900 mb-4">Product Images</h3>
+                            {{ image_form|crispy }}
+                        </div>
+                        <input type="hidden" name="e_form" value="e_form">
+                        <div class="flex space-x-3">
+                            <button type="submit" 
+                                    class="flex-1 inline-flex items-center justify-center px-4 py-2 bg-gradient-to-r from-teal-500 to-cyan-500 text-white text-sm font-medium rounded-lg hover:from-teal-600 hover:to-cyan-600 transition-all">
+                                <i class="fa-solid fa-save mr-2"></i>
+                                Save Changes
+                            </button>
+                            <button type="button" 
+                                    class="edit-modal-close flex-1 inline-flex items-center justify-center px-4 py-2 border border-teal-300 text-teal-700 text-sm font-medium rounded-lg hover:bg-teal-50 transition-colors">
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
- <!-- Add Swiper JS -->
- <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
- <script>
-     const swiper = new Swiper('.mySwiper', {
-         slidesPerView: 'auto',
-         spaceBetween: 8,
-         centeredSlides: false,
-         grabCursor: true,
-         freeMode: true,
-         navigation: {
-             nextEl: '.swiper-button-next',
-             prevEl: '.swiper-button-prev',
-         },
-         pagination: {
-             el: '.swiper-pagination',
-             clickable: true,
-         },
-         breakpoints: {
-             640: {
-                 spaceBetween: 8,
-             },
-             1024: {
-                 spaceBetween: 8,
-             },
-         },
-     });
+    <!-- Footer - Hidden on Mobile -->
+    <div class="hidden md:block">
+        {% include "partials/footer.html" %}
+    </div>
 
-     document.addEventListener('DOMContentLoaded', function() {
-        // Product Modal Toggle
-        const productEditBtn = document.getElementById('productEditTrigger');
-        const productEditModal = document.getElementById('productEditModal');
-        const closeBtns = document.querySelectorAll('.edit-modal-close');
-
-        // Toggle modal
-        if(productEditBtn && productEditModal) {
-            productEditBtn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                productEditModal.classList.toggle('hidden');
-            });
+    <script>
+        function goBack() {
+            window.history.back();
         }
 
-        // Close modal
-        closeBtns.forEach(btn => {
-            btn.addEventListener('click', function() {
-                productEditModal.classList.add('hidden');
+        document.addEventListener('DOMContentLoaded', function() {
+            // Product Modal Toggle
+            const productEditBtn = document.getElementById('productEditTrigger');
+            const productEditModal = document.getElementById('productEditModal');
+            const closeBtns = document.querySelectorAll('.edit-modal-close');
+
+            // Toggle modal
+            if(productEditBtn && productEditModal) {
+                productEditBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    productEditModal.classList.toggle('hidden');
+                });
+            }
+
+            // Close modal
+            closeBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    productEditModal.classList.add('hidden');
+                });
+            });
+
+            // Close when clicking outside
+            document.addEventListener('click', function(e) {
+                if(!e.target.closest('#productEditModal') && 
+                   !e.target.closest('#productEditTrigger')) {
+                    productEditModal.classList.add('hidden');
+                }
+            });
+
+            // Close on ESC key
+            document.addEventListener('keydown', function(e) {
+                if(e.key === 'Escape') {
+                    productEditModal.classList.add('hidden');
+                }
             });
         });
-
-        // Close when clicking outside
-        document.addEventListener('click', function(e) {
-            if(!e.target.closest('#productEditModal') && 
-               !e.target.closest('#productTrigger')) {
-                productEditModal.classList.add('hidden');
-            }
-        });
-
-        // Close on ESC key
-        document.addEventListener('keydown', function(e) {
-            if(e.key === 'Escape') {
-                productEditModal.classList.add('hidden');
-            }
-        });
-    });
- </script>
-
+    </script>
 {% endblock %}

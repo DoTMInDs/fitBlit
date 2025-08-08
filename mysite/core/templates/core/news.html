@@ -4,155 +4,226 @@
 {% block title %}News{% endblock  %}
 {% block content %}
     {% include "partials/nav.html" %}
-    <div class="px-[0.5rem] md:px-0  w-[100%] md:w-[80%] m-auto space_buttom">
-        <div class="flex gap-2">
-            <div class="w-[100%] mb-[30px] ">
-                <div class="bg-slate-100 shadow border border-slate-200 rounded">
-                    <h2 class="p-[5px] text-slate-500 text-[15px]">General News</h2> 
-                </div>
-                <div class="w-full flex justify-between mt-[1rem] ">
-                    <div class="news-grid w-full">
-                        {% for article in article_page_obj %}
-                            <div class="mb-[1rem] shadow-md rounded-[10px] ">
-                                <div class="p-[1rem]">
-                                    <h5 class="text-[18px] font-medium"> {{ article.title }} </h5> 
-                                    <div class="flex justify-between items-center mb-[1rem]">
-                                        <p class=" text-nowrap text-[14px] text-[#444] font-semibold">
-                                            <i class="fa-solid fa-clock"></i>
-                                            <small>{{article.dated_on|date:"M. d, Y" }}</small>
-                                        </p>
-                                        <p class="text-[13px] text-[#444] font-semibold text-nowrap">
-                                            <i class="fa-solid fa-comments px-[2px]"></i>
-                                            {{article.article_comment_count}}
-                                             Comments
-                                        </p>
-                                        <p class=" flex text-nowrap items-center gap-[5px] text-[13px] text-[#444] font-semibold">
-                                            <a href="{% url "profile" %}" class="hover:underline">
-                                                <i class="fa-solid fa-user"></i> 
-                                                {{ article.author }} 
-                                            </a>
-                                        </p> 
-                                    </div>
-                                    <div class=" flex gap-3" style="overflow:hidden;">
-                                        <div class="w-[100%] min-w-[100px] h-[80px] rounded shadow flex justify-center items-center">
-                                            {% if article.image %}
-                                                <img src="{{article.image.url}}" class="rounded w-[100px] h-[100%] object-center object-cover" alt="...">
-                                            {% endif %}
-                                        </div>
-                                        <p class="text-[18px] text-slate-700"><small >{{article.article_content|truncatewords:8}}</small></p>
-                                    </div>
-                                </div>
-                                <div class="border-t border-slate-200 p-[1rem] px-[1rem] pb-[1rem] flex justify-between items-center">
-                                    <button class="rounded-full py-[6px] px-[18px] hover:bg-slate-200 transition duration-200 text-slate-600">
-                                       <a href="{% url "blog-post-detail" article.id %}" class="">
-                                            <i class="fa-solid fa-eye mr-[0.5rem]"></i>
-                                            Detail
-                                       </a>
-                                    </button>                               
-                                    <div class="">
-                                        {% if article.author == request.user %}
-                                            <button class="w-[50px] h-[50px] rounded-[10px] shadow-md hover:bg-slate-200 transition duration-200">
-                                                <a href="{% url "user-dashboard-edit" article.id %}" class="flex justify-center items-center text-slate-600 rounded-full p-[0.5rem]">
-                                                    <i class="fa-regular fa-pen-to-square"></i>
-                                                </a>
-                                            </button>
-                                            <button class="w-[50px] h-[50px] rounded-[10px] shadow-md bg-rose-200 transition duration-200">
-                                                <a href="{% url "user-post-delete" article.id %}" class="flex justify-center items-center text-rose-600  rounded-full p-[0.3rem]">
-                                                    <i class="fa-solid fa-trash-can"></i>                                         
-                                                </a>
-                                            </button>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </div> 
-                        {% endfor %}  
+    
+    <!-- Mobile-First News Page -->
+    <div class="min-h-screen bg-gray-50">
+        <!-- Header Section -->
+        <div class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-10">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16">
+                    <h1 class="text-xl font-bold text-gray-900">Latest News</h1>
+                    <div class="flex items-center space-x-2">
+                        <button class="p-2 rounded-full hover:bg-teal-50 transition-colors">
+                            <i class="fa-solid fa-search text-teal-600"></i>
+                        </button>
+                        <button class="p-2 rounded-full hover:bg-teal-50 transition-colors">
+                            <i class="fa-solid fa-filter text-teal-600"></i>
+                        </button>
                     </div>
                 </div>
             </div>
-            <div class="md:block spotlight">
-                <div class="min-w-[400px] w-[100%]">
-                    <div class=" bg-[#777777] rounded">
-                        <h2 class="p-[5px] text-[#fefefefe] text-[15px]">Spotlight</h2>
+        </div>
+
+        <!-- Main Content -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="flex flex-col lg:flex-row gap-6">
+                <!-- News Articles Section -->
+                <div class="flex-1">
+                    <!-- Category Header -->
+                    <div class="mb-6">
+                        <div class="bg-gradient-to-r from-teal-500 to-cyan-500 rounded-lg shadow-sm">
+                            <h2 class="px-4 py-3 text-white font-semibold text-lg">
+                                <i class="fa-solid fa-newspaper mr-2"></i>
+                                General News
+                            </h2>
+                        </div>
                     </div>
-                    <div class=" bg-[#ffffff] mt-[1rem]">
-                        <div class="flex flex-col w-full">
-                            {% for blog_post in posts %}
-                                <a href="{% url "blog-postmodel-detail" blog_post.id %}" class="flex link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
-                                    <div class="shadow rounded-md w-full mt-[1rem]">
-                                        <div class="">
-                                            {% if blog_post.image %}
-                                                <img src="{{blog_post.image.url}}" class=" rounded-t w-[100%] h-[100%] object-cover object-center" alt="...">
-                                            {% endif %}
+
+                    <!-- Articles Grid -->
+                    <div class="space-y-4">
+                        {% for article in article_page_obj %}
+                            <article class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-300">
+                                <!-- Article Header -->
+                                <div class="p-4 sm:p-6">
+                                    <div class="flex items-start justify-between mb-3">
+                                        <h3 class="text-lg sm:text-xl font-bold text-gray-900 leading-tight line-clamp-2">
+                                            {{ article.title }}
+                                        </h3>
+                                        {% if article.author == request.user %}
+                                            <div class="flex items-center space-x-1 ml-3">
+                                                <a href="{% url 'user-dashboard-edit' article.id %}" 
+                                                   class="p-2 rounded-full hover:bg-teal-50 text-teal-600 transition-colors">
+                                                    <i class="fa-regular fa-pen-to-square text-sm"></i>
+                                                </a>
+                                                <a href="{% url 'user-post-delete' article.id %}" 
+                                                   class="p-2 rounded-full hover:bg-red-50 text-red-600 transition-colors">
+                                                    <i class="fa-solid fa-trash-can text-sm"></i>
+                                                </a>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+
+                                    <!-- Article Meta -->
+                                    <div class="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-4">
+                                        <div class="flex items-center">
+                                            <i class="fa-solid fa-clock mr-1"></i>
+                                            <span>{{ article.dated_on|date:"M d, Y" }}</span>
                                         </div>
-                                        <div class="px-[0.5rem]">
-                                            <h5 class="card-title mt-[10px]  py-0 "> {{ blog_post.title|truncatewords:2 }}</h5>
-                                            <p class="card-text text-[14px] py-0 my-0">
-                                                <i class="fa-solid fa-clock pr-[2px]"></i>
-                                                <small>{{blog_post.created_on}}</small>
-                                            </p>
-                                            <p class="text-[14px] text-[#444] py-0 my-0 font-semibold">
-                                                <i class="fa-solid fa-comments pr-[2px]"></i>
-                                                {{blog_post.post_comment_count}}
-                                                    Comments
-                                            </p>
-                                            <div class="mb-[6px]">
-                                                <p class="card-text flex items-center gap-[5px] text-[14px] text-[#444] font-semibold"><i class="fa-solid fa-user"></i> {{ blog_post.author }} </p> 
-                                            </div> 
+                                        <div class="flex items-center">
+                                            <i class="fa-solid fa-comments mr-1"></i>
+                                            <span>{{ article.article_comment_count }} Comments</span>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <i class="fa-solid fa-user mr-1"></i>
+                                            <a href="{% url 'profile' %}" class="hover:text-teal-600 transition-colors">
+                                                {{ article.author }}
+                                            </a>
                                         </div>
                                     </div>
-                                </a> 
+
+                                    <!-- Article Content -->
+                                    <div class="flex gap-4">
+                                        {% if article.image %}
+                                            <div class="flex-shrink-0">
+                                                <img src="{{ article.image.url }}" 
+                                                     class="w-20 h-20 sm:w-24 sm:h-24 rounded-lg object-cover shadow-sm" 
+                                                     alt="{{ article.title }}">
+                                            </div>
+                                        {% endif %}
+                                        <div class="flex-1 min-w-0">
+                                            <p class="text-gray-700 text-sm sm:text-base leading-relaxed line-clamp-3">
+                                                {{ article.article_content|truncatewords:15 }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Article Actions -->
+                                <div class="border-t border-gray-100 bg-gradient-to-r from-teal-50 to-cyan-50 px-4 sm:px-6 py-3">
+                                    <div class="flex items-center justify-between">
+                                        <a href="{% url 'blog-post-detail' article.id %}" 
+                                           class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-teal-500 to-cyan-500 text-white text-sm font-medium rounded-lg hover:from-teal-600 hover:to-cyan-600 transition-all">
+                                            <i class="fa-solid fa-eye mr-2"></i>
+                                            Read More
+                                        </a>
+                                        <div class="flex items-center space-x-2">
+                                            <button class="p-2 rounded-full hover:bg-teal-100 transition-colors">
+                                                <i class="fa-regular fa-heart text-teal-600"></i>
+                                            </button>
+                                            <button class="p-2 rounded-full hover:bg-teal-100 transition-colors">
+                                                <i class="fa-solid fa-share text-teal-600"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="mt-8">
+                        <nav class="flex items-center justify-center">
+                            <div class="flex items-center space-x-2">
+                                {% if article_page_obj.has_previous %}
+                                    <a href="?article_page={{ article_page_obj.previous_page_number }}" 
+                                       class="inline-flex items-center px-3 py-2 text-sm font-medium text-teal-700 bg-white border border-teal-300 rounded-lg hover:bg-teal-50 transition-colors">
+                                        <i class="fa-solid fa-arrow-left mr-2"></i>
+                                        Previous
+                                    </a>
+                                {% else %}
+                                    <span class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-300 rounded-lg cursor-not-allowed">
+                                        <i class="fa-solid fa-arrow-left mr-2"></i>
+                                        Previous
+                                    </span>
+                                {% endif %}
+
+                                <div class="flex items-center space-x-1">
+                                    {% for num in article_page_obj.paginator.page_range %}
+                                        {% if article_page_obj.number == num %}
+                                            <span class="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-gradient-to-r from-teal-500 to-cyan-500 border border-teal-500 rounded-lg">
+                                                {{ num }}
+                                            </span>
+                                        {% else %}
+                                            <a href="?article_page={{ num }}" 
+                                               class="inline-flex items-center px-3 py-2 text-sm font-medium text-teal-700 bg-white border border-teal-300 rounded-lg hover:bg-teal-50 transition-colors">
+                                                {{ num }}
+                                            </a>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+
+                                {% if article_page_obj.has_next %}
+                                    <a href="?article_page={{ article_page_obj.next_page_number }}" 
+                                       class="inline-flex items-center px-3 py-2 text-sm font-medium text-teal-700 bg-white border border-teal-300 rounded-lg hover:bg-teal-50 transition-colors">
+                                        Next
+                                        <i class="fa-solid fa-arrow-right ml-2"></i>
+                                    </a>
+                                {% else %}
+                                    <span class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-300 rounded-lg cursor-not-allowed">
+                                        Next
+                                        <i class="fa-solid fa-arrow-right ml-2"></i>
+                                    </span>
+                                {% endif %}
+                            </div>
+                        </nav>
+                    </div>
+                </div>
+
+                <!-- Spotlight Sidebar (Hidden on Mobile) -->
+                <div class="hidden lg:block lg:w-80">
+                    <div class="sticky top-20">
+                        <div class="bg-gradient-to-r from-cyan-500 to-teal-500 rounded-lg shadow-sm mb-4">
+                            <h2 class="px-4 py-3 text-white font-semibold text-lg">
+                                <i class="fa-solid fa-star mr-2"></i>
+                                Spotlight
+                            </h2>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            {% for blog_post in posts %}
+                                <a href="{% url 'blog-postmodel-detail' blog_post.id %}" 
+                                   class="block bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-300">
+                                    {% if blog_post.image %}
+                                        <div class="aspect-video overflow-hidden">
+                                            <img src="{{ blog_post.image.url }}" 
+                                                 class="w-full h-full object-cover" 
+                                                 alt="{{ blog_post.title }}">
+                                        </div>
+                                    {% endif %}
+                                    <div class="p-4">
+                                        <h4 class="font-semibold text-gray-900 mb-2 line-clamp-2">
+                                            {{ blog_post.title|truncatewords:4 }}
+                                        </h4>
+                                        <div class="flex items-center justify-between text-sm text-gray-600">
+                                            <div class="flex items-center">
+                                                <i class="fa-solid fa-clock mr-1"></i>
+                                                <span>{{ blog_post.created_on|date:"M d" }}</span>
+                                            </div>
+                                            <div class="flex items-center">
+                                                <i class="fa-solid fa-comments mr-1"></i>
+                                                <span>{{ blog_post.post_comment_count }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="mt-2 text-sm text-gray-600">
+                                            <i class="fa-solid fa-user mr-1"></i>
+                                            {{ blog_post.author }}
+                                        </div>
+                                    </div>
+                                </a>
                             {% endfor %}
                         </div>
                     </div>
                 </div>
-               
             </div>
         </div>
-
     </div>
 
-     <!-- Pagination for Articles -->
-     <div class="pagination flex justify-center items-center">
-        <div class="flex items-center gap-[0.5rem]">
-            {% if article_page_obj.has_previous %}
-                <a href="?article_page={{ article_page_obj.previous_page_number }}" class="text-[#3b5361] flex items-center gap-[0.5rem] no-underline text-nowrap text-[14px]">
-                    <i class="fa fa-solid fa-arrow-left mx-[0.3rem]"></i>
-                    Prev
-                </a>
-                {% else %}
-                <a class="text-[#3b5361] flex items-center gap-[0.5rem] no-underline text-nowrap text-[14px] disabled">
-                    <i class="fa fa-solid fa-arrow-left mx-[0.3rem]"></i>
-                    Prev
-                </a>
-            {% endif %}
-            {% for num in article_page_obj.paginator.page_range %}
-                <div class="flex items-center gap-[0.3rem]">
-                    {% if article_page_obj.number == num %}
-                        <li class="list-none">
-                            <a class="no-underline text-[#fefefe] font-semibold text-[10px] md:text-[14px] bg-slate-400 py-[0.3rem] px-[0.5rem] text-center w-[25px] h-[25px] rounded-full" href="?article_page={{ num }}">{{ num }}</a>
-                        </li>
-                    {% else %}
-                        <li class="list-none">
-                            <a class="no-underline text-[#3b5361] font-semibold text-[10px] md:text-[14px] hover:bg-slate-200 py-[0.3rem] px-[0.5rem] text-center w-[25px] h-[25px] rounded-full" href="?article_page={{ num }}">{{ num }}</a>
-                        </li>
-                    {% endif %}
-                </div>
-            {% endfor %}
-            {% if article_page_obj.has_next %}
-                <a href="?article_page={{ article_page_obj.next_page_number }}" class="text-[#3b5361] text-nowrap no-underline flex items-center gap-[0.5rem] text-[14px]">
-                    Next
-                    <i class="fa fa-solid fa-arrow-right mx-[0.3rem]"></i>
-                </a>
-            {% else %}
-                <a class="text-[#3b5361] text-nowrap no-underline flex items-center gap-[0.5rem] text-[14px]">
-                    Next
-                    <i class="fa fa-solid fa-arrow-right mx-[0.3rem]"></i>
-                </a>
-            {% endif %}
-        </div>
+    <!-- Footer - Hidden on Mobile -->
+    <div class="hidden md:block">
+        {% include "partials/footer.html" %}
     </div>
 
 
-    {% include "partials/footer.html" %}
-    {% endblock content %}
+    
+{% endblock content %}
     

@@ -155,12 +155,14 @@
                                 </div>
                                 <div class="flex gap-[0.5rem] mt-[20px]">
                                     <button type="button" class="closeSongBtn block py-[0.5rem] text-slate-600 w-[100%] bg-[#fcfcfc] border-opacity-20 border border-slate-400 rounded-full">Cancel</button>
+                                    {% if song.song_file %}
                                     <a class="block py-[0.5rem] w-[100%] hover:bg-slate-200 transition duration-300 flex justify-center items-center border-opacity-30 border border-slate-400 rounded-full" href="{{ song.song_file.url }}" download>
                                         <button class="">
                                             <i class="fa-solid fa-cloud-arrow-down"></i>
                                             Download
                                         </button>  
-                                    </a>                                       
+                                    </a>    
+                                    {% endif %}                                   
                                 </div>
                             </div>
                         </div>

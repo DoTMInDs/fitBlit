@@ -2,216 +2,232 @@
 {% load static %}
 {% load tailwind_filters %}
 {% block nav %}
-    <nav class="nav-web-view p-[0.3rem] md:p-[0.3rem]  w-[100%] bg-[#fefefe] shadow fixed top-[0] z-[100]">
-        <div class=" w-full flex items-center justify-between md:w-[80%] m-auto ">
-            <div class="flex items-center cursor-pointer">
-                <a href="{% url "home" %}" class="no-underline gap-[0.5rem] flex items-center">
-                    <img src="{% static 'images/fitblog-logo.png' %}" height="64px" class="w-[30px] ">
-                    <h4 class=" text-[#444444] ">FitBlog</h4>
-                </a>
-            </div>
-            <div class="main-nav">
-                <ul class="flex gap-[1.5rem] items-center">
-                    <li>
-                        <a class="flex items-center gap-[0.3rem] no-underline text-nowrap text-[#3b5361] font-medium" href="{% url "news-page" %}">
-                            <i class="fa-regular fa-newspaper"></i>
-                            News
-                        </a>
-                    </li>
-                    <li>
-                        <a class="flex items-center gap-[0.3rem] no-underline text-nowrap text-[#3b5361] font-medium" href="{% url "business-page" %}">
-                            <i class="fa-solid fa-cart-shopping"></i>
-                            Market Store
-                        </a>
-                    </li>
-                    <li>
-                        <a class="flex items-center gap-[0.3rem] no-underline text-nowrap text-[#3b5361] font-medium" href="{% url "music-page" %}">
-                            <i class="fa-solid fa-music"></i>
-                            Music
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            <div class="flex items-center md:order-2">
-                <button data-modal-target="post-modal" data-modal-toggle="post-modal" id="postBtn" type="button" class="capitalize bg-teal-600 px-[0.6rem] py-[0.3rem] rounded-[10px] shadow-md font-semibold text-[#FFFFFF] mr-[1rem] text-nowrap flex gap-[0.3rem] items-center" >
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M8 15C4.14 15 1 11.86 1 8C1 4.14 4.14 1 8 1C11.86 1 15 4.14 15 8C15 11.86 11.86 15 8 15ZM8 2C4.69 2 2 4.69 2 8C2 11.31 4.69 14 8 14C11.31 14 14 11.31 14 8C14 4.69 11.31 2 8 2Z" fill="currentColor"/>
-                        <path d="M8 11.5C7.72 11.5 7.5 11.28 7.5 11V5C7.5 4.72 7.72 4.5 8 4.5C8.28 4.5 8.5 4.72 8.5 5V11C8.5 11.28 8.28 11.5 8 11.5Z" fill="currentColor"/>
-                        <path d="M11 8.5H5C4.72 8.5 4.5 8.28 4.5 8C4.5 7.72 4.72 7.5 5 7.5H11C11.28 7.5 11.5 7.72 11.5 8C11.5 8.28 11.28 8.5 11 8.5Z" fill="currentColor"/>
-                    </svg>
-                     Post
-                </button>
-                <div class="relative">
+    <nav class="bg-white shadow-lg border-b border-gray-100 sticky top-0 mt-0 z-50 desktop-view">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <a href="{% url 'home' %}" class="flex items-center space-x-3 group">
+                        <div class="w-10 h-10 bg-gradient-to-br from-teal-500 to-teal-600 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition duration-300">
+                            <img src="{% static 'images/fitblog-logo.png' %}" alt="FitBlit" class="w-6 h-6">
+                        </div>
+                        <div>
+                            <h1 class="text-xl font-bold text-gray-900">FitBlit</h1>
+                            <p class="text-xs text-gray-500 -mt-1">Dashboard</p>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Desktop Navigation -->
+                <div class="flex items-center space-x-8">
+                    <a href="{% url 'news-page' %}" class="flex items-center space-x-2 text-gray-700 hover:text-teal-600 font-medium transition duration-300 group">
+                        <i class="fa-regular fa-newspaper text-lg group-hover:scale-110 transition duration-300"></i>
+                        <span>News</span>
+                    </a>
+                    <a href="{% url 'business-page' %}" class="flex items-center space-x-2 text-gray-700 hover:text-teal-600 font-medium transition duration-300 group">
+                        <i class="fa-solid fa-cart-shopping text-lg group-hover:scale-110 transition duration-300"></i>
+                        <span>Marketplace</span>
+                    </a>
+                    <a href="{% url 'music-page' %}" class="flex items-center space-x-2 text-gray-700 hover:text-teal-600 font-medium transition duration-300 group">
+                        <i class="fa-solid fa-music text-lg group-hover:scale-110 transition duration-300"></i>
+                        <span>Music</span>
+                    </a>
+                </div>
+
+                <!-- User Menu and Actions -->
+                <div class="flex items-center space-x-4">
+                    <!-- Create Post Button -->
+                    <button data-modal-target="post-modal" data-modal-toggle="post-modal" id="postBtn" 
+                            class="bg-gradient-to-r from-teal-500 to-teal-600 text-white px-4 py-2 rounded-xl font-semibold hover:from-teal-600 hover:to-teal-700 transition duration-300 shadow-lg hover:shadow-xl flex items-center space-x-2">
+                        <i class="fa-solid fa-plus text-sm"></i>
+                        <span>Create Post</span>
+                    </button>
+
+                    <!-- User Dropdown -->
                     {% if user.is_authenticated %}
-                        <button id="dropdownNavbarLink" data-dropdown-toggle="dropdownNavbar" class="cursor-pointer flex gap-[0.5rem] items-center bg-[#3D5361] rounded-full w-[40px] h-[40px] text-[13px]  hover:text-[#3D5261] text-nowrap">
-                            <span class="font-bold text-xl flex justify-center items-center text-[#FFFFFF] w-[40px] h-[40px] rounded-full border border-slate-200 shadow">{{ user.username|first|upper }}</span>
-                        </button>
-                        <!--ProfileModel-->
-                        <div id="dropdownNavbar" class="hidden border border-slate-200 rounded-[15px] w-[250px] shadow-lg bg-slate-50 absolute right-0">
-                            <div class="" aria-labelledby="dropdownLargeButton">
-                                <div class="flex items-center gap-[1rem] border-b borer-slate-300 px-[1rem]">
-                                    <div class="">
+                        <div class="relative" x-data="{ open: false }">
+                            <button @click="open = !open" class="flex items-center space-x-3 p-2 rounded-xl hover:bg-gray-50 transition duration-300">
+                                <div class="w-8 h-8 bg-gradient-to-br from-teal-500 to-teal-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+                                    {{ user.username|first|upper }}
+                                </div>
+                                <i class="fa-solid fa-chevron-down text-gray-500 text-xs"></i>
+                            </button>
+                            
+                            <div x-show="open" @click.away="open = false" 
+                                 class="absolute right-0 mt-2 w-64 bg-white rounded-2xl shadow-xl border border-gray-100 py-2 z-50">
+                                <!-- User Info -->
+                                <div class="px-4 py-3 border-b border-gray-100">
+                                    <div class="flex items-center space-x-3">
                                         {% if user.profilemodel.image %}
-                                            <img class="w-[40px] h-[40px] border border-slate-200 rounded-[50%] object-cover object-center mr-[10px]" src=" {{ user.profilemodel.image.url }} " alt="Profile Image">
+                                            <img src="{{ user.profilemodel.image.url }}" alt="Profile" class="w-10 h-10 rounded-full object-cover">
                                         {% else %}
-                                            <img class="w-[40px] h-[40px] border border-slate-200 rounded-[50%] object-cover object-center mr-[10px]" src="{% static "images/default.png" %} " alt="Default Profile Image">
+                                            <div class="w-10 h-10 bg-gradient-to-br from-teal-500 to-teal-600 rounded-full flex items-center justify-center">
+                                                <i class="fa-solid fa-user text-white"></i>
+                                            </div>
                                         {% endif %}
-                                    </div>
-                                    <div class="m-0 p-0">
-                                        <h2 class="m-0 p-0 text-[#444444] font-medium">{{ user.profilemodel.full_name }}</h2>
-                                        <small class='text-[0.8rem] text-[#555555]'>@{{ user.username }}</small>
+                                        <div>
+                                            <p class="font-semibold text-gray-900">{{ user.profilemodel.full_name|default:user.username }}</p>
+                                            <p class="text-sm text-gray-500">@{{ user.username }}</p>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="mt-[0.3rem]">
-                                    <div class="">
-                                        <a href="{% url "profile" %}" class="flex items-center gap-[1rem] text-[#555555] no-underline text-nowrap px-[1rem] py-[0.5rem] hover:bg-[#ebebeb]">
-                                            <p> <i class="fa-solid fa-gear p_user"></i></p>
-                                            <p class="">Manage account</p>
-                                        </a>
+                                
+                                <!-- Menu Items -->
+                                <div class="py-2">
+                                    <a href="{% url 'profile' %}" class="flex items-center space-x-3 px-4 py-2 text-gray-700 hover:bg-gray-50 transition duration-300">
+                                        <i class="fa-solid fa-user-gear text-gray-500"></i>
+                                        <span>Manage Account</span>
+                                    </a>
+                                    <a href="{% url 'user-dashboard' %}" class="flex items-center space-x-3 px-4 py-2 text-gray-700 hover:bg-gray-50 transition duration-300">
+                                        <i class="fa-solid fa-chart-line text-gray-500"></i>
+                                        <span>Dashboard</span>
+                                    </a>
+                                    {% if user.is_staff %}
+                                    <a href="{% url 'admin:index' %}" class="flex items-center space-x-3 px-4 py-2 text-gray-700 hover:bg-gray-50 transition duration-300">
+                                        <i class="fa-solid fa-gears text-gray-500"></i>
+                                        <span>Admin Panel</span>
+                                    </a>
+                                    {% endif %}
+                                    <div class="border-t border-gray-100 my-2"></div>
+                                    <a href="{% url 'logout' %}" class="flex items-center space-x-3 px-4 py-2 text-red-600 hover:bg-red-50 transition duration-300">
+                                        <i class="fa-solid fa-sign-out-alt"></i>
+                                        <span>Sign Out</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Dashboard Navigation -->
+    <nav class="bg-white shadow-lg border-b border-gray-100 sticky top-0 z-50 md:hidden">
+        <div class="px-4">
+            <div class="flex justify-between items-center h-14">
+                <!-- Mobile Logo -->
+                <div class="flex items-center">
+                    <a href="{% url 'home' %}" class="flex items-center space-x-2">
+                        <div class="w-8 h-8 bg-gradient-to-br from-teal-500 to-teal-600 rounded-lg flex items-center justify-center">
+                            <img src="{% static 'images/fitblog-logo.png' %}" alt="FitBlit" class="w-5 h-5">
+                        </div>
+                        <span class="text-lg font-bold text-gray-900">FitBlit</span>
+                    </a>
+                </div>
+
+                <!-- Mobile Actions -->
+                <div class="flex items-center space-x-3">
+                    <!-- Create Post Button -->
+                    <button data-modal-target="post-modal" data-modal-toggle="post-modal" id="postBtn" 
+                            class="bg-gradient-to-r from-teal-500 to-teal-600 text-white px-3 py-2 rounded-lg font-semibold text-sm hover:from-teal-600 hover:to-teal-700 transition duration-300 shadow-lg hover:shadow-xl flex items-center space-x-1">
+                        <i class="fa-solid fa-plus text-xs"></i>
+                        <span class="hidden sm:inline">Post</span>
+                    </button>
+
+                    <!-- User Menu for Mobile -->
+                    {% if user.is_authenticated %}
+                        <div class="relative" x-data="{ open: false }">
+                            <button @click="open = !open" class="flex items-center p-2 rounded-lg hover:bg-gray-50 transition duration-300">
+                                <div class="w-7 h-7 bg-gradient-to-br from-teal-500 to-teal-600 rounded-full flex items-center justify-center text-white font-semibold text-xs">
+                                    {{ user.username|first|upper }}
+                                </div>
+                            </button>
+                            
+                            <div x-show="open" @click.away="open = false" 
+                                 class="absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border border-gray-100 py-2 z-50">
+                                <div class="px-4 py-3 border-b border-gray-100">
+                                    <div class="flex items-center space-x-3">
+                                        {% if user.profilemodel.image %}
+                                            <img src="{{ user.profilemodel.image.url }}" alt="Profile" class="w-8 h-8 rounded-full object-cover">
+                                        {% else %}
+                                            <div class="w-8 h-8 bg-gradient-to-br from-teal-500 to-teal-600 rounded-full flex items-center justify-center">
+                                                <i class="fa-solid fa-user text-white text-sm"></i>
+                                            </div>
+                                        {% endif %}
+                                        <div>
+                                            <p class="font-semibold text-gray-900 text-sm">{{ user.profilemodel.full_name|default:user.username }}</p>
+                                            <p class="text-xs text-gray-500">@{{ user.username }}</p>
+                                        </div>
                                     </div>
-                                    <div class="">
-                                        <a href="{% url "admin:index" %}" class="flex items-center gap-[1rem] text-[#555555] no-underline text-nowrap px-[1rem] py-[0.5rem] hover:bg-[#ebebeb]">
-                                            <p> <i class="fa-solid fa-gears p_user"></i></p>
-                                            <p class="">Admin</p>
-                                        </a>
-                                    </div>
-                                    <div class="">
-                                        <a href="{% url "user-dashboard" %}" class='flex gap-[1rem] items-center px-[1rem] py-[0.5rem] no-underline text-nowrap text-[#555555] hover:bg-[#ebebeb]'>
-                                            <p> <i class="fa-solid fa-circle-user"></i></p>
-                                            <p class="">Dashboard</p>
-                                        </a>
-                                    </div>
-                                    <div class="">
-                                        <a href="{% url "logout" %}" class='flex gap-[1rem] text-[#555555] no-underline text-nowrap items-center px-[1rem] py-[0.5rem] hover:bg-[#ebebeb]'>
-                                            <p><i class="fa-solid fa-arrow-right-from-bracket"></i></p>
-                                            <p class="">Sign out</p>
-                                        </a>
-                                    </div>
+                                </div>
+                                
+                                <div class="py-2">
+                                    <a href="{% url 'profile' %}" class="flex items-center space-x-3 px-4 py-2 text-gray-700 hover:bg-gray-50 transition duration-300">
+                                        <i class="fa-solid fa-user-gear text-gray-500 text-sm"></i>
+                                        <span class="text-sm">Profile</span>
+                                    </a>
+                                    <a href="{% url 'user-dashboard' %}" class="flex items-center space-x-3 px-4 py-2 text-gray-700 hover:bg-gray-50 transition duration-300">
+                                        <i class="fa-solid fa-chart-line text-gray-500 text-sm"></i>
+                                        <span class="text-sm">Dashboard</span>
+                                    </a>
+                                    <div class="border-t border-gray-100 my-2"></div>
+                                    <a href="{% url 'logout' %}" class="flex items-center space-x-3 px-4 py-2 text-red-600 hover:bg-red-50 transition duration-300">
+                                        <i class="fa-solid fa-sign-out-alt text-sm"></i>
+                                        <span class="text-sm">Sign Out</span>
+                                    </a>
                                 </div>
                             </div>
                         </div>
                     {% else %}
-                        <div class="flex items-center gap-[10px] w-full">
-                            <a href="{% url "sign_up" %}" class=" rounded-full py-[6px] px-[18px] text-[13px] font-semibold text-[#3D5361] text-nowrap no-underline transition">
-                                <i class="fa-solid fa-right-from-bracket mr-[3px]"></i>
-                                Sign up
-                            </a>
-                            <a href="{% url "login" %}" class="rounded-full py-[6px] px-[18px] text-[#fefefefe] bg-[#3D5361] text-[13px] font-semibold text-nowrap no-underline transition">
-                                <i class="fa-solid fa-right-from-bracket mr-[3px]"></i>
-                                Login
-                            </a>
-                        </div>
+                        <a href="{% url 'login' %}" class="text-gray-700 hover:text-teal-600 font-medium text-sm transition duration-300">
+                            Sign In
+                        </a>
                     {% endif %}
                 </div>
-                <button type="button" data-collapse-toggle="navbar-search" aria-controls="navbar-search" aria-expanded="false" class="md:hidden text-gray-500 dark:text-gray-400 hover:bg-gray-100  focus:outline-none focus:ring-4 focus:ring-gray-200  rounded-lg text-sm p-2.5 me-1">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M18.031 16.617L22.314 20.899L20.899 22.314L16.617 18.031C15.0237 19.3082 13.042 20.0029 11 20C6.032 20 2 15.968 2 11C2 6.032 6.032 2 11 2C15.968 2 20 6.032 20 11C20.0029 13.042 19.3082 15.0237 18.031 16.617ZM16.025 15.875C17.2938 14.5697 18.0025 12.8204 18 11C18 7.133 14.867 4 11 4C7.133 4 4 7.133 4 11C4 14.867 7.133 18 11 18C12.8204 18.0025 14.5697 17.2938 15.875 16.025L16.025 15.875Z" fill="currentColor"/>
-                    </svg>
-                    <span class="sr-only">Search</span>
-                </button>
-                <div class="relative hidden md:block">
-                    <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M18.031 16.617L22.314 20.899L20.899 22.314L16.617 18.031C15.0237 19.3082 13.042 20.0029 11 20C6.032 20 2 15.968 2 11C2 6.032 6.032 2 11 2C15.968 2 20 6.032 20 11C20.0029 13.042 19.3082 15.0237 18.031 16.617ZM16.025 15.875C17.2938 14.5697 18.0025 12.8204 18 11C18 7.133 14.867 4 11 4C7.133 4 4 7.133 4 11C4 14.867 7.133 18 11 18C12.8204 18.0025 14.5697 17.2938 15.875 16.025L16.025 15.875Z" fill="currentColor"/>
-                        </svg>
-                        <span class="sr-only">Search icon</span>
-                    </div>
-                    <input type="text" id="search-navbar" class="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 " placeholder="Search...">
-                </div>
-                <button data-collapse-toggle="navbar-search" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 " aria-controls="navbar-search" aria-expanded="false">
-                    <span class="sr-only">Open main menu</span>
-                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
-                    </svg>
-                </button>
-            </div>
-        </div>
-        <!--Mobile-responsive-->
-        <div class="">
-            <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1 " id="navbar-search">
-                <form method="get" action="" class="relative mt-3 md:hidden">
-                    <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                        <svg class="w-4 h-4 text-gray-500 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-                        </svg>
-                    </div>
-                    <input type="search" name="search" id="search-navbar" class="block w-full p-2 py-[0.8rem] ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500" placeholder="Search...">
-                </form>
-                <ul class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white ">
-                    <li class="text-[#3b5362] border-b border-[#62879e4b] py-[1.2rem] px-[1rem] hover:bg-[#6a7f8d28]">
-                        <i class="fa-regular fa-newspaper mr-[0.5rem]"></i>
-                        <a class="no-underline  text-[15px]" href="{% url "news-page" %}">News</a>
-                    </li>
-                    <li class="text-[#3b5362] border-b border-[#62879e4b] py-[1.2rem] px-[1rem] hover:bg-[#6a7f8d28]">
-                        <i class="fa-solid fa-cart-shopping mr-[0.5rem]"></i>
-                        <a class="no-underline  text-[15px]" href="{% url "business-page" %}">Market Store</a>
-                    </li>
-                    <li class="text-[#3b5362] border-b border-[#62879e4b] py-[1.2rem] px-[1rem] hover:bg-[#6a7f8d28]">
-                        <i class="fa-solid fa-music mr-[0.5rem]"></i>
-                        <a class="no-underline  text-[15px]" href="{% url "music-page" %}">Music</a>
-                    </li>
-                    {% if not user.is_authenticated %}
-                    <li class="text-[#3b5362] border-b border-[#62879e4b] py-[1.2rem] px-[1rem] hover:bg-[#6a7f8d28]">
-                        <i class="fa-solid fa-user mr-[0.5rem]"></i>
-                        <a class="no-underline  text-[15px]" href="{% url "login" %}">Sign In</a>
-                    </li>
-                    <li class="text-[#3b5362] border-b border-[#62879e4b] py-[1.2rem] px-[1rem] hover:bg-[#6a7f8d28]">
-                        <i class="fa-solid fa-right-from-bracket mr-[0.5rem]"></i>
-                        <a class="no-underline  text-[15px]" href="{% url "sign_up" %}">Sign Up</a>
-                    </li>
-                    {% endif %}
-                </ul>
             </div>
         </div>
     </nav>
-    
-    <!-- Modal -->
-    <div id="post-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-        <div  class="w-[100%] md:w-[50%] m-auto fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] bg-slate-50 shadow rounded-[1rem] ">
-            <div class="modal-content p-[1.5rem]">
-                <div class="flex justify-between items-center mb-[1rem]">
-                    <h1 class="modal-title " >Create your Post <i class="fa-brands fa-blogger-b ml-[10px] mt-[3px]"></i></h1>
-                    <button type="button" data-modal-hide="post-modal" class="closeBtn cursor-pointer">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path opacity="0.5" d="M12 22C7.286 22 4.929 22 3.464 20.535C2 19.072 2 16.714 2 12C2 7.286 2 4.929 3.464 3.464C4.93 2 7.286 2 12 2C16.714 2 19.071 2 20.535 3.464C22 4.93 22 7.286 22 12C22 16.714 22 19.071 20.535 20.535C19.072 22 16.714 22 12 22Z" fill="black"/>
-                            <path d="M8.97001 8.97C9.11064 8.82955 9.30126 8.75066 9.50001 8.75066C9.69876 8.75066 9.88939 8.82955 10.03 8.97L12 10.94L13.97 8.97C14.0387 8.89631 14.1215 8.83721 14.2135 8.79622C14.3055 8.75523 14.4048 8.73319 14.5055 8.73141C14.6062 8.72963 14.7062 8.74816 14.7996 8.78588C14.893 8.8236 14.9778 8.87974 15.049 8.95096C15.1203 9.02218 15.1764 9.10702 15.2141 9.2004C15.2519 9.29379 15.2704 9.39382 15.2686 9.49452C15.2668 9.59523 15.2448 9.69454 15.2038 9.78654C15.1628 9.87854 15.1037 9.96134 15.03 10.03L13.06 12L15.03 13.97C15.1037 14.0387 15.1628 14.1215 15.2038 14.2135C15.2448 14.3055 15.2668 14.4048 15.2686 14.5055C15.2704 14.6062 15.2519 14.7062 15.2141 14.7996C15.1764 14.893 15.1203 14.9778 15.049 15.049C14.9778 15.1203 14.893 15.1764 14.7996 15.2141C14.7062 15.2518 14.6062 15.2704 14.5055 15.2686C14.4048 15.2668 14.3055 15.2448 14.2135 15.2038C14.1215 15.1628 14.0387 15.1037 13.97 15.03L12 13.06L10.03 15.03C9.88784 15.1625 9.69979 15.2346 9.50549 15.2312C9.31119 15.2277 9.1258 15.149 8.98839 15.0116C8.85098 14.8742 8.77226 14.6888 8.76884 14.4945C8.76541 14.3002 8.83753 14.1122 8.97001 13.97L10.94 12L8.97001 10.03C8.82956 9.88938 8.75067 9.69875 8.75067 9.5C8.75067 9.30125 8.82956 9.11063 8.97001 8.97Z" fill="black"/>
-                        </svg>
-                    </button>
+
+    <!-- Mobile Bottom Navigation for Dashboard -->
+    <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50 md:hidden">
+        <div class="flex justify-around items-center h-16 px-2">
+            <!-- Home -->
+            <a href="{% url 'home' %}" class="flex flex-col items-center justify-center flex-1 py-2 transition duration-300 {% if request.resolver_match.url_name == 'home' %}text-teal-600{% else %}text-gray-500 hover:text-teal-600{% endif %}">
+                <i class="fa-solid fa-home text-xl mb-1"></i>
+                <span class="text-xs font-medium">Home</span>
+            </a>
+
+            <!-- News -->
+            <a href="{% url 'news-page' %}" class="flex flex-col items-center justify-center flex-1 py-2 transition duration-300 {% if request.resolver_match.url_name == 'news-page' %}text-teal-600{% else %}text-gray-500 hover:text-teal-600{% endif %}">
+                <i class="fa-regular fa-newspaper text-xl mb-1"></i>
+                <span class="text-xs font-medium">News</span>
+            </a>
+
+            <!-- Create Post -->
+            <button data-modal-target="post-modal" data-modal-toggle="post-modal" 
+                    class="flex flex-col items-center justify-center flex-1 py-2 transition duration-300 text-teal-600 hover:text-teal-700">
+                <div class="w-12 h-12 bg-gradient-to-r from-teal-500 to-teal-600 rounded-full flex items-center justify-center shadow-lg mb-1">
+                    <i class="fa-solid fa-plus text-white text-lg"></i>
                 </div>
-                <div class="modal-body mb-[2rem]">
-                    <div class=" bg-[#ffffff8e] ">
-                        <form action="" method="POST" enctype="multipart/form-data">
-                            {% csrf_token %}
-                            {{ user_post_form|crispy }}
-                            <div class="flex gap-[1rem] items-center my-[2rem] ">
-                                <input type="submit" value="Post" class="py-[8px] cursor-pointer px-[18px]  rounded-full text-[#fefefefe] hover:bg-slate-500 bg-slate-600 w-full ">
-                                <input type="button"  value="Cancel" class="closeBtn py-[8px] cursor-pointer px-[18px]  rounded-full text-[#3b5361] hover:bg-slate-50 border border-slate-400 w-full ">
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
+                <span class="text-xs font-medium">Create</span>
+            </button>
+
+            <!-- Marketplace -->
+            <a href="{% url 'business-page' %}" class="flex flex-col items-center justify-center flex-1 py-2 transition duration-300 {% if request.resolver_match.url_name == 'business-page' %}text-teal-600{% else %}text-gray-500 hover:text-teal-600{% endif %}">
+                <i class="fa-solid fa-cart-shopping text-xl mb-1"></i>
+                <span class="text-xs font-medium">Store</span>
+            </a>
+
+            <!-- Dashboard -->
+            <a href="{% url 'user-dashboard' %}" class="flex flex-col items-center justify-center flex-1 py-2 transition duration-300 {% if request.resolver_match.url_name == 'user-dashboard' %}text-teal-600{% else %}text-gray-500 hover:text-teal-600{% endif %}">
+                <i class="fa-solid fa-chart-line text-xl mb-1"></i>
+                <span class="text-xs font-medium">Dashboard</span>
+            </a>
         </div>
     </div>
 
-    <script>
-       
+    <!-- Bottom Navigation Spacer for Mobile -->
+    <div class="h-16 md:hidden"></div>
 
-        document.addEventListener('DOMContentLoaded', function() {
-            const mobileListTrigger = document.getElementById('mobile-list-trigger');
-            const activePlusDropUp = document.getElementById('activePlusDropUp');
-            if (mobileListTrigger && activePlusDropUp) {
-                mobileListTrigger.addEventListener('click', () => {
-                    console.log('clicked on plus sign');
-                    activePlusDropUp.classList.toggle('activePlusTrigger');
-                    const plusIcon = mobileListTrigger.querySelector('i');
-                    plusIcon.classList.toggle('fa-plus');
-                    plusIcon.classList.toggle('fa-minus');
-                });
+    <!-- Alpine.js for dropdown functionality -->
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
+    <style>
+        @media (max-width: 768px) {
+            .desktop-view {
+                display: none;
             }
-        });
-
-
-      
-    </script>
+        }
+    </style>
 {% endblock %}

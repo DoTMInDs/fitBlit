@@ -24,7 +24,7 @@ class Profile(models.Model):
 class PostModel(models.Model):
     title=models.CharField(max_length=200, unique=True)
     slug=models.SlugField(max_length=200, unique=True)
-    image=CloudinaryField('image', folder='post_pics',null=True,blank=True, validators=[FileExtensionValidator(['png', 'jpg','jpeg', 'WebP', 'avif', 'jfif'])])
+    image=CloudinaryField('image', folder='post_pics',null=True,blank=True)
     author=models.ForeignKey(User, on_delete=models.CASCADE)
     created_on=models.DateTimeField(auto_now_add=True)
     updated_on=models.DateTimeField(auto_now=True)
@@ -46,7 +46,7 @@ class PostModel(models.Model):
 class ArticlePostModel(models.Model):
     title=models.CharField(max_length=200, unique=True)
     sub_title=models.CharField(max_length=200, unique=True,null=True)
-    image=CloudinaryField('image',folder='article_pics/',null=True,blank=True, validators=[FileExtensionValidator(['png', 'jpg','jpeg', 'WebP', 'avif', 'jfif'])])
+    image=CloudinaryField('image',folder='article_pics/',null=True,blank=True)
     author=models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     slug=models.SlugField(max_length=200, unique=True)
     article_content=models.TextField(null=True)
@@ -94,7 +94,7 @@ class Item(models.Model):
     description = models.CharField(max_length=200)
     price = models.DecimalField(default=0, decimal_places=2, max_digits=12)
     title = models.CharField(max_length=150)
-    image=CloudinaryField('image',folder='products/',null=True,blank=True,validators=[FileExtensionValidator(['png', 'jpg','jpeg', 'WebP', 'avif', 'jfif'])])
+    image=CloudinaryField('image',folder='products/',null=True,blank=True)
     location = models.CharField(max_length=50)
     contact = models.CharField(max_length=20, null=True,blank=True)
     market_price = models.CharField(max_length=100,blank=True,null=True)
@@ -111,7 +111,7 @@ class Item(models.Model):
     
 class ItemImage(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='images')
-    image = CloudinaryField('image',folder='item_images/',null=True,blank=True,validators=[FileExtensionValidator(['png', 'jpg','jpeg', 'WebP', 'avif', 'jfif'])])
+    image = CloudinaryField('image',folder='item_images/',null=True,blank=True)
     
     def __str__(self):
         return f"Image for {self.item.title}"

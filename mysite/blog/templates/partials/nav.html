@@ -1,318 +1,290 @@
-    {% extends "base.html" %}
-    {% load static %}
-    {% load tailwind_filters %}
-    {% block nav %}
-    <nav class="p-[0.3rem] md:p-[0.3rem] z-[999] w-[100%] bg-[#fefefe] shadow fixed top-[0]">
-        <div class="flex items-center justify-between md:w-[80%] m-auto ">
-            <div class="flex items-center cursor-pointer">
-                <a href="{% url "home" %}" class="no-underline gap-[0.5rem] flex items-center">
-                    <img src="{% static 'images/fitblog-logo.png' %}" height="64px" class="w-[40px] h-[40px] rounded-full">
-                    <h4 class=" text-teal-600 font-semibold">FitBlog</h4>
-                </a>
-            </div>
-            <div class="main-nav ">
-                <ul class="flex gap-[1.5rem] items-center">
-                    <li>
-                        <a class="flex items-center gap-[0.3rem] no-underline text-nowrap text-[#3b5361] font-medium" href="{% url "news-page" %}">
-                            <i class="fa-regular fa-newspaper"></i>
-                            News
-                        </a>
-                    </li>
-                    <li>
-                        <a class="flex items-center gap-[0.3rem] no-underline text-nowrap text-[#3b5361] font-medium" href="{% url "business-page" %}">
-                            <i class="fa-solid fa-cart-shopping"></i>
-                            Market Store
-                        </a>
-                    </li>
-                    <li>
-                        <a class="flex items-center gap-[0.3rem] no-underline text-nowrap text-[#3b5361] font-medium" href="{% url "music-page" %}">
-                            <i class="fa-solid fa-music"></i>
-                            Music
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            <div class="flex items-center md:order-2 nav-acct-side">
-                <form method="get" class="flex items-center max-w-sm mx-auto search-mobile">   
-                    <label for="simple-search" class="sr-only">Search</label>
-                    <div class="relative w-full">
-                        <div class="absolute inset-y-0 start-0 text-[#3b5362] flex items-center ps-3 pointer-events-none">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M18.031 16.617L22.314 20.899L20.899 22.314L16.617 18.031C15.0237 19.3082 13.042 20.0029 11 20C6.032 20 2 15.968 2 11C2 6.032 6.032 2 11 2C15.968 2 20 6.032 20 11C20.0029 13.042 19.3082 15.0237 18.031 16.617ZM16.025 15.875C17.2938 14.5697 18.0025 12.8204 18 11C18 7.133 14.867 4 11 4C7.133 4 4 7.133 4 11C4 14.867 7.133 18 11 18C12.8204 18.0025 14.5697 17.2938 15.875 16.025L16.025 15.875Z" fill="currentColor"/>
-                            </svg>
+{% extends "base.html" %}
+{% load static %}
+{% load tailwind_filters %}
+{% block nav %}
+    <!-- Desktop Navigation -->
+    <nav class="bg-white shadow-lg border-b border-gray-100 sticky top-0 z-50 desktop-view">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <a href="{% url 'home' %}" class="flex items-center space-x-3 group">
+                        <div class="w-10 h-10 bg-gradient-to-br from-teal-500 to-teal-600 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition duration-300">
+                            <img src="{% static 'images/fitblog-logo.png' %}" alt="FitBlit" class="w-6 h-6">
                         </div>
-                        <input type="search" name="search" id="id-search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 " placeholder="Search branch name..." required />
+                        <div>
+                            <h1 class="text-xl font-bold text-gray-900">FitBlit</h1>
+                            <p class="text-xs text-gray-500 -mt-1">Digital Hub</p>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Desktop Navigation -->
+                <div class="flex items-center space-x-8">
+                    <a href="{% url 'news-page' %}" class="flex items-center space-x-2 text-gray-700 hover:text-teal-600 font-medium transition duration-300 group">
+                        <i class="fa-regular fa-newspaper text-lg group-hover:scale-110 transition duration-300"></i>
+                        <span>News</span>
+                    </a>
+                    <a href="{% url 'business-page' %}" class="flex items-center space-x-2 text-gray-700 hover:text-teal-600 font-medium transition duration-300 group">
+                        <i class="fa-solid fa-cart-shopping text-lg group-hover:scale-110 transition duration-300"></i>
+                        <span>Marketplace</span>
+                    </a>
+                    <a href="{% url 'music-page' %}" class="flex items-center space-x-2 text-gray-700 hover:text-teal-600 font-medium transition duration-300 group">
+                        <i class="fa-solid fa-music text-lg group-hover:scale-110 transition duration-300"></i>
+                        <span>Music</span>
+                    </a>
+                </div>
+
+                <!-- Search Bar -->
+                <div class="flex items-center flex-1 max-w-md mx-8">
+                    <div class="relative w-full">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fa-solid fa-search text-gray-400"></i>
+                        </div>
+                        <form method="get" class="w-full">
+                            <input type="search" name="search" placeholder="Search articles, music, items..." 
+                                class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition duration-300">
+                        </form>
                     </div>
-                    <button type="submit" class="p-2.5 ms-2 text-sm font-medium text-white bg-slate-700 rounded-lg border border-blue-700 hover:bg-slate-800 focus:ring-4 focus:outline-none focus:ring-blue-300 ">
-                        <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-                        </svg>
-                        <span class="sr-only">Search</span>
-                    </button>
-                </form>
-                <div class="relative">
+                </div>
+
+                <!-- User Menu -->
+                <div class="flex items-center space-x-4">
                     {% if user.is_authenticated %}
-                        <button id="dropdownNavbarLink" data-dropdown-toggle="dropdownNavbar" class="cursor-pointer flex gap-[0.5rem] items-center bg-[#3D5361] rounded-full w-[40px] h-[40px] text-[13px]  hover:text-[#3D5261] text-nowrap">
-                            <span class="font-bold text-xl flex justify-center items-center text-[#FFFFFF] w-[40px] h-[40px] rounded-full border border-slate-200 shadow">{{ user.username|first|upper }}</span>
+                        <!-- Notifications -->
+                        <button class="relative p-2 text-gray-600 hover:text-teal-600 transition duration-300">
+                            <i class="fa-regular fa-bell text-lg"></i>
+                            <span class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
                         </button>
-                        <!--ProfileModel-->
-                        <div id="dropdownNavbar" class=" border border-slate-200 hidden rounded-[15px] w-[250px] shadow-lg bg-slate-50 absolute right-0">
-                            <div class="" aria-labelledby="dropdownLargeButton">
-                                <div class="flex items-center gap-[1rem] border-b borer-slate-300 px-[1rem]">
-                                    <div class="">
+
+                        <!-- User Dropdown -->
+                        <div class="relative" x-data="{ open: false }">
+                            <button @click="open = !open" class="flex items-center space-x-3 p-2 rounded-xl hover:bg-gray-50 transition duration-300">
+                                <div class="w-8 h-8 bg-gradient-to-br from-teal-500 to-teal-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+                                    {{ user.username|first|upper }}
+                                </div>
+                                <i class="fa-solid fa-chevron-down text-gray-500 text-xs"></i>
+                            </button>
+                            
+                            <div x-show="open" @click.away="open = false" 
+                                class="absolute right-0 mt-2 w-64 bg-white rounded-2xl shadow-xl border border-gray-100 py-2 z-50">
+                                <!-- User Info -->
+                                <div class="px-4 py-3 border-b border-gray-100">
+                                    <div class="flex items-center space-x-3">
                                         {% if user.profilemodel.image %}
-                                            <img class="w-[40px] h-[40px] border border-slate-200 rounded-[50%] object-cover object-center mr-[10px]" src=" {{ user.profilemodel.image.url }} " alt="Profile Image">
+                                            <img src="{{ user.profilemodel.image.url }}" alt="Profile" class="w-10 h-10 rounded-full object-cover">
                                         {% else %}
-                                            <img class="w-[40px] h-[40px] border border-slate-200 rounded-[50%] object-cover object-center mr-[10px]" src="{% static "images/default.png" %} " alt="Default Profile Image">
+                                            <div class="w-10 h-10 bg-gradient-to-br from-teal-500 to-teal-600 rounded-full flex items-center justify-center">
+                                                <i class="fa-solid fa-user text-white"></i>
+                                            </div>
                                         {% endif %}
-                                    </div>
-                                    <div class="m-0 p-0">
-                                        <h2 class="m-0 p-0 text-[#444444] font-medium">{{ user.profilemodel.full_name }}</h2>
-                                        <small class='text-[0.8rem] text-[#555555]'>@{{ user.username }}</small>
+                                        <div>
+                                            <p class="font-semibold text-gray-900">{{ user.profilemodel.full_name|default:user.username }}</p>
+                                            <p class="text-sm text-gray-500">@{{ user.username }}</p>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="mt-[0.3rem]">
-                                    <div class="">
-                                        <a href="{% url "profile" %}" class="flex items-center gap-[1rem] text-[#555555] no-underline text-nowrap px-[1rem] py-[0.5rem] hover:bg-[#ebebeb]">
-                                            <p> <i class="fa-solid fa-gear p_user"></i></p>
-                                            <p class="">Manage account</p>
-                                        </a>
-                                    </div>
-                                    <div class="">
-                                        <a href="{% url "admin:index" %}" class="flex items-center gap-[1rem] text-[#555555] no-underline text-nowrap px-[1rem] py-[0.5rem] hover:bg-[#ebebeb]">
-                                            <p> <i class="fa-solid fa-gears p_user"></i></p>
-                                            <p class="">Admin</p>
-                                        </a>
-                                    </div>
-                                    <div class="">
-                                        <a href="{% url "user-dashboard" %}" class='flex gap-[1rem] items-center px-[1rem] py-[0.5rem] no-underline text-nowrap text-[#555555] hover:bg-[#ebebeb]'>
-                                            <p> <i class="fa-solid fa-circle-user"></i></p>
-                                            <p class="">Dashboard</p>
-                                        </a>
-                                    </div>
-                                    <div class="">
-                                        <a href="{% url "logout" %}" class='flex gap-[1rem] text-[#555555] no-underline text-nowrap items-center px-[1rem] py-[0.5rem] hover:bg-[#ebebeb]'>
-                                            <p><i class="fa-solid fa-arrow-right-from-bracket"></i></p>
-                                            <p class="">Sign out</p>
-                                        </a>
-                                    </div>
+                                
+                                <!-- Menu Items -->
+                                <div class="py-2">
+                                    <a href="{% url 'profile' %}" class="flex items-center space-x-3 px-4 py-2 text-gray-700 hover:bg-gray-50 transition duration-300">
+                                        <i class="fa-solid fa-user-gear text-gray-500"></i>
+                                        <span>Profile Settings</span>
+                                    </a>
+                                    <a href="{% url 'user-dashboard' %}" class="flex items-center space-x-3 px-4 py-2 text-gray-700 hover:bg-gray-50 transition duration-300">
+                                        <i class="fa-solid fa-chart-line text-gray-500"></i>
+                                        <span>Dashboard</span>
+                                    </a>
+                                    {% if user.is_staff %}
+                                    <a href="{% url 'admin:index' %}" class="flex items-center space-x-3 px-4 py-2 text-gray-700 hover:bg-gray-50 transition duration-300">
+                                        <i class="fa-solid fa-gears text-gray-500"></i>
+                                        <span>Admin Panel</span>
+                                    </a>
+                                    {% endif %}
+                                    <div class="border-t border-gray-100 my-2"></div>
+                                    <a href="{% url 'logout' %}" class="flex items-center space-x-3 px-4 py-2 text-red-600 hover:bg-red-50 transition duration-300">
+                                        <i class="fa-solid fa-sign-out-alt"></i>
+                                        <span>Sign Out</span>
+                                    </a>
                                 </div>
                             </div>
                         </div>
                     {% else %}
-                        <div class="flex items-center gap-[10px] w-full">
-                            <a href="{% url "sign_up" %}" class=" rounded-full py-[6px] px-[18px] text-[13px] font-semibold text-[#3D5361] text-nowrap no-underline transition">
-                                <i class="fa-solid fa-right-from-bracket mr-[3px]"></i>
-                                Sign up
+                        <!-- Guest User -->
+                        <div class="flex items-center space-x-3">
+                            <a href="{% url 'login' %}" class="text-gray-700 hover:text-teal-600 font-medium transition duration-300">
+                                Sign In
                             </a>
-                            <a href="{% url "login" %}" class="rounded-full py-[6px] px-[18px] text-[#fefefefe] bg-[#3D5361] text-[13px] font-semibold text-nowrap no-underline transition">
-                                <i class="fa-solid fa-right-from-bracket mr-[3px]"></i>
-                                Login
+                            <a href="{% url 'sign_up' %}" class="bg-gradient-to-r from-teal-500 to-teal-600 text-white px-4 py-2 rounded-xl font-medium hover:from-teal-600 hover:to-teal-700 transition duration-300 shadow-lg hover:shadow-xl">
+                                Sign Up
                             </a>
                         </div>
                     {% endif %}
                 </div>
-                <button type="button" data-collapse-toggle="navbar-search" aria-controls="navbar-search" aria-expanded="false" class="md:hidden text-gray-500 dark:text-gray-400 hover:bg-gray-100  focus:outline-none focus:ring-4 focus:ring-gray-200  rounded-lg text-sm p-2.5 me-1">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M18.031 16.617L22.314 20.899L20.899 22.314L16.617 18.031C15.0237 19.3082 13.042 20.0029 11 20C6.032 20 2 15.968 2 11C2 6.032 6.032 2 11 2C15.968 2 20 6.032 20 11C20.0029 13.042 19.3082 15.0237 18.031 16.617ZM16.025 15.875C17.2938 14.5697 18.0025 12.8204 18 11C18 7.133 14.867 4 11 4C7.133 4 4 7.133 4 11C4 14.867 7.133 18 11 18C12.8204 18.0025 14.5697 17.2938 15.875 16.025L16.025 15.875Z" fill="currentColor"/>
-                    </svg>
-                    <span class="sr-only">Search</span>
-                </button>
-                <div class="relative hidden md:block">
-                    <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M18.031 16.617L22.314 20.899L20.899 22.314L16.617 18.031C15.0237 19.3082 13.042 20.0029 11 20C6.032 20 2 15.968 2 11C2 6.032 6.032 2 11 2C15.968 2 20 6.032 20 11C20.0029 13.042 19.3082 15.0237 18.031 16.617ZM16.025 15.875C17.2938 14.5697 18.0025 12.8204 18 11C18 7.133 14.867 4 11 4C7.133 4 4 7.133 4 11C4 14.867 7.133 18 11 18C12.8204 18.0025 14.5697 17.2938 15.875 16.025L16.025 15.875Z" fill="currentColor"/>
-                        </svg>
-                        <span class="sr-only">Search icon</span>
-                    </div>
-                    <input type="text" id="search-navbar" class="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 " placeholder="Search...">
-                </div>
-                <button data-collapse-toggle="navbar-search" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 " aria-controls="navbar-search" aria-expanded="false">
-                    <span class="sr-only">Open main menu</span>
-                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
-                    </svg>
-                </button>
-            </div>
-        </div>
-        <!--Mobile-responsive-->
-        <div class="">
-            <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1 " id="navbar-search">
-                <form method="get" action="" class="relative mt-3 md:hidden">
-                    <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                        <svg class="w-4 h-4 text-gray-500 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-                        </svg>
-                    </div>
-                    <input type="search" name="search" id="search-navbar" class="block w-full p-2 py-[0.8rem] ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500" placeholder="Search...">
-                </form>
-                <ul class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white ">
-                    <li class="text-[#3b5362] border-b border-[#62879e4b] py-[1.2rem] px-[1rem] hover:bg-[#6a7f8d28]">
-                        <i class="fa-regular fa-newspaper mr-[0.5rem]"></i>
-                        <a class="no-underline  text-[15px]" href="{% url "news-page" %}">News</a>
-                    </li>
-                    <li class="text-[#3b5362] border-b border-[#62879e4b] py-[1.2rem] px-[1rem] hover:bg-[#6a7f8d28]">
-                        <i class="fa-solid fa-cart-shopping mr-[0.5rem]"></i>
-                        <a class="no-underline  text-[15px]" href="{% url "business-page" %}">Market Store</a>
-                    </li>
-                    <li class="text-[#3b5362] border-b border-[#62879e4b] py-[1.2rem] px-[1rem] hover:bg-[#6a7f8d28]">
-                        <i class="fa-solid fa-music mr-[0.5rem]"></i>
-                        <a class="no-underline  text-[15px]" href="{% url "music-page" %}">Music</a>
-                    </li>
-                    {% if not user.is_authenticated %}
-                    <li class="text-[#3b5362] border-b border-[#62879e4b] py-[1.2rem] px-[1rem] hover:bg-[#6a7f8d28]">
-                        <i class="fa-solid fa-user mr-[0.5rem]"></i>
-                        <a class="no-underline  text-[15px]" href="{% url "login" %}">Sign In</a>
-                    </li>
-                    <li class="text-[#3b5362] border-b border-[#62879e4b] py-[1.2rem] px-[1rem] hover:bg-[#6a7f8d28]">
-                        <i class="fa-solid fa-right-from-bracket mr-[0.5rem]"></i>
-                        <a class="no-underline  text-[15px]" href="{% url "sign_up" %}">Sign Up</a>
-                    </li>
-                    {% endif %}
-                </ul>
             </div>
         </div>
     </nav>
 
-    {% comment %} <div class="mobile-footer-wrapper">
-        <div class="mobile-footer-container ">
-            <div class="">
-                <a href="{% url "home" %}" class="no-underline gap-[0.5rem] text-[#3b5361] flex items-center" style="text-decoration:none;display:flex;flex-direction:column;gap:3px;align-items:center;font-size:12px">
-                    <i class="fa fa-solid fa-home text-[14px] text-[#3b5361]"></i>
-                    Home
-                </a>
-            </div>
-           <div class="">
-                <a href="{% url "business-page" %}" class="no-underline gap-[0.5rem] text-[#3b5361] flex items-center" style="text-decoration:none;display:flex;flex-direction:column;gap:3px;align-items:center;font-size:12px">
-                    <i class="fa fa-solid fa-cart-shopping text-[14px] text-[#3b5361]"></i>
-                    Store
-                </a>
-           </div>
-           <div class="">
-                <div id="mobile-list-trigger" class="mobile-list-dropup ">
-                    <i class="fa fa-regular fa-plus border border-slate-500 rounded-full p-[0.8rem] text-[14px] text-[#3b5361]"></i>
-                </div>
-
-                <div class="plusTrigger absolute transition duration-300 bg-slate-50 border border-slate-200 rounded-t-[10px] bottom-[100%] right-0 left-0 w-full z-50" id="activePlusDropUp">
-                    <div>
-                        <a href="{% url "business-page" %}" class="text-[#3b5361] text-[14px] hover:bg-slate-100 p-[1rem] no-underline flex items-center gap-[10px]">
-                            <i class="fa-solid fa-plus-circle"></i>
-                            Product
-                        </a>
-                        <a href="{% url "music-page" %}" class="border-t border-slate-100 text-[#3b5361] hover:bg-slate-100 text-[14px] p-[1rem] no-underline flex items-center gap-[10px]">
-                            <i class="fa-solid fa-music"></i>
-                            Music
-                        </a>
-                        <a href="{% url "user-dashboard" %}" class="border-t border-slate-100 text-[#3b5361] text-[14px] hover:bg-slate-100 p-[1rem] no-underline flex items-center gap-[10px]">
-                            <i class="fa-solid fa-circle-user"></i>
-                            Dashboard
-                        </a>
-                    </div>
-                </div>
-           </div>
-            <div class="">
-                <a href="{% url "news-page" %}" class="no-underline text-[#3b5361] gap-[0.5rem] flex items-center" style="text-decoration:none;display:flex;flex-direction:column;gap:3px;align-items:center;font-size:12px">
-                    <i class="fa fa-regular fa-newspaper text-[14px] text-[#3b5361]"></i>
-                    News
-                </a>
-            </div>
-            <div class="">
-                {% if user.is_authenticated %}
-                    <div class="">
-                        <div class="static-backdrop-btn text-[#3b5361] gap-[0.5rem] flex items-center" style="text-decoration:none;display:flex;flex-direction:column;gap:3px;align-items:center;font-size:12px">
-                            <i class="fa fa-regular fa-user text-[14px] text-[#3b5361]"></i>
-                            Profile
+    <!-- Mobile Top Navigation -->
+    <nav class="bg-white shadow-lg border-b border-gray-100  z-50 md:hidden ">
+        <div class="px-4">
+            <div class="flex justify-between items-center">
+                <!-- Mobile Logo -->
+                <div class="flex items-center">
+                    <a href="{% url 'home' %}" class="flex items-center space-x-2">
+                        <div class="w-8 h-8 bg-gradient-to-br from-teal-500 to-teal-600 rounded-lg flex items-center justify-center">
+                            <img src="{% static 'images/fitblog-logo.png' %}" alt="FitBlit" class="w-5 h-5">
                         </div>
+                        <span class="text-lg font-bold text-gray-900">FitBlit</span>
+                    </a>
+                </div>
 
-                        <div class="profile-nav-modal absolute bottom-[100%] right-0 left-0 w-full transition duration-300" id="staticBackdrop4">
-                            <div class="bg-slate-50  w-[100%] border border-slate-300 rounded-t-[10px]">
-                                <div class="modal-body">
-                                    <div class="">
-                                        <div class="p-[0.3rem]">
-                                            <a href="{% url "profile" %}" class="flex items-center text-[14px] gap-[1rem] text-[#555555] no-underline text-nowrap px-[0.8rem] py-[0.6rem] hover:bg-[#ebebeb]">
-                                            <p> <i class="fa-solid fa-gear text-slate-500"></i></p>
-                                                <p class="">Manage account</p>
-                                            </a>
-                                        </div>
-                                        <div class="p-[0.3rem]">
-                                            <a href="{% url "admin:index" %}" class="flex items-center gap-[1rem] text-[14px] text-[#555555] no-underline text-nowrap px-[0.8rem] py-[0.6rem] hover:bg-[#ebebeb]">
-                                            <p> <i class="fa-solid fa-gears text-slate-500 "></i></p>
-                                                <p class="">Admin</p>
-                                            </a>
-                                        </div>
-                                        <div class="p-[0.3rem]">
-                                            <a href="{% url "user-dashboard" %}" class='flex gap-[1rem] text-[14px] items-center px-[0.8rem] py-[0.6rem] no-underline text-nowrap text-[#555555] hover:bg-[#ebebeb]'>
-                                                <p> <i class="fa-solid fa-circle-user text-slate-500"></i></p>
-                                                <p class="">Dashboard</p>
-                                            </a>
-                                        </div>
-                                        <div class="p-[0.3rem]">
-                                            <a href="#!" class=' flex gap-[1rem] text-[14px] items-center px-[0.8rem] py-[0.6rem] text-[#555555] no-underline text-nowrap hover:bg-[#ebebeb]'>
-                                                <p><i class="fa-solid fa-user-pen text-slate-500"></i></p>
-                                                <p class="">Reviews</p>
-                                            </a>
-                                        </div>
-                                        <div class="p-[0.3rem]">
-                                            <a href="#!" class=' flex gap-[1rem] text-[14px] items-center px-[0.8rem] py-[0.6rem] text-[#555555] no-underline text-nowrap hover:bg-[#ebebeb]'>
-                                                <p><i class="fa-regular fa-heart text-slate-500"></i></p>
-                                                <p class="">Saved</p>
-                                            </a>
-                                        </div>
-                                        <div class="p-[0.3rem]">
-                                            <a href="{% url "logout" %}" class='flex gap-[1rem] text-[14px] text-[#555555] no-underline text-nowrap items-center px-[0.8rem] py-[0.6rem] hover:bg-[#ebebeb]'>
-                                                <p><i class="fa-solid fa-arrow-right-from-bracket text-slate-500"></i></p>
-                                                <p class="">Sign out</p>
-                                            </a>
+                <!-- Mobile Search & User -->
+                <div class="flex items-center space-x-3">
+                    <!-- Search Button -->
+                    <button onclick="toggleMobileSearch()" class="p-2 text-gray-600 hover:text-teal-600 transition duration-300">
+                        <i class="fa-solid fa-search text-lg"></i>
+                    </button>
+
+                    <!-- User Menu for Mobile -->
+                    {% if user.is_authenticated %}
+                        <div class="relative" x-data="{ open: false }">
+                            <button @click="open = !open" class="flex items-center p-2 rounded-lg hover:bg-gray-50 transition duration-300">
+                                <div class="w-7 h-7 bg-gradient-to-br from-teal-500 to-teal-600 rounded-full flex items-center justify-center text-white font-semibold text-xs">
+                                    {{ user.username|first|upper }}
+                                </div>
+                            </button>
+                            
+                            <div x-show="open" @click.away="open = false" 
+                                class="absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border border-gray-100 py-2 z-50">
+                                <div class="px-4 py-3 border-b border-gray-100">
+                                    <div class="flex items-center space-x-3">
+                                        {% if user.profilemodel.image %}
+                                            <img src="{{ user.profilemodel.image.url }}" alt="Profile" class="w-8 h-8 rounded-full object-cover">
+                                        {% else %}
+                                            <div class="w-8 h-8 bg-gradient-to-br from-teal-500 to-teal-600 rounded-full flex items-center justify-center">
+                                                <i class="fa-solid fa-user text-white text-sm"></i>
+                                            </div>
+                                        {% endif %}
+                                        <div>
+                                            <p class="font-semibold text-gray-900 text-sm">{{ user.profilemodel.full_name|default:user.username }}</p>
+                                            <p class="text-xs text-gray-500">@{{ user.username }}</p>
                                         </div>
                                     </div>
-                                </div>      
+                                </div>
+                                
+                                <div class="py-2">
+                                    <a href="{% url 'profile' %}" class="flex items-center space-x-3 px-4 py-2 text-gray-700 hover:bg-gray-50 transition duration-300">
+                                        <i class="fa-solid fa-user-gear text-gray-500 text-sm"></i>
+                                        <span class="text-sm">Profile</span>
+                                    </a>
+                                    <a href="{% url 'user-dashboard' %}" class="flex items-center space-x-3 px-4 py-2 text-gray-700 hover:bg-gray-50 transition duration-300">
+                                        <i class="fa-solid fa-chart-line text-gray-500 text-sm"></i>
+                                        <span class="text-sm">Dashboard</span>
+                                    </a>
+                                    <div class="border-t border-gray-100 my-2"></div>
+                                    <a href="{% url 'logout' %}" class="flex items-center space-x-3 px-4 py-2 text-red-600 hover:bg-red-50 transition duration-300">
+                                        <i class="fa-solid fa-sign-out-alt text-sm"></i>
+                                        <span class="text-sm">Sign Out</span>
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                {% else %}
-                    <div class="dropup ">
-                        <div class="" id="userBtn">
-                            <img class="w-[30px] h-[30px] rounded-[50%] object-cover object-center " src="{% static "images/default.png" %} " alt="Default Profile Image">
-                        </div>
-                        <ul class="hidden absolute w-full bottom-[100%] z-50 right-[5px] bg-slate-50 w-[150px] border border-slate-200 rounded" id="userContainer">
-                            <a href="{% url "sign_up" %}" class="flex items-center text-[13px] hover:bg-slate-200 px-[1.5rem] py-[1rem]  font-semibold text-[#3D5361] text-nowrap no-underline transition duration-300">
-                                <i class="fa-solid fa-right-from-bracket mr-[0.3rem]"></i>
-                                Sign up
-                            </a>
-                            <a href="{% url "login" %}" class="flex items-center text-[#3b5361] hover:bg-slate-200 px-[1.5rem] py-[1rem]  text-[13px] font-semibold text-nowrap no-underline transition duration-300">
-                                <i class="fa-solid fa-right-from-bracket mr-[0.3rem]"></i>
-                                Login
-                            </a>
-                        </ul>
-                    </div>
-                {% endif %}
+                    {% else %}
+                        <a href="{% url 'login' %}" class="text-gray-700 hover:text-teal-600 font-medium text-sm transition duration-300">
+                            Sign In
+                        </a>
+                    {% endif %}
+                </div>
             </div>
-        </div>
-        
-    </div> {% endcomment %}
 
-      {% comment %} <!--News Modal -->
-    <div class="hidden" id="exampleModal" >
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="" id="exampleModalLabel">
-                    <i class="fa-brands fa-blogger-b ml-[10px] mt-[3px]"></i>
-                    Create your Post 
-                </h1>
-                <button type="button" class="btn-close" ></button>
-            </div>
-            <div class="modal-body">
-                <div class=" bg-[#ffffff8e] p-[20px] my-[20px]" >
-                    <form action="" method="POST" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        {{ user_post_form|crispy }}
-                        <input type="submit" value="Post" class="py-[8px] px-[18px] mt-[2rem] rounded-full text-[#fefefefe] bg-[#3D5361] w-full ">
-                        <input type="button" value="Cancel" class="py-[8px] px-[18px] mt-[1rem] rounded-full text-[#3b5361] border border-slate-400 w-full ">
+            <!-- Mobile Search Bar (Hidden by default) -->
+            <div id="mobileSearch" class="hidden pb-4">
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="fa-solid fa-search text-gray-400"></i>
+                    </div>
+                    <form method="get">
+                        <input type="search" name="search" placeholder="Search..." 
+                            class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
                     </form>
                 </div>
             </div>
         </div>
-    </div> {% endcomment %}
+    </nav>
 
-    {% endblock nav %}
+    <!-- Mobile Bottom Navigation -->
+    <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50 md:hidden">
+        <div class="flex justify-around items-center h-16 px-2">
+            <!-- Home -->
+            <a href="{% url 'home' %}" class="flex flex-col items-center justify-center flex-1 py-2 transition duration-300 {% if request.resolver_match.url_name == 'home' %}text-teal-600{% else %}text-gray-500 hover:text-teal-600{% endif %}">
+                <i class="fa-solid fa-home text-xl mb-1"></i>
+                <span class="text-xs font-medium">Home</span>
+            </a>
+
+            <!-- News -->
+            <a href="{% url 'news-page' %}" class="flex flex-col items-center justify-center flex-1 py-2 transition duration-300 {% if request.resolver_match.url_name == 'news-page' %}text-teal-600{% else %}text-gray-500 hover:text-teal-600{% endif %}">
+                <i class="fa-regular fa-newspaper text-xl mb-1"></i>
+                <span class="text-xs font-medium">News</span>
+            </a>
+
+            <!-- Marketplace -->
+            <a href="{% url 'business-page' %}" class="flex flex-col items-center justify-center flex-1 py-2 transition duration-300 {% if request.resolver_match.url_name == 'business-page' %}text-teal-600{% else %}text-gray-500 hover:text-teal-600{% endif %}">
+                <i class="fa-solid fa-cart-shopping text-xl mb-1"></i>
+                <span class="text-xs font-medium">Store</span>
+            </a>
+
+            <!-- Music -->
+            <a href="{% url 'music-page' %}" class="flex flex-col items-center justify-center flex-1 py-2 transition duration-300 {% if request.resolver_match.url_name == 'music-page' %}text-teal-600{% else %}text-gray-500 hover:text-teal-600{% endif %}">
+                <i class="fa-solid fa-music text-xl mb-1"></i>
+                <span class="text-xs font-medium">Music</span>
+            </a>
+
+            <!-- Profile/Dashboard -->
+            {% if user.is_authenticated %}
+                <a href="{% url 'user-dashboard' %}" class="flex flex-col items-center justify-center flex-1 py-2 transition duration-300 {% if request.resolver_match.url_name == 'user-dashboard' %}text-teal-600{% else %}text-gray-500 hover:text-teal-600{% endif %}">
+                    <i class="fa-solid fa-user text-xl mb-1"></i>
+                    <span class="text-xs font-medium">Profile</span>
+                </a>
+            {% else %}
+                <a href="{% url 'login' %}" class="flex flex-col items-center justify-center flex-1 py-2 transition duration-300 {% if request.resolver_match.url_name == 'login' %}text-teal-600{% else %}text-gray-500 hover:text-teal-600{% endif %}">
+                    <i class="fa-solid fa-sign-in-alt text-xl mb-1"></i>
+                    <span class="text-xs font-medium">Sign In</span>
+                </a>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Bottom Navigation Spacer for Mobile -->
+    {% comment %} <div class="h-16 md:hidden"></div> {% endcomment %}
+
+    <!-- Alpine.js for dropdown functionality -->
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
+    <style>
+        @media (max-width: 768px) {
+            .desktop-view {
+                display: none;
+            }
+        }
+    </style>
+
+    <!-- Mobile search toggle script -->
+    <script>
+        function toggleMobileSearch() {
+            const searchBar = document.getElementById('mobileSearch');
+            searchBar.classList.toggle('hidden');
+        }
+
+        // Close mobile search when clicking outside
+        document.addEventListener('click', function(event) {
+            const searchBar = document.getElementById('mobileSearch');
+            const searchButton = event.target.closest('button');
+            
+            if (!searchBar.contains(event.target) && !searchButton) {
+                searchBar.classList.add('hidden');
+            }
+        });
+    </script>
           
+{% endblock nav %}

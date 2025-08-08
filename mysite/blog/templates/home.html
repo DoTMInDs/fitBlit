@@ -1,223 +1,245 @@
 {% extends "base.html" %}
 {% load static %}
 {% load tailwind_filters %}
-{% block title %}Home{% endblock  %}
+{% block title %}FitBlit - Your Digital Hub{% endblock  %}
 {% block content %}
     {% include "partials/nav.html" %}
-    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
-    <style>
-        .swiper {
-            width: 100%;
-            padding: 0.5rem 0.5rem;
-        }
-        .swiper-slide {
-           width:150px;
-           height:auto;
-        }
-        .swiper-button-next,
-        .swiper-button-prev {
-            color:rgb(255, 255, 255);
-            background: rgba(0, 0, 0, 0.34);
-            padding: 15px;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-        }
-        .swiper-button-next::after,
-        .swiper-button-prev::after {
-            font-size: 1.2rem;
-        }
-    </style>
     
-    <div class="w-full flex flex-col justify-between h-full md:w-[80%] m-auto px-[0.5rem] md:px-[0px] mobile-padding">
-       <div class=" overflow-hidden">
-            <div class="flex justify-between">
-                <h2 class="text-[18px] text-[#3D5361] font-semibold">Trending News</h2>
-                <p class="text-[#fff]">
-                    <a class="no-underline text-[#ec2929a9] font-semibold text-[14px]  text-nowrap" href="{% url "news-page" %}">Show all
-                        <i class="fa-solid fa-arrow-up-right-from-square ml-[0.5rem]"></i>
-                    </a>
+    <!-- Hero Section -->
+    <section class="relative bg-gradient-to-br from-teal-600 via-teal-700 to-teal-800 text-white py-16 md:py-24">
+        <div class="absolute inset-0 bg-black opacity-20"></div>
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h1 class="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+                    Welcome to <span class="text-yellow-300">FitBlit</span>
+                </h1>
+                <p class="text-xl md:text-2xl mb-8 text-teal-100 max-w-3xl mx-auto">
+                    Your ultimate digital hub for news, music, and marketplace. Discover trending stories, 
+                    listen to amazing music, and find great deals all in one place.
                 </p>
-            </div>
-            <div class="swiper mySwiper bg-white ">
-                <div class="swiper-wrapper">
-                    {% for article in articles %}
-                        <div class="swiper-slide shadow rounded-[10px] w-[100%]" style="min-width: 350px;">
-                            <div class="p-[1rem]">
-                                <h5 class="text-[18px] font-medium"> {{ article.title|truncatewords:4 }} </h5> 
-                                <div class="flex justify-between items-center mb-[1rem]">
-                                    <p class="text-nowrap text-[13px] text-[#3d5361c4] font-semibold">
-                                        <i class="fa-solid fa-clock"></i>
-                                        <small>{{ article.dated_on|date:"M. d, Y" }}</small>
-                                    </p>
-                                    <p class="text-[13px] text-nowrap text-[#3d5361c4] font-semibold">
-                                        <i class="fa-solid fa-comments px-[2px]"></i>
-                                        {{article.article_comment_count}}
-                                            Comments
-                                    </p>
-                                    <p class="flex text-nowrap items-center gap-[5px] text-[13px] text-[#444] font-semibold">
-                                        <a href="{% url "profile" %}" 
-                                        class="text-[#3d5361c4]">
-                                            <i class="fa-solid fa-user"></i> 
-                                            {{ article.author }} 
-                                        </a>
-                                    </p> 
-                                </div>
-                                <div class=" flex gap-3 w-full">
-                                    {% if article.image %}
-                                        <img src="{{article.image.url}}" class="w-[100%] min-w-[100px] h-[80px] rounded shadow object-center object-cover" alt="article img">
-                                    {% endif %}
-                                    <p class="text-[#3D5361] overflow-hidden">
-                                        {{article.article_content|truncatewords:6}}
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="mt-[1rem] border-t border-slate-200 p-[1rem] flex justify-between items-center">
-                                <button class="rounded-full py-[6px] px-[18px] hover:bg-slate-200 transition duration-200 text-slate-600 ">
-                                    <a href="{% url "blog-post-detail" article.id %}" class="">
-                                        <i class="fa-solid fa-eye mr-[0.2rem]"></i>
-                                        Detail
-                                    </a>
-                                </button>                               
-                                <div class="">
-                                    {% if article.author == request.user %}
-                                        <button class="w-[50px] h-[50px] rounded-[10px] shadow-md hover:bg-slate-200 transition duration-200">
-                                            <a href="{% url "user-dashboard-edit" article.id %}" class="flex justify-center items-center text-slate-600 rounded-full p-[0.5rem]">
-                                                <i class="fa-regular fa-pen-to-square "></i>
-                                            </a>
-                                        </button>
-                                        <button class="w-[50px] h-[50px] rounded-[10px] shadow-md bg-rose-200 transition duration-300">
-                                            <a href="{% url "user-post-delete" article.id %}" class="flex justify-center items-center text-rose-600  rounded-full p-[0.3rem]">
-                                                <i class="fa-solid fa-trash-can "></i>                                         
-                                            </a>
-                                        </button>
-                                    {% endif %}
-                                </div>
-                            </div>
-                        </div> 
-                    {% endfor %}
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="{% url 'news-page' %}" class="bg-white text-teal-700 px-8 py-3 rounded-full font-semibold hover:bg-teal-50 transition duration-300 flex items-center justify-center gap-2">
+                        <i class="fa-regular fa-newspaper"></i>
+                        Explore News
+                    </a>
+                    <a href="{% url 'music-page' %}" class="border-2 border-white text-white px-8 py-3 rounded-full font-semibold hover:bg-white hover:text-teal-700 transition duration-300 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-music"></i>
+                        Discover Music
+                    </a>
                 </div>
-               <!-- Add navigation arrows -->
-               <div class="swiper-button-next"></div>
-               <div class="swiper-button-prev"></div>
             </div>
-       </div>
-        <!--Trending-songs-->
-        <div class="mt-[2rem]">
-            <div class="flex justify-between">
-                <h2 class="text-[18px] text-[#3D5361] font-semibold popular_artist_h2 ">Trending songs</h2>
-                <p class="text-[#fff]">
-                    <a class="no-underline text-[#ec2929a9] font-semibold text-[14px]  text-nowrap" href="{% url "all-songs" %}">
-                        Show all
-                        <i class="fa-solid fa-arrow-up-right-from-square ml-[0.5rem]"></i>
-                    </a>
-                </p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pb-20 md:pb-12">
+        
+        <!-- Trending News Section -->
+        <section class="mb-16">
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h2 class="text-3xl font-bold text-gray-900 mb-2">Trending News</h2>
+                    <p class="text-gray-600">Stay updated with the latest stories and insights</p>
+                </div>
+                <a href="{% url 'news-page' %}" class="inline-flex items-center gap-2 text-teal-600 hover:text-teal-700 font-semibold transition duration-300">
+                    View All
+                    <i class="fa-solid fa-arrow-right"></i>
+                </a>
             </div>
-            <div class="swiper mySwiper bg-white">
-                <div class="swiper-wrapper">
-                    {% for song in songs %}
-                    <div class=" text-[#3b5361] swiper-slide w-[100%] shadow rounded-[10px]" style="min-width: 250px;">
-                        <div class="relative rounded-[10px] cursor-pointer hover:bg-slate-200 p-[3px] ">
-                            <div class="absolute right-[10px] top-[10px] bg-yellow-300 flex justify-center items-center w-[40px] h-[40px] rounded-full ">
-                                <a href="{% url "artist-detail" song.artist.id %}" class="no-underline"><i class="fa-solid fa-play text-black"></i></a>
-                            </div>
-                            <div class="">
-                                <div class="h-[150px] rounded-[10px] w-[150px]">
-                                    {% if song.cover_image %}
-                                        <img src="{{ song.cover_image.url }}" class="rounded-[10px] w-[150px] h-[150px] object-cover object-center" alt="song cover-art">
-                                    {% endif %}
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {% for article in articles|slice:":6" %}
+                <article class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition duration-300 overflow-hidden group">
+                    {% if article.image %}
+                    <div class="relative h-48 overflow-hidden">
+                        <img src="{{ article.image.url }}" alt="{{ article.title }}" 
+                             class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                    </div>
+                    {% endif %}
+                    <div class="p-6">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="bg-teal-100 text-teal-800 text-xs font-medium px-2.5 py-0.5 rounded-full">News</span>
+                            <span class="text-gray-500 text-sm">{{ article.dated_on|date:"M d, Y" }}</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-3 line-clamp-2">{{ article.title }}</h3>
+                        <p class="text-gray-600 mb-4 line-clamp-3">{{ article.article_content|truncatewords:15 }}</p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <div class="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center">
+                                    <i class="fa-solid fa-user text-teal-600 text-sm"></i>
                                 </div>
-                                <div class="all_artist_content">
-                                    <h3 class="">{{ song.title }}</h3>
-                                    <p class="">{{ song.artist }}</p>
+                                <span class="text-sm text-gray-600">{{ article.author.username }}</span>
+                            </div>
+                            <a href="{% url 'blog-post-detail' article.id %}" 
+                               class="inline-flex items-center gap-1 text-teal-600 hover:text-teal-700 font-medium text-sm transition duration-300">
+                                Read More
+                                <i class="fa-solid fa-arrow-right text-xs"></i>
+                            </a>
+                        </div>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- Trending Music Section -->
+        <section class="mb-16">
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h2 class="text-3xl font-bold text-gray-900 mb-2">Trending Music</h2>
+                    <p class="text-gray-600">Discover the latest hits and emerging artists</p>
+                </div>
+                <a href="{% url 'all-songs' %}" class="inline-flex items-center gap-2 text-teal-600 hover:text-teal-700 font-semibold transition duration-300">
+                    View All
+                    <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                {% for song in songs|slice:":10" %}
+                <div class="group cursor-pointer">
+                    <div class="relative bg-white rounded-2xl shadow-lg hover:shadow-xl transition duration-300 overflow-hidden">
+                        <div class="relative aspect-square overflow-hidden">
+                            {% if song.cover_image %}
+                            <img src="{{ song.cover_image.url }}" alt="{{ song.title }}" 
+                                 class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                            {% else %}
+                            <div class="w-full h-full bg-gradient-to-br from-teal-400 to-teal-600 flex items-center justify-center">
+                                <i class="fa-solid fa-music text-white text-3xl"></i>
+                            </div>
+                            {% endif %}
+                            <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
+                                <div class="w-12 h-12 bg-white/90 rounded-full flex items-center justify-center">
+                                    <i class="fa-solid fa-play text-teal-600"></i>
                                 </div>
                             </div>
                         </div>
-                    </div>    
-                    {% endfor %}                 
+                        <div class="p-4">
+                            <h3 class="font-semibold text-gray-900 mb-1 line-clamp-1">{{ song.title }}</h3>
+                            <p class="text-sm text-gray-600 line-clamp-1">{{ song.artist.artist }}</p>
+                        </div>
+                    </div>
                 </div>
-                <!-- Add navigation arrows -->
-                <div class="swiper-button-next"></div>
-                <div class="swiper-button-prev"></div>
+                {% endfor %}
             </div>
-        </div>
+        </section>
 
-        <!--Trending-Items-->
-        <div class="mt-[2rem] space_buttom">
-            <div class="flex justify-between">
-                <h2 class="text-[18px] text-[#3D5361] font-semibold popular_artist_h2 ">Trending ads</h2>
-                <p class="text-[#fff]">
-                    <a class="no-underline text-[#ec2929a9] font-semibold text-[14px]  text-nowrap" href="{% url "all-items" %}">
-                        Show all
-                        <i class="fa-solid fa-arrow-up-right-from-square ml-[0.5rem]"></i>
-                    </a>
-                </p>
-            </div>
-            <div class="swiper mySwiper bg-white">
-                <div class="swiper-wrapper">
-                    {% for item in items %}
-                        <a href="{% url "all-items" %}" class="no-underline swiper-slide shadow rounded-[10px] w-[100%]" style="min-width: 250px;">
-                            <div class="rounded-[10px]">
-                                {% if item.image %}
-                                    <img src="{{ item.image.url }}" class="w-[100%] h-[100%] object-center object-cover rounded-[10px]" alt="item image">
-                                {% endif %}
-                            </div>
-                            <div class=" overflow-hidden p-[0.5rem]">
-                                <h2 class="text-teal-500 text-[18px] font-bold ">GHS{{ item.price }}</h2>
-                                <h3 class="text-slate-600 text-[15px] font-semibold">{{ item.title }}</h3>
-                                <p class="text-[#3b5361] text-[14px] font-regular">{{ item.content|truncatewords:8 }}</p>
-                                <p class="text-[#3b5361] text-[13px] font-regular flex items-center gap-[0.5rem]">
-                                    <i class="fa fa-solid fa-location-dot"></i>
-                                    {{ item.location }}
-                                </p>
-                            </div>
-                            <div class="flex justify-between items-center gap-[0.5rem] border-t border-slate-200 p-[0.5rem]">
-                                <div class="">
-                                    <small class="bg-slate-200 p-[0.3rem] text-nowrap text-[#3b5361] rounded-[3px] text-[10px]">{{item.item_status}}</small>
-                                    {% if item.item_type %}
-                                        <small class="bg-slate-200 p-[0.3rem] text-nowrap text-[#3b5361] rounded-[3px] text-[10px]">{{item.item_type}}</small>
-                                    {% else %}
-                                        <small class=""></small>
-                                    {% endif %}
-                                </div>
-                            </div>
-                        </a>
-                    {% endfor %}
+        <!-- Marketplace Section -->
+        <section class="mb-16">
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h2 class="text-3xl font-bold text-gray-900 mb-2">Featured Items</h2>
+                    <p class="text-gray-600">Great deals and unique finds in our marketplace</p>
                 </div>
-                <!-- Add navigation arrows -->
-                <div class="swiper-button-next"></div>
-                <div class="swiper-button-prev"></div>
+                <a href="{% url 'all-items' %}" class="inline-flex items-center gap-2 text-teal-600 hover:text-teal-700 font-semibold transition duration-300">
+                    View All
+                    <i class="fa-solid fa-arrow-right"></i>
+                </a>
             </div>
-        </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {% for item in items|slice:":8" %}
+                <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition duration-300 overflow-hidden group">
+                    <div class="relative aspect-square overflow-hidden">
+                        {% if item.image %}
+                        <img src="{{ item.image.url }}" alt="{{ item.title }}" 
+                             class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                        {% else %}
+                        <div class="w-full h-full bg-gradient-to-br from-gray-300 to-gray-400 flex items-center justify-center">
+                            <i class="fa-solid fa-image text-gray-500 text-3xl"></i>
+                        </div>
+                        {% endif %}
+                        <div class="absolute top-3 right-3">
+                            <span class="bg-teal-500 text-white text-xs font-medium px-2 py-1 rounded-full">
+                                {{ item.item_status|default:"Available" }}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-semibold text-gray-900 line-clamp-1">{{ item.title }}</h3>
+                            <span class="text-lg font-bold text-teal-600">GHS {{ item.price }}</span>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-3 line-clamp-2">{{ item.description }}</p>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-1 text-sm text-gray-500">
+                                <i class="fa-solid fa-location-dot"></i>
+                                <span>{{ item.location }}</span>
+                            </div>
+                            <a href="{% url 'item-detail' item.id %}" 
+                               class="inline-flex items-center gap-1 text-teal-600 hover:text-teal-700 font-medium text-sm transition duration-300">
+                                View Details
+                                <i class="fa-solid fa-arrow-right text-xs"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- Call to Action Section -->
+        <section class="bg-gradient-to-r from-teal-600 to-teal-700 rounded-3xl p-8 md:p-12 text-white text-center">
+            <div class="max-w-3xl mx-auto">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Join the FitBlit Community</h2>
+                <p class="text-xl mb-8 text-teal-100">Share your stories, upload your music, and discover amazing content from creators around the world.</p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'user-dashboard' %}" class="bg-white text-teal-700 px-8 py-3 rounded-full font-semibold hover:bg-teal-50 transition duration-300 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-plus"></i>
+                        Create Content
+                    </a>
+                    {% else %}
+                    <a href="{% url 'sign_up' %}" class="bg-white text-teal-700 px-8 py-3 rounded-full font-semibold hover:bg-teal-50 transition duration-300 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-user-plus"></i>
+                        Sign Up Free
+                    </a>
+                    <a href="{% url 'login' %}" class="border-2 border-white text-white px-8 py-3 rounded-full font-semibold hover:bg-white hover:text-teal-700 transition duration-300 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-sign-in-alt"></i>
+                        Sign In
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
     </div>
 
-  {% include "partials/footer.html" %}
-    <!-- Add Swiper JS -->
-    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-    <script>
-        const swiper = new Swiper('.mySwiper', {
-            slidesPerView: 'auto',
-            spaceBetween: 8,
-            centeredSlides: false,
-            grabCursor: true,
-            freeMode: true,
-            navigation: {
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
-            },
-            pagination: {
-                el: '.swiper-pagination',
-                clickable: true,
-            },
-            breakpoints: {
-                640: {
-                    spaceBetween: 8,
-                },
-                1024: {
-                    spaceBetween: 8,
-                },
-            },
-        });
-    </script>
+    <!-- Custom CSS for line clamping and mobile optimization -->
+    <style>
+        .line-clamp-1 {
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1;
+        }
+        .line-clamp-2 {
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+        }
+        .line-clamp-3 {
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 3;
+        }
+        
+        /* Mobile-specific optimizations */
+        @media (max-width: 768px) {
+            .aspect-square {
+                aspect-ratio: 1 / 1;
+            }
+        }
+        
+        /* Ensure proper spacing for bottom navigation on mobile */
+        @media (max-width: 768px) {
+            main {
+                padding-bottom: 4rem;
+            }
+        }
+    </style>
+
 {% endblock content %}
 

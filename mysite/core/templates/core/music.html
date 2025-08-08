@@ -1,278 +1,480 @@
 {% extends "base.html" %}
 {% load static %}
 {% load tailwind_filters %}
-{% block title %}Music{% endblock  %}
+{% block title %}Music - FitBlit{% endblock %}
 {% block content %}
     {% include "partials/nav.html" %}
-    <style>
-        .swiper {
-            width: 100%;
-            padding: 0.5rem 0.5rem;
-        }
-        .swiper-slide {
-           width:150px;
-           height:auto;
-        }
-        .swiper-button-next,
-        .swiper-button-prev {
-            color:rgb(255, 255, 255);
-            background: rgba(0, 0, 0, 0.34);
-            padding: 15px;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-        }
-        .swiper-button-next::after,
-        .swiper-button-prev::after {
-            font-size: 1.2rem;
-        }
-    </style>
-
-    <!-- Music-header -->
-    <div class="px-[0px] md:px-0 w-[100%] md:w-[80%] m-auto">
-        <div class="w-[100%] px-[0.5rem]">
-            <div class="border-b border-slate-300 w-full flex justify-start items-start">
-                <div class="flex gap-[20px]">
-                    <p class="mobile-back-btn">
-                        <a class="uppercase text-[13px] no-underline font-semibold text-[#3b5361] text-nowrap" href="{% url 'home' %}">
-                            <i class="fa-solid fa-house-chimney"></i>
-                            Home
-                        </a>
-                    </p>
-                    <div class="dropdown">
-                        <button id="albumTrigger1" class="uppercase text-[13px] no-underline font-semibold text-[#3b5361] text-nowrap" type="button">
-                            <i class="fa-solid fa-plus-circle"></i>
-                            Album
-                        </button>
-                         <!-- Modal -->
-                         <div class="hidden fixed top-0 left-0 w-[100%] bg-[#000000] bg-opacity-20 h-[100vh] z-[1000]" id="albumTrigger1DropDown1">
-                            <div class="w-[100%] md:w-[50%] m-auto fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] bg-slate-50 shadow rounded-[1rem]">
-                                <div class="">
-                                    <div class="flex justify-between items-center border-b border-slate-200 p-[1rem]">
-                                        <h1 class="text-[23px] font-medium text-slate-700" id="exampleModalLabel">
-                                            <i class="fa-solid fa-headphones"></i>
-                                            Create an Album
-                                        </h1>
-                                        <button type="button" id="closeBtn" class="btn-close text-[18px]" >
-                                            <i class="fa-solid fa-close"></i>
-                                        </button>
-                                    </div>
-                                    <div class="p-[1rem]">
-                                        <form action="" method="post" enctype="multipart/form-data">
-                                            {% csrf_token %}
-                                            {{ a_form|crispy }}
-                                            <input type="hidden" name="a_form" value="a_form">
-                                            <div class="md:flex gap-[10px] justify-center items-center flex-row">
-                                                <input type="submit" name="a_form" value="Upload Album" class="w-full cursor-pointer text-slate-50 hover:bg-slate-500 bg-[#3D5361] rounded-full py-[10px] px-[5rem]">
-                                                <button type="button" class="text-[#3D5361] w-full border border-[#3D5361] border-opacity-20 rounded-full my-[10px] md:my-0 py-[10px] px-[5rem]">Close</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                       
+    
+    <!-- Messages Display -->
+    {% if messages %}
+        <div class="fixed top-4 right-4 z-50 space-y-2" id="message-container">
+            {% for message in messages %}
+                <div class="{% if message.tags == 'error' %}bg-red-50 border border-red-200 text-red-700{% elif message.tags == 'success' %}bg-green-50 border border-green-200 text-green-700{% elif message.tags == 'warning' %}bg-yellow-50 border border-yellow-200 text-yellow-700{% else %}bg-blue-50 border border-blue-200 text-blue-700{% endif %} p-4 rounded-lg shadow-lg max-w-sm">
+                    <div class="flex items-center">
+                        {% if message.tags == 'error' %}
+                            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                            </svg>
+                        {% elif message.tags == 'success' %}
+                            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                            </svg>
+                        {% elif message.tags == 'warning' %}
+                            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                            </svg>
+                        {% else %}
+                            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                            </svg>
+                        {% endif %}
+                        <span class="text-sm font-medium">{{ message }}</span>
                     </div>
-                    <div class="">
-                        <button id="albumTrigger2" type="button" class="uppercase text-[13px] no-underline font-semibold text-[#3b5361] text-nowrap">
-                            <i class="fa-solid fa-music "></i>
-                            Add Artist
-                        </button>
-                        <!-- Modal -->
-                        <div class="hidden fixed top-0 left-0 w-[100%] bg-[#000000] bg-opacity-20 h-[100vh] z-[1000]" id="albumTrigger1DropDown2">
-                            <div class="w-[100%] md:w-[50%] m-auto fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] bg-slate-50 shadow rounded-[1rem]">
-                                <div class="">
-                                    <div class="flex justify-between items-center border-b border-slate-200 p-[1rem]">
-                                        <h1 class="text-[23px] font-medium text-slate-700" id="exampleModalLabel">
-                                            <i class="fa-solid fa-headphones"></i>
-                                            Add an Artist
-                                        </h1>
-                                        <button type="button" id="closeBtn" class="btn-close text-[18px]" >
-                                            <i class="fa-solid fa-close"></i>
-                                        </button>
-                                    </div>
-                                    <div class="p-[1rem]">
-                                        <form action="" method="post" enctype="multipart/form-data">
-                                            {% csrf_token %}
-                                            {{ form|crispy }}
-                                            <input type="hidden" name="form" value="form">
-                                            <div class="md:flex gap-[10px] justify-center items-center flex-row">
-                                                <input type="submit" value="Post Artist" class="w-full cursor-pointer text-slate-50 hover:bg-slate-500 bg-[#3D5361] rounded-full py-[10px] px-[5rem]">
-                                                <button type="button" class="text-[#3D5361] w-full border border-[#3D5361] my-[10px] md:my-0 border-opacity-20 rounded-full py-[10px] px-[5rem]">Close</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Music Page -->
+    <div class="min-h-screen bg-gray-50">
+        <!-- Header -->
+        <div class="bg-gradient-to-br from-teal-500 via-teal-600 to-teal-700 px-4 py-8 md:py-12">
+            <div class="max-w-7xl mx-auto">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <a href="{% url 'home' %}" class="flex items-center space-x-2 text-white hover:text-teal-100 transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                            </svg>
+                            <span class="text-sm font-medium">Home</span>
+                        </a>
+                    </div>
+                    <div class="text-center md:text-right">
+                        <h1 class="text-2xl md:text-3xl font-bold text-white mb-2">Music</h1>
+                        <p class="text-teal-100 text-sm md:text-base">Discover amazing artists and albums</p>
                     </div>
                 </div>
             </div>
-     
+        </div>
 
-            <!-- Music-main-section -->
-            <div class="mt-[2rem]">
-                <div class="flex justify-between">
-                    <h2 class="text-[18px] md:text-[22px] ml-[0.5rem] font-medium">Popular Artists</h2>
-                    <p class="text-[#fff]">
-                        <a class="no-underline text-[#ec2929a9] font-semibold text-[14px] font-verdana  text-nowrap" href="{% url "all-artist" %}">Show all
-                            <i class="fa-solid fa-arrow-up-right-from-square ml-[0.5rem]"></i>
-                        </a>
-                    </p>
+        <!-- Action Buttons -->
+        <div class="max-w-7xl mx-auto px-4 py-6">
+            <div class="flex flex-col sm:flex-row gap-4 mb-8">
+                <button data-modal-target="album-modal" data-modal-toggle="album-modal" 
+                        class="flex items-center justify-center space-x-2 px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                    </svg>
+                    <span>Create Album</span>
+                </button>
+                <button data-modal-target="artist-modal" data-modal-toggle="artist-modal" 
+                        class="flex items-center justify-center space-x-2 px-6 py-3 border border-teal-600 text-teal-600 rounded-lg hover:bg-teal-50 transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                    </svg>
+                    <span>Add Artist</span>
+                </button>
+            </div>
+
+            <!-- Popular Artists Section -->
+            <div class="mb-12">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-xl md:text-2xl font-bold text-gray-900">Popular Artists</h2>
+                    <a href="{% url 'all-artist' %}" class="flex items-center space-x-2 text-teal-600 hover:text-teal-700 transition-colors">
+                        <span class="text-sm font-medium">Show all</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 17l9.2-9.2M17 17V7H7"/>
+                        </svg>
+                    </a>
                 </div>
-                <div class="swiper mySwiper bg-white">
-                    <div class="swiper-wrapper">
-                        {% for artist_upload in artist_uploads %}
-                            <div class="swiper-slide w-[100%] min-w-[250px] text-[#3b5361] shadow rounded-[10px]">
-                                <div class="relative rounded-[10px] hover:bg-slate-200 p-[3px]">
-                                    <div class="absolute right-[10px] top-[10px] bg-yellow-300 flex justify-center items-center w-[40px] h-[40px] rounded-full">
-                                        <a href="{% url 'artist-detail' artist_upload.id %}" class="no-underline hover:text-slate-700 text-slate-800"><i class="fa-solid fa-play"></i></a>
-                                    </div>
-                                    <div class="">
-                                        <div class="h-[150px] rounded-[50%] w-[150px]">
-                                            {% if artist_upload.artist_profile %}
-                                                <img src="{{ artist_upload.artist_profile.url }}" class="rounded-[50%] w-[150px] h-[150px] object-cover object-center" alt="...">
-                                            {% endif %}
+                
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                    {% for artist_upload in artist_uploads %}
+                        <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all group">
+                            <div class="relative">
+                                <div class="aspect-square overflow-hidden">
+                                    {% if artist_upload.artist_profile %}
+                                        <img src="{{ artist_upload.artist_profile.url }}" 
+                                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
+                                             alt="{{ artist_upload.artist }}">
+                                    {% else %}
+                                        <div class="w-full h-full bg-gradient-to-br from-teal-100 to-teal-200 flex items-center justify-center">
+                                            <svg class="w-12 h-12 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                            </svg>
                                         </div>
-                                        <div class="px-[0.5rem]">
-                                            <h3 class="text-slate-700 text-[18px]">{{ artist_upload.artist }}</h3>
-                                            <p class="text-rose-500 font-medium text-[14px]">{{ artist_upload.artist_genre }}</p>
-                                        </div>
-                                    </div>
+                                    {% endif %}
                                 </div>
-                            </div>    
-                        {% endfor %}                 
-                    </div>
-                    <!-- Add navigation arrows -->
-                    <div class="swiper-button-next"></div>
-                    <div class="swiper-button-prev"></div>
+                                <div class="absolute top-3 right-3">
+                                    <a href="{% url 'artist-detail' artist_upload.id %}" 
+                                       class="flex items-center justify-center w-10 h-10 bg-teal-600 text-white rounded-full hover:bg-teal-700 transition-all shadow-lg">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-semibold text-gray-900 text-sm truncate">{{ artist_upload.artist }}</h3>
+                                <p class="text-teal-600 text-xs font-medium">{{ artist_upload.artist_genre }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
 
-            <div class="mt-[2rem]">
-                <div class="flex justify-between">
-                    <h2 class="text-[18px] md:text-[22px] ml-[0.5rem] font-medium">Popular albums and singles</h2>
-                    <p class="text-[#fff]">
-                        <a class="no-underline text-[#ec2929a9] font-semibold text-[14px] font-verdana  text-nowrap" href="{% url "all-album" %}">
-                            Show all
-                            <i class="fa-solid fa-arrow-up-right-from-square ml-[0.5rem]"></i>
-                        </a>
-                    </p>
+            <!-- Popular Albums Section -->
+            <div class="mb-12">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-xl md:text-2xl font-bold text-gray-900">Popular Albums & Singles</h2>
+                    <a href="{% url 'all-album' %}" class="flex items-center space-x-2 text-teal-600 hover:text-teal-700 transition-colors">
+                        <span class="text-sm font-medium">Show all</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 17l9.2-9.2M17 17V7H7"/>
+                        </svg>
+                    </a>
                 </div>
-                <div class="swiper mySwiper bg-white">
-                    <div class="swiper-wrapper">
-                        {% for album in albums %}
-                            <div class="swiper-slide no-underline w-[100%] min-w-[250px] text-[#3b5361] shadow rounded-[10px]">
-                                <div class="relative rounded-[10px] hover:bg-slate-200 p-[3px]">
-                                    <div class="absolute right-[10px] top-[10px] bg-yellow-300 flex justify-center items-center w-[40px] h-[40px] rounded-full ">
-                                        <a href="{% url "album-detail" album.id %}" class="no-underline hover:text-slate-700 text-slate-800"><i class="fa-solid fa-play "></i></a>
-                                    </div>
-                                    <div class="">
-                                        <div class="h-[150px] rounded-[50%] w-[150px]">
-                                            {% if album.cover_image %}
-                                                <img src="{{ album.cover_image.url }}" class="rounded-[10px] w-[150px] h-[150px] object-cover object-center" alt="...">
-                                            {% endif %}
+                
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                    {% for album in albums %}
+                        <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all group">
+                            <div class="relative">
+                                <div class="aspect-square overflow-hidden">
+                                    {% if album.cover_image %}
+                                        <img src="{{ album.cover_image.url }}" 
+                                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
+                                             alt="{{ album.title }}">
+                                    {% else %}
+                                        <div class="w-full h-full bg-gradient-to-br from-teal-100 to-teal-200 flex items-center justify-center">
+                                            <svg class="w-12 h-12 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/>
+                                            </svg>
                                         </div>
-                                        <div class="px-[0.5rem]">
-                                            <h3 class="text-slate-700 text-[18px]">{{ album.title }}</h3>
-                                            <p class="text-rose-500 font-medium text-[14px]">{{ album.artist }}</p>
-                                        </div>
-                                    </div>
+                                    {% endif %}
                                 </div>
-                            </div>    
-                        {% endfor %}                 
-                    </div>
-                    <!-- Add navigation arrows -->
-                    <div class="swiper-button-next"></div>
-                    <div class="swiper-button-prev"></div>
+                                <div class="absolute top-3 right-3">
+                                    <a href="{% url 'album-detail' album.id %}" 
+                                       class="flex items-center justify-center w-10 h-10 bg-teal-600 text-white rounded-full hover:bg-teal-700 transition-all shadow-lg">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-semibold text-gray-900 text-sm truncate">{{ album.title }}</h3>
+                                <p class="text-teal-600 text-xs font-medium">{{ album.artist }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>
     </div>
 
-    {% include "partials/footer.html" %}
+    <!-- Album Modal -->
+    <div id="album-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div class="relative p-4 w-full max-w-2xl">
+            <div class="relative bg-white rounded-xl shadow-xl flex flex-col" style="max-height: 90vh;">
+                <!-- Modal Header (fixed height) -->
+                <div class="relative bg-teal-600 p-6 rounded-t-xl flex justify-between items-center flex-shrink-0">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/>
+                            </svg>
+                        </div>
+                        <div class="ml-4">
+                            <h2 class="text-xl font-bold text-white">Create Album</h2>
+                            <p class="text-teal-100 text-sm">Add a new album to your collection</p>
+                        </div>
+                    </div>
+                    <button type="button" class="text-white bg-transparent hover:bg-white hover:text-teal-600 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center transition-all" data-modal-hide="album-modal">
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                        </svg>
+                    </button>
+                </div>
+                
+                <!-- Scrollable Form Content -->
+                <div class="p-6 overflow-y-auto flex-grow">
+                    <form action="" method="post" enctype="multipart/form-data" class="space-y-6">
+                        {% csrf_token %}
+                        
+                        <!-- Album Title -->
+                        <div>
+                            <label for="title" class="block mb-2 text-sm font-medium text-gray-900">Album Title</label>
+                            <input type="text" name="title" id="title" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full p-2.5" placeholder="Enter album title" required>
+                        </div>
+                        
+                        <!-- Artist Selection -->
+                        <div>
+                            <label for="artist" class="block mb-2 text-sm font-medium text-gray-900">Artist</label>
+                            <select name="artist" id="artist" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full p-2.5" required>
+                                <option value="" disabled selected>Select artist</option>
+                                {% if artists %}
+                                    {% for artist in artists %}
+                                        <option value="{{ artist.id }}">{{ artist.artist }}</option>
+                                    {% endfor %}
+                                {% else %}
+                                    <option value="" disabled>No artists available</option>
+                                {% endif %}
+                            </select>
+                        </div>
+                        
+                        <!-- Release Date -->
+                        <div>
+                            <label for="release_date" class="block mb-2 text-sm font-medium text-gray-900">Release Date</label>
+                            <input type="date" name="release_date" id="release_date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full p-2.5" required>
+                        </div>
+                            
+                            <!-- Album Cover Upload -->
+                            <div>
+                                <label class="block mb-2 text-sm font-medium text-gray-900" for="cover_image">Album Cover</label>
+                                <div class="flex items-center justify-center w-full">
+                                    <label for="cover_image" class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+                                        <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                            <svg class="w-8 h-8 mb-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                                            </svg>
+                                            <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Click to upload</span> or drag and drop</p>
+                                            <p class="text-xs text-gray-500">PNG, JPG or JPEG (MAX. 5MB)</p>
+                                        </div>
+                                        <input id="cover_image" name="cover_image" type="file" class="hidden" accept="image/*" />
+                                    </label>
+                                </div>
+                                <div id="album-cover-preview" class="mt-2 hidden">
+                                    <img id="preview-album-cover" class="h-32 rounded-lg" src="#" alt="Album cover preview" />
+                                </div>
+                            </div>
+                            
+                            <input type="hidden" name="a_form" value="a_form">
+                        </form>
+                    </div>
+                    
+                    <!-- Fixed Footer with Buttons -->
+                    <div class="p-6 bg-gray-50 rounded-b-xl flex-shrink-0">
+                        <div class="flex space-x-3">
+                            <button type="submit" name="a_form" 
+                                    class="flex-1 inline-flex items-center justify-center px-6 py-3 bg-teal-600 text-white text-sm font-medium rounded-lg hover:bg-teal-700 transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                                </svg>
+                                Upload Album
+                            </button>
+                            <button type="button" 
+                                    class="flex-1 inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-all focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+                                    data-modal-hide="album-modal">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                </svg>
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
 
-    <!-- Add Swiper JS -->
-    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+    <!-- Artist Modal -->
+    <div id="artist-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div class="relative p-4 w-full max-w-2xl">
+            <div class="relative bg-white rounded-xl shadow-xl flex flex-col" style="max-height: 90vh;">
+                <!-- Modal Header (fixed height) -->
+                <div class="relative bg-teal-600 p-6 rounded-t-xl flex justify-between items-center flex-shrink-0">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                            </svg>
+                        </div>
+                        <div class="ml-4">
+                            <h2 class="text-xl font-bold text-white">Add Artist</h2>
+                            <p class="text-teal-100 text-sm">Add a new artist to the platform</p>
+                        </div>
+                    </div>
+                    <button type="button" class="text-white bg-transparent hover:bg-white hover:text-teal-600 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center transition-all" data-modal-hide="artist-modal">
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                        </svg>
+                    </button>
+                </div>
+                
+                <!-- Scrollable Form Content -->
+                <div class="p-6 overflow-y-auto flex-grow">
+                    <form action="" method="post" enctype="multipart/form-data" class="space-y-6">
+                        {% csrf_token %}
+                        <!-- Artist Name -->
+                        <div>
+                            <label for="artist" class="block mb-2 text-sm font-medium text-gray-900">Artist Name</label>
+                            <input type="text" name="artist" id="artist" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full p-2.5" placeholder="Enter artist name" required>
+                        </div>
+                        
+                        <!-- Artist Genre -->
+                        <div>
+                            <label for="artist_genre" class="block mb-2 text-sm font-medium text-gray-900">Genre</label>
+                            <input type="text" name="artist_genre" id="artist_genre" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full p-2.5" placeholder="Enter artist genre">
+                        </div>
+                        
+                        <!-- Artist Image Upload -->
+                        <div>
+                            <label class="block mb-2 text-sm font-medium text-gray-900" for="artist_image">Artist Cover Image</label>
+                            <div class="flex items-center justify-center w-full">
+                                <label for="artist_image" class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+                                    <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                        <svg class="w-8 h-8 mb-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                                        </svg>
+                                        <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Click to upload</span> or drag and drop</p>
+                                        <p class="text-xs text-gray-500">PNG, JPG or JPEG (MAX. 5MB)</p>
+                                    </div>
+                                    <input id="artist_image" name="artist_image" type="file" class="hidden" accept="image/*" />
+                                </label>
+                            </div>
+                            <div id="image-preview" class="mt-2 hidden">
+                                <img id="preview-image" class="h-32 rounded-lg" src="#" alt="Image preview" />
+                            </div>
+                        </div>
+
+                        <!-- Artist Profile Upload -->
+                        <div>
+                            <label class="block mb-2 text-sm font-medium text-gray-900" for="artist_profile">Artist Profile Image</label>
+                            <div class="flex items-center justify-center w-full">
+                                <label for="artist_profile" class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+                                    <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                        <svg class="w-8 h-8 mb-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                                        </svg>
+                                        <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Click to upload</span> or drag and drop</p>
+                                        <p class="text-xs text-gray-500">PNG, JPG or JPEG (MAX. 5MB)</p>
+                                    </div>
+                                    <input id="artist_profile" name="artist_profile" type="file" class="hidden" accept="image/*" />
+                                </label>
+                            </div>
+                            <div id="image-preview" class="mt-2 hidden">
+                                <img id="preview-image" class="h-32 rounded-lg" src="#" alt="Image preview" />
+                            </div>
+                        </div>
+                        
+                       
+                    </form>
+                </div>
+                
+                <!-- Fixed Footer with Buttons -->
+                <div class="p-6 bg-gray-50 rounded-b-xl flex-shrink-0">
+                    <div class="flex space-x-3">
+                        <button type="submit" 
+                                class="flex-1 inline-flex items-center justify-center px-6 py-3 bg-teal-600 text-white text-sm font-medium rounded-lg hover:bg-teal-700 transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                            </svg>
+                            Post Artist
+                        </button>
+                        <button type="button" 
+                                class="flex-1 inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-all focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+                                data-modal-hide="artist-modal">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <!-- Mobile Bottom Spacer -->
+    <div class="h-16 md:hidden"></div>
+
+    <!-- Hide footer on mobile -->
+    <div class="hidden md:block">
+        {% include "partials/footer.html" %}
+    </div>
+
     <script>
-        const swiper = new Swiper('.mySwiper', {
-            slidesPerView: 'auto',
-            spaceBetween: 8,
-            centeredSlides: false,
-            grabCursor: true,
-            freeMode: true,
-            navigation: {
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
-            },
-            pagination: {
-                el: '.swiper-pagination',
-                clickable: true,
-            },
-            breakpoints: {
-                640: {
-                    spaceBetween: 8,
-                },
-                1024: {
-                    spaceBetween: 8,
-                },
-            },
-        });
-
+        // Auto-trigger toasts for Django messages
         document.addEventListener('DOMContentLoaded', function() {
-            // Album modals functionality
-            const albumTrigger1 = document.getElementById('albumTrigger1');
-            const albumDropDown1 = document.getElementById('albumTrigger1DropDown1');
-            const albumTrigger2 = document.getElementById('albumTrigger2');
-            const albumDropDown2 = document.getElementById('albumTrigger1DropDown2');
-            const closeBtns = document.querySelectorAll('.btn-close');
-    
-            // Add unique IDs to your HTML elements first
-            // Album Trigger 1 (Create Album)
-            if(albumTrigger1 && albumDropDown1) {
-                albumTrigger1.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    albumDropDown1.classList.toggle('hidden');
-                    albumDropDown2.classList.add('hidden');
-                });
-            }
-    
-            // Album Trigger 2 (Add Artist)
-            if(albumTrigger2 && albumDropDown2) {
-                albumTrigger2.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    albumDropDown2.classList.toggle('hidden');
-                    albumDropDown1.classList.add('hidden');
-                });
-            }
-    
-            // Close buttons
-            closeBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    albumDropDown1.classList.add('hidden');
-                    albumDropDown2.classList.add('hidden');
-                });
-            });
-    
-            // Close modals when clicking outside
-            document.addEventListener('click', function(e) {
-                if(!e.target.closest('.dropdown') && 
-                   !e.target.closest('#albumTrigger1DropDown1') &&
-                   !e.target.closest('#albumTrigger1DropDown2')) {
-                    albumDropDown1.classList.add('hidden');
-                    albumDropDown2.classList.add('hidden');
+            // Wait for toast system to be available
+            const waitForToast = () => {
+                if (window.showToast) {
+                    // Check for Django messages in the page
+                    const djangoMessages = document.querySelectorAll('#message-container .p-4, .alert, .messages li, [class*="alert-"]');
+                    
+                    djangoMessages.forEach(messageEl => {
+                        const message = messageEl.textContent.trim();
+                        let type = 'info';
+                        
+                        // Determine type based on classes
+                        if (messageEl.classList.contains('bg-red-50') || messageEl.classList.contains('error')) {
+                            type = 'error';
+                        } else if (messageEl.classList.contains('bg-green-50') || messageEl.classList.contains('success')) {
+                            type = 'success';
+                        } else if (messageEl.classList.contains('bg-yellow-50') || messageEl.classList.contains('warning')) {
+                            type = 'warning';
+                        }
+                        
+                        // Show toast notification
+                        window.showToast(message, type);
+                        
+                        // Hide original message after a short delay
+                        setTimeout(() => {
+                            messageEl.style.display = 'none';
+                        }, 100);
+                    });
+                } else {
+                    // Retry after a short delay if toast system isn't ready
+                    setTimeout(waitForToast, 100);
                 }
-            });
-    
-            // Close on escape key
-            document.addEventListener('keydown', function(e) {
-                if(e.key === 'Escape') {
-                    albumDropDown1.classList.add('hidden');
-                    albumDropDown2.classList.add('hidden');
-                }
-            });
+            };
+            
+            // Start the process
+            waitForToast();
         });
     </script>
-    {% endblock content %}
+
+    <script>
+        // Image preview functionality
+        document.getElementById('artist_image').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                const previewContainer = document.getElementById('image-preview');
+                const previewImage = document.getElementById('preview-image');
+                
+                reader.onload = function(e) {
+                    previewImage.src = e.target.result;
+                    previewContainer.classList.remove('hidden');
+                }
+                
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Album cover preview functionality
+        document.getElementById('cover_image').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                const previewContainer = document.getElementById('album-cover-preview');
+                const previewImage = document.getElementById('preview-album-cover');
+                
+                reader.onload = function(e) {
+                    previewImage.src = e.target.result;
+                    previewContainer.classList.remove('hidden');
+                }
+                
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Set today as default release date
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('release_date').value = today;
+        });
+    </script>
+    {% endblock %}
 
 

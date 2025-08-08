@@ -29,7 +29,7 @@
     </nav>
     
   
-    <main class=" mt-[70px]">
+    <main>
         {% block content %}
         {% endblock  %}
     </main>
@@ -38,9 +38,161 @@
         {% block footer %}
         {% endblock footer %}
     </footer>
-    
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed top-4 right-4 z-50 space-y-2"></div>
+
+    <!-- Toast Notification Template -->
+    <template id="toast-template">
+        <div class="toast-notification transform transition-all duration-300 ease-in-out translate-x-full opacity-0">
+            <div class="flex items-center p-4 rounded-lg shadow-lg border-l-4 min-w-[300px] max-w-[400px]">
+                <div class="flex-shrink-0 mr-3">
+                    <i class="toast-icon text-lg"></i>
+                </div>
+                <div class="flex-1">
+                    <p class="toast-message text-sm font-medium"></p>
+                </div>
+                <button class="toast-close ml-3 flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </div>
+        </div>
+    </template>
+
     <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+
+    <!-- Toast Notification JavaScript -->
+    <script>
+        class ToastNotification {
+            constructor() {
+                this.container = document.getElementById('toast-container');
+                this.template = document.getElementById('toast-template');
+                this.toasts = [];
+            }
+
+            show(message, type = 'info', duration = 5000) {
+                const toast = this.createToast(message, type);
+                this.container.appendChild(toast);
+                this.toasts.push(toast);
+
+                // Animate in
+                setTimeout(() => {
+                    toast.classList.remove('translate-x-full', 'opacity-0');
+                    toast.classList.add('translate-x-0', 'opacity-100');
+                }, 100);
+
+                // Auto remove
+                if (duration > 0) {
+                    setTimeout(() => {
+                        this.remove(toast);
+                    }, duration);
+                }
+
+                return toast;
+            }
+
+            createToast(message, type) {
+                const toast = this.template.content.cloneNode(true).querySelector('.toast-notification');
+                const messageEl = toast.querySelector('.toast-message');
+                const iconEl = toast.querySelector('.toast-icon');
+                const closeBtn = toast.querySelector('.toast-close');
+
+                messageEl.textContent = message;
+
+                // Set styles based on type
+                const styles = this.getToastStyles(type);
+                toast.querySelector('.flex').className = `flex items-center p-4 rounded-lg shadow-lg border-l-4 min-w-[300px] max-w-[400px] ${styles.container}`;
+                iconEl.className = `toast-icon text-lg ${styles.icon}`;
+                iconEl.innerHTML = styles.iconContent;
+
+                // Add close functionality
+                closeBtn.addEventListener('click', () => {
+                    this.remove(toast);
+                });
+
+                return toast;
+            }
+
+            getToastStyles(type) {
+                const styles = {
+                    success: {
+                        container: 'bg-green-50 border-green-500 text-green-800',
+                        icon: 'text-green-500',
+                        iconContent: '<i class="fa-solid fa-check-circle"></i>'
+                    },
+                    error: {
+                        container: 'bg-red-50 border-red-500 text-red-800',
+                        icon: 'text-red-500',
+                        iconContent: '<i class="fa-solid fa-exclamation-circle"></i>'
+                    },
+                    warning: {
+                        container: 'bg-yellow-50 border-yellow-500 text-yellow-800',
+                        icon: 'text-yellow-500',
+                        iconContent: '<i class="fa-solid fa-exclamation-triangle"></i>'
+                    },
+                    info: {
+                        container: 'bg-teal-50 border-teal-500 text-teal-800',
+                        icon: 'text-teal-500',
+                        iconContent: '<i class="fa-solid fa-info-circle"></i>'
+                    }
+                };
+
+                return styles[type] || styles.info;
+            }
+
+            remove(toast) {
+                if (!toast || !toast.parentNode) return;
+
+                // Animate out
+                toast.classList.add('translate-x-full', 'opacity-0');
+                toast.classList.remove('translate-x-0', 'opacity-100');
+
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.parentNode.removeChild(toast);
+                    }
+                    this.toasts = this.toasts.filter(t => t !== toast);
+                }, 300);
+            }
+
+            removeAll() {
+                this.toasts.forEach(toast => this.remove(toast));
+            }
+        }
+
+        // Initialize toast notification system
+        const toast = new ToastNotification();
+
+        // Handle Django messages
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check for Django messages in the page
+            const djangoMessages = document.querySelectorAll('.alert, .messages li, [class*="alert-"]');
+            
+            djangoMessages.forEach(messageEl => {
+                const message = messageEl.textContent.trim();
+                let type = 'info';
+
+                // Determine message type based on classes
+                if (messageEl.classList.contains('alert-error') || messageEl.classList.contains('error')) {
+                    type = 'error';
+                } else if (messageEl.classList.contains('alert-success') || messageEl.classList.contains('success')) {
+                    type = 'success';
+                } else if (messageEl.classList.contains('alert-warning') || messageEl.classList.contains('warning')) {
+                    type = 'warning';
+                }
+
+                // Show toast and remove original message
+                toast.show(message, type);
+                messageEl.style.display = 'none';
+            });
+
+            // Make toast available globally
+            window.showToast = (message, type = 'info', duration = 5000) => {
+                return toast.show(message, type, duration);
+            };
+        });
+    </script>
 </body>
 </html>

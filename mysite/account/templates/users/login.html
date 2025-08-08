@@ -1,54 +1,123 @@
 {% extends "base.html" %}
 {% load static %}
 {% load tailwind_filters %}
-{% block title %}Sign In{% endblock  %}
+{% block title %}Sign In - FitBlit{% endblock %}
 {% block content %}
-    <div class="flex justify-center items-center w-full h-[100%]">
-        <form action="" method="post" class="md:w-[450px] w-[100%] p-[30px] rounded bg-slate-50 border border-slate-300">
-            <div class="">
-                <h1 class="text-[28px] text-slate-500 font-medium my-[20px] text-center">Login</h1>
+<div class="min-h-screen bg-gradient-to-br from-gray-50 via-white to-teal-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
+        <!-- Logo and Header with Gradient Background -->
+        <div class="text-center bg-gradient-to-br from-teal-500 via-teal-600 to-teal-700 rounded-3xl p-8 shadow-2xl">
+            <div class="mx-auto w-20 h-20 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center shadow-xl mb-6">
+                <img src="{% static 'images/fitblog-logo.png' %}" alt="FitBlit" class="w-10 h-10">
             </div>
-            {% csrf_token %}  
-            <input type="hidden" name="next" value="{{ next }}">
-            {% if messages %}
-                <div class="mb-[10px]">
-                    {% for message in messages %}
-                        <p class="text-red-500">{{ message }}</p>
-                    {% endfor %}
+            <h2 class="text-3xl font-bold text-white mb-2">Welcome back</h2>
+            <p class="text-teal-100">Sign in to your FitBlit account</p>
+        </div>
+
+        <!-- Login Form -->
+        <div class="bg-white rounded-3xl shadow-2xl border border-gray-100 p-8">
+            <form action="" method="post" class="space-y-6">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ next }}">
+                
+                <!-- Error Messages -->
+                {% if messages %}
+                    <div class="bg-red-50 border border-red-200 rounded-xl p-4">
+                        {% for message in messages %}
+                            <p class="text-red-600 text-sm flex items-center">
+                                <i class="fa-solid fa-exclamation-circle mr-2"></i>
+                                {{ message }}
+                            </p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <!-- Username Field -->
+                <div class="space-y-2">
+                    <label for="id_username" class="text-sm font-medium text-gray-700">Username</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <i class="fa-regular fa-user text-gray-400"></i>
+                        </div>
+                        <input type="text" id="id_username" name="username" 
+                               class="w-full pl-12 pr-4 py-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition duration-300 bg-gray-50 focus:bg-white" 
+                               placeholder="Enter your username" required>
+                    </div>
                 </div>
-            {% endif %}
-            <div class="">
-                <div class="my-[1rem] border border-slate-300 rounded  bg-white flex items-center px-[1rem]">
-                    <i class="fa fa-regular fa-user text-slate-400"></i>
-                    <input type="text" id="id_username" name="username" class="py-[0.5rem] px-[10px] border-transparent bg-transparent outline-none w-full placeholder:text-slate-400" placeholder="Enter username..." required>
+
+                <!-- Password Field -->
+                <div class="space-y-2">
+                    <label for="id_password" class="text-sm font-medium text-gray-700">Password</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <i class="fa-solid fa-lock text-gray-400"></i>
+                        </div>
+                        <input type="password" id="id_password" name="password" 
+                               class="w-full pl-12 pr-12 py-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition duration-300 bg-gray-50 focus:bg-white" 
+                               placeholder="Enter your password" required>
+                        <button type="button" id="toggleEye" 
+                                class="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-600 transition duration-300"
+                                onclick="togglePassword()">
+                            <i class="fa-solid fa-eye-slash"></i>
+                        </button>
+                    </div>
                 </div>
-                <div class="my-[1rem] border border-slate-300 rounded w-full bg-white flex items-center px-[1rem]">
-                    <i class="fa fa-solid fa-lock text-slate-400"></i>
-                    <input type="password" id="id_password" name="password" class=" outline-none w-full border-transparent bg-transparent py-[0.5rem] px-[10px] placeholder:text-slate-400" placeholder="Enter password..." required>
-                    <i id="toggleEye" class="fa fa-solid fa-eye-slash cursor-pointer text-slate-400" onclick="togglePassword()"></i>
+
+                <!-- Forgot Password Link -->
+                <div class="flex items-center justify-end">
+                    <a href="{% url 'password_reset' %}" class="text-sm text-teal-600 hover:text-teal-700 font-medium transition duration-300">
+                        Forgot your password?
+                    </a>
                 </div>
-            </div>     
-            <p class="text-right font-open-sans mt-[0.5rem]"><a href="#!" class='text-rose-500'>Forgot password?</a></p>
-            <button type="submit" class="rounded text-[#fff] bg-slate-500 px-[30px] py-[10px] w-full mt-[30px]">Login</button>
-                <p class=" py-[20px] font-open-sans text-center">New to FitBlog <a href="{% url "sign_up" %}" class="text-rose-500 hover:text-[#595454]">Create account</a></p>
-        </form>
+
+                <!-- Submit Button -->
+                <button type="submit" 
+                        class="w-full bg-gradient-to-r from-teal-500 to-teal-600 text-white py-4 px-6 rounded-xl font-semibold text-lg hover:from-teal-600 hover:to-teal-700 transform hover:scale-[1.02] transition duration-300 shadow-lg hover:shadow-xl">
+                    Sign In
+                </button>
+            </form>
+
+            <!-- Divider -->
+            <div class="relative my-8">
+                <div class="absolute inset-0 flex items-center">
+                    <div class="w-full border-t border-gray-200"></div>
+                </div>
+                <div class="relative flex justify-center text-sm">
+                    <span class="px-4 bg-white text-gray-500">New to FitBlit?</span>
+                </div>
+            </div>
+
+            <!-- Sign Up Link -->
+            <div class="text-center">
+                <a href="{% url 'sign_up' %}" 
+                   class="inline-flex items-center justify-center w-full py-3 px-4 border border-gray-300 rounded-xl text-gray-700 bg-white hover:bg-gray-50 font-medium transition duration-300 shadow-sm hover:shadow-md">
+                    <i class="fa-solid fa-user-plus mr-2"></i>
+                    Create your account
+                </a>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center text-sm text-gray-500">
+            <p>By signing in, you agree to our <a href="#" class="text-teal-600 hover:text-teal-700">Terms of Service</a> and <a href="#" class="text-teal-600 hover:text-teal-700">Privacy Policy</a></p>
+        </div>
     </div>
+</div>
 
+<script>
+function togglePassword() {
+    const passwordInput = document.getElementById('id_password');
+    const eyeIcon = document.querySelector('#toggleEye i');
 
-    <script>
-        function togglePassword() {
-            const passwordInput = document.getElementById('id_password');
-            const eyeIcon = document.querySelector('#toggleEye');
-    
-            if(passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                eyeIcon.classList.replace('fa-eye-slash', 'fa-eye');
-            } else {
-                passwordInput.type = 'password';
-                eyeIcon.classList.replace('fa-eye', 'fa-eye-slash');
-            }
-        }
-    </script>
-{% endblock  %}
+    if(passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        eyeIcon.classList.replace('fa-eye-slash', 'fa-eye');
+    } else {
+        passwordInput.type = 'password';
+        eyeIcon.classList.replace('fa-eye', 'fa-eye-slash');
+    }
+}
+</script>
+{% endblock %}
 
 

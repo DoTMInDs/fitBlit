@@ -5,7 +5,7 @@ from cloudinary.models import CloudinaryField
 
 class ProfileModel(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
-    image = CloudinaryField('image', folder='profile_pics',null=True ,blank=True, validators=[FileExtensionValidator(['png', 'jpg','jpeg', 'WebP', 'avif', 'jfif'])])
+    image = CloudinaryField('image', folder='profile_images',null=True ,blank=True)
     full_name = models.CharField(null=True,max_length=200)
     about = models.TextField(null=True)
     talks_about = models.CharField(max_length=255, default='anything', null=True)

@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.core.validators import FileExtensionValidator
 from cloudinary.models import CloudinaryField
 from cloudinary_storage.storage import VideoMediaCloudinaryStorage
-from cloudinary_storage.validators import validate_video
+# from cloudinary_storage.validators import validate_video
 # from blog.models import Author
 
 # Create your models here.
@@ -16,8 +16,8 @@ class Artist(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE,null=True)
     artist = models.CharField(max_length=200, null=True,unique=True)
     artist_genre = models.CharField(max_length=200,null=True)
-    artist_image=CloudinaryField('image', folder='artist_cover',null=True,blank=True,validators=[FileExtensionValidator(['png', 'jpg','jpeg', 'WebP', 'avif', 'jfif'])])
-    artist_profile=CloudinaryField('image', folder='artist_profile',null=True,blank=True, validators=[FileExtensionValidator(['png', 'jpg','jpeg', 'WebP', 'avif', 'jfif'])])
+    artist_image=CloudinaryField('image', folder='artist_image',null=True,blank=True)
+    artist_profile=CloudinaryField('image', folder='artist_profile',null=True,blank=True)
     posted_on=models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -30,7 +30,7 @@ class Album(models.Model):
     artist = models.ForeignKey(Artist, on_delete=models.CASCADE, related_name='albums')
     title = models.CharField(max_length=200)
     release_date = models.DateField()
-    cover_image = CloudinaryField('image', folder='album_cover', null=True, blank=True, validators=[FileExtensionValidator(['png', 'jpg','jpeg', 'WebP', 'avif', 'jfif'])])
+    cover_image = CloudinaryField('image', folder='album_cover', null=True, blank=True)
 
     class Meta:
         ordering = ['-release_date']
@@ -43,7 +43,7 @@ class Song(models.Model):
     artist = models.ForeignKey(Artist, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     genre = models.CharField(max_length=200, null=True)
-    cover_image = CloudinaryField('image', folder='song_cover', null=True, blank=True, validators=[FileExtensionValidator(['png', 'jpg','jpeg', 'WebP', 'avif', 'jfif'])])
+    cover_image = CloudinaryField('image', folder='song_cover_image', null=True, blank=True)
     song_file = models.FileField(upload_to='music', null=True, blank=True)
     posted_on = models.DateTimeField(auto_now_add=True)
 
@@ -54,7 +54,7 @@ class Song(models.Model):
 class SportsModel(models.Model):
     title=models.CharField(max_length=200, unique=True)
     sub_title=models.CharField(max_length=200, unique=True,null=True)
-    artist_song_create = models.FileField(upload_to='video/',null=True,blank=True, validators=[FileExtensionValidator(['MOV', 'WMV', 'MP4', 'FLV', 'WEBM', 'AVI', 'MKV'])])
+    artist_song_create = models.FileField(upload_to='song_files/',null=True,blank=True)
     # image=CloudinaryField(upload_to='images/',null=True,blank=True)
     author=models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     slug=models.SlugField(max_length=200, unique=True)

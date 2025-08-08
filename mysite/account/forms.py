@@ -63,3 +63,34 @@ class PostEditForm(forms.ModelForm):
         if image and not hasattr(image, 'name'):
             image.name = 'temp.jpg'
         return image
+
+class ArticlePostModelForm(forms.ModelForm):
+    class Meta:
+        model = ArticlePostModel
+        fields = ['title', 'sub_title', 'slug', 'article_content', 'image', 'status']
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full pl-10 p-2.5',
+                'placeholder': 'Enter article title'
+            }),
+            'sub_title': forms.TextInput(attrs={
+                'class': 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full pl-10 p-2.5',
+                'placeholder': 'Enter sub title (optional)'
+            }),
+            'slug': forms.TextInput(attrs={
+                'class': 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full pl-10 p-2.5',
+                'placeholder': 'Enter URL slug'
+            }),
+            'article_content': forms.Textarea(attrs={
+                'class': 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full pl-10 p-2.5',
+                'placeholder': 'Write your article content here...',
+                'rows': 6
+            }),
+            'image': forms.FileInput(attrs={
+                'class': 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full pl-10 p-2.5',
+                'accept': 'image/*'
+            }),
+            'status': forms.Select(attrs={
+                'class': 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full pl-10 p-2.5'
+            }),
+        }
