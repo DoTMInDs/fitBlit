@@ -352,8 +352,8 @@
                                     <input id="artist_profile" name="artist_profile" type="file" class="hidden" accept="image/*" />
                                 </label>
                             </div>
-                            <div id="image-preview" class="mt-2 hidden">
-                                <img id="preview-image" class="h-32 rounded-lg" src="#" alt="Image preview" />
+                            <div id="profile-preview" class="mt-2 hidden">
+                                <img id="preview-profile" class="h-32 rounded-lg" src="#" alt="preview-profile" />
                             </div>
                         </div>
                         
@@ -442,6 +442,23 @@
                 const reader = new FileReader();
                 const previewContainer = document.getElementById('image-preview');
                 const previewImage = document.getElementById('preview-image');
+                
+                reader.onload = function(e) {
+                    previewImage.src = e.target.result;
+                    previewContainer.classList.remove('hidden');
+                }
+                
+                reader.readAsDataURL(file);
+            }
+        });
+        // Artist profile image preview functionality
+        document.getElementById('artist_profile').addEventListener('change', function(event)
+        {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                const previewContainer = document.getElementById('profile-preview');
+                const previewImage = document.getElementById('preview-profile');
                 
                 reader.onload = function(e) {
                     previewImage.src = e.target.result;
