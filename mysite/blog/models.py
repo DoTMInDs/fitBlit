@@ -13,6 +13,7 @@ class Author(models.Model):
     def __str__(self) -> str:
         return self.name
 
+
 class Profile(models.Model):
     fullname = models.CharField(max_length=100)
     email=models.EmailField(validators=[EmailValidator])
