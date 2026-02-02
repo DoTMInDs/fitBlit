@@ -2,6 +2,7 @@ from django.shortcuts import render,redirect, get_object_or_404
 from django.contrib import messages
 from blog.models import PostModel,ArticlePostModel
 from blog.forms import CommentForm,ArticleCommentForm,ArtistPostForm,AlbumForm,SongUploadForm
+from account.forms import UserPostForm
 from django.db.models import Q
 from .models import Artist,Album,SportsModel,Song
 from blog.models import Item,ItemImage
@@ -32,6 +33,21 @@ def NewsPage(request):
         Q(author__username__icontains=filter_query) |
         Q(sub_title__icontains=filter_query) 
     )
+
+    if request.method == "POST":
+        user_post_form = UserPostForm(request.POST, request.FILES)
+        if user_post_form.is_valid():
+            instance = user_post_form.save(commit=False)
+            instance.author = request.user
+            instance.save()
+            return redirect('user-dashboard')
+        else:
+            for field, errors in user_post_form.errors.items():
+                for error in errors:
+                    messages.error(request, f"Error in {field}: {error}")
+    
+    else:
+        user_post_form = UserPostForm()
     
      # Pagination for articles
     article_paginator = Paginator(articles, 25)  # Show 5 articles per page
@@ -39,9 +55,9 @@ def NewsPage(request):
     article_page_obj = article_paginator.get_page(article_page_number)
 
     context = {
-        # 'articles': articles,
         'article_page_obj': article_page_obj,
         'posts': posts,
+        'user_post_form': user_post_form,
     }
     return render(request, 'core/news.html', context)
 
@@ -165,20 +181,39 @@ def MusicPage(request):
     a_form = AlbumForm() 
 
     if request.method == "POST":
+        print("POST request received")  # Debug print
+        print("POST data:", request.POST)  # Debug print
+        print("FILES data:", request.FILES)  # Debug print
+        
+        # Check which form was submitted
         if 'form' in request.POST:
+            print("Artist form submitted")  # Debug print
             form = ArtistPostForm(request.POST, request.FILES)        
-            if form.is_valid() :
+            if form.is_valid():
+                print("Artist form is valid")  # Debug print
                 artist = form.save(commit=False)
                 artist.user = request.user
                 artist.save()            
+                messages.success(request, 'Artist created successfully!')
                 return redirect('music-page')
+            else:
+                print("Artist form errors:", form.errors)  # Debug print
+                for field, errors in form.errors.items():
+                    for error in errors:
+                        messages.error(request, f"Error in {field}: {error}")
+                        
         elif 'a_form' in request.POST:
+            print("Album form submitted")  # Debug print
             a_form = AlbumForm(request.POST, request.FILES)
             if a_form.is_valid():
+                print("Album form is valid")  # Debug print
                 album = a_form.save(commit=False)
                 album.user = request.user
                 album.save()
+                messages.success(request, 'Album created successfully!')
                 return redirect('music-page')
+            else:
+                print("Album form errors:", a_form.errors)  # Debug print
         
     else:
         form = ArtistPostForm()
@@ -221,16 +256,44 @@ def ArtistDetailPage(request, artist_id):
 
 @login_required
 def all_artist(request):    
-    artist_uploads = Artist.objects.all()
+    # Get the search query
+    filter_query = request.GET.get('search', '')
     
-    filter_query = request.GET.get('search') if request.GET.get('search') != None else ''
-    artist_uploads = Artist.objects.filter(
-        Q(artist__icontains=filter_query) |
-        Q(artist_genre__icontains=filter_query)
-    )
+    # Filter artists based on search query
+    if filter_query:
+        artist_uploads = Artist.objects.filter(
+            Q(artist__icontains=filter_query) |
+            Q(artist_genre__icontains=filter_query)
+        )
+    else:
+        artist_uploads = Artist.objects.all()
+    
+    # Handle form submission
+    if request.method == 'POST':
+        if 'form' in request.POST:  # Check if this is the artist form submission
+            print("Artist form submitted")  # Debug print
+            form = ArtistPostForm(request.POST, request.FILES)        
+            if form.is_valid():
+                print("Artist form is valid")  # Debug print
+                artist = form.save(commit=False)
+                artist.user = request.user
+                artist.save()            
+                messages.success(request, 'Artist created successfully!')
+                return redirect('all-artist')  # Redirect back to all artists page
+            else:
+                print("Artist form errors:", form.errors)  # Debug print
+                for field, errors in form.errors.items():
+                    for error in errors:
+                        messages.error(request, f"Error in {field}: {error}")
+        else:
+            form = ArtistPostForm()
+    else:
+        form = ArtistPostForm()
 
     context = {
         "artist_uploads": artist_uploads,
+        "form": form,
+        "search_query": filter_query,
     }
     return render(request, 'artists/all_artist.html', context)
     
@@ -243,9 +306,12 @@ def all_album(request):
         Q(artist__artist__icontains=filter_query) |
         Q(title__icontains=filter_query)
     )
+    # Get unique artists count
+    unique_artists = albums.values('artist').distinct().count()
 
     context = {
         "albums": albums,
+        "unique_artists": unique_artists,
     }
     return render(request, 'artists/all_album.html', context)
 
@@ -264,6 +330,10 @@ def AlbumDetail(request, album_id):
                 song.artist = album.artist
                 song.save()
                 return redirect('album-detail', album_id=album.id)
+        else:
+            for field, errors in song_form.errors.items():
+                for error in errors:
+                    messages.error(request, f"Error in {field}: {error}")
     else:
         song_form = SongUploadForm()
 

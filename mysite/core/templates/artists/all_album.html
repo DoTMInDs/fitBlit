@@ -1,46 +1,345 @@
 {% extends "base.html" %}
 {% load static %}
 {% load tailwind_filters %}
-{% block title %}all Artist{% endblock  %}
+{% block title %}All Albums - Music Collection{% endblock %}
+
 {% block content %}
     {% include "partials/nav.html" %}
 
-       <!-- Music-main-section -->
-       <div class="px-[0px] md:px-0 w-[100%] md:w-[80%] m-auto ">
-        <div class="w-[100%] ">
-            <button onclick="goBack()" class="rounded-full ml-[0.5rem] mb-[1rem] text-[#3D5361]">
-                <i class="fa-solid fa-circle-arrow-left"></i>
-                Back
-            </button>
-            <div class="flex justify-between ml-[0.5rem]">
-                <h2 class="text-[18px] font-bold">Popular Album</h2>
+    <!-- Hero Section -->
+    <div class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+            <!-- Breadcrumb Navigation -->
+            <div class="mb-6 flex items-center">
+                <a href="{% url 'music-page' %}" class="text-slate-300 hover:text-white transition-colors flex items-center">
+                    <i class="fas fa-arrow-left mr-2"></i>
+                    <span class="text-sm font-medium">Back to Music</span>
+                </a>
             </div>
 
-            <div class="w-full">
-                <div class="music-grid">
-                    {% for album in albums %}
-                        <div class="relative rounded-[10px] shadow hover:bg-slate-200 p-[3px] ">
-                            <div class="absolute right-[10px] top-[10px] bg-yellow-300 flex justify-center items-center w-[40px] h-[40px] rounded-full ">
-                                <a href="{% url "album-detail" album.id %}" class="no-underline hover:text-slate-700 text-slate-800"><i class="fa-solid fa-play "></i></a>
-                            </div>
-                            <div class="">
-                                <div class="h-[200px] rounded-[10px] ">
-                                    {% if album.cover_image %}
-                                        <img src="{{ album.cover_image.url }}" class=" w-[100%] h-[100%] rounded-[10px] object-center object-cover" alt="...">
-                                    {% endif %}
+            <!-- Page Header -->
+            <div class="flex flex-col md:flex-row md:items-center justify-between mb-8">
+                <div>
+                    <h1 class="text-3xl md:text-4xl font-bold text-white mb-2">All Albums</h1>
+                    <p class="text-slate-300">Browse through our complete collection of albums</p>
+                </div>
+                <div class="mt-4 md:mt-0">
+                    <div class="flex items-center space-x-4">
+                        <!-- Search Form -->
+                        <form method="get" action="" class="relative">
+                            <div class="relative">
+                                <input type="text" 
+                                       name="search" 
+                                       value="{{ request.GET.search|default:'' }}"
+                                       placeholder="Search albums..." 
+                                       class="pl-10 pr-4 py-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl text-white placeholder-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent w-full md:w-64">
+                                <div class="absolute left-3 top-2.5">
+                                    <i class="fas fa-search text-slate-300"></i>
                                 </div>
-                                <div class="px-[0.5rem]">
-                                    <h3 class="text-slate-700 text-[18px]">{{ album.title }}</h3>
-                                    <p class="text-rose-500 font-medium text-[14px]">{{ album.artist }}</p>
-                                </div>
                             </div>
+                        </form>
+                        
+                        <!-- Sort Dropdown -->
+                        <div class="relative">
+                            <button class="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm text-white rounded-xl hover:bg-white/20 transition-all">
+                                <i class="fas fa-sort"></i>
+                                <span class="text-sm">Sort</span>
+                                <i class="fas fa-chevron-down text-xs"></i>
+                            </button>
                         </div>
-                    {% endfor %}                 
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+                <div class="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10">
+                    <p class="text-slate-300 text-sm mb-1">Total Albums</p>
+                    <p class="text-2xl font-bold text-white">{{ albums|length }}</p>
+                </div>
+                <div class="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10">
+                    <p class="text-slate-300 text-sm mb-1">Artists</p>
+                    <p class="text-2xl font-bold text-white">{{ unique_artists|default:albums|dictsort:"artist.id"|length }}</p>
+                </div>
+                <div class="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10">
+                    <p class="text-slate-300 text-sm mb-1">Latest Release</p>
+                    <p class="text-xl font-semibold text-white">
+                        {% with albums|first as latest %}
+                            {% if latest.release_date %}
+                                {{ latest.release_date|date:"F Y" }}
+                            {% else %}
+                                Recent
+                            {% endif %}
+                        {% endwith %}
+                    </p>
                 </div>
             </div>
         </div>
     </div>
 
-    {% include "partials/footer.html" %}
-{% endblock %}
+    <!-- Albums Grid -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mb-12">
+        {% if albums %}
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {% for album in albums %}
+                <div class="group bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+                    <!-- Album Cover -->
+                    <div class="relative h-64 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
+                        {% if album.cover_image %}
+                            <img src="{{ album.cover_image.url }}" 
+                                 alt="{{ album.title }}" 
+                                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        {% else %}
+                            <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-teal-100 to-teal-200">
+                                <div class="text-center p-6">
+                                    <div class="w-16 h-16 bg-gradient-to-br from-teal-500 to-teal-600 rounded-full flex items-center justify-center mx-auto mb-3">
+                                        <i class="fas fa-record-vinyl text-white text-2xl"></i>
+                                    </div>
+                                    <p class="text-teal-800 font-medium">{{ album.artist }}</p>
+                                </div>
+                            </div>
+                        {% endif %}
+                        
+                        <!-- Overlay with Action Buttons -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-between p-4">
+                            <a href="{% url 'album-detail' album.id %}" 
+                               class="w-12 h-12 bg-teal-500 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-teal-600 transition-all hover:scale-110">
+                                <i class="fas fa-play text-lg"></i>
+                            </a>
+                            <div class="flex space-x-2">
+                                <button class="w-10 h-10 bg-white/90 text-gray-800 rounded-full flex items-center justify-center shadow-lg hover:bg-white transition-all hover:scale-110">
+                                    <i class="fas fa-heart text-sm"></i>
+                                </button>
+                                <button class="w-10 h-10 bg-white/90 text-gray-800 rounded-full flex items-center justify-center shadow-lg hover:bg-white transition-all hover:scale-110">
+                                    <i class="fas fa-plus text-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Year Badge -->
+                        {% if album.release_date %}
+                        <div class="absolute top-3 right-3">
+                            <span class="px-3 py-1 bg-black/70 text-white text-xs font-medium rounded-full backdrop-blur-sm">
+                                {{ album.release_date|date:"Y" }}
+                            </span>
+                        </div>
+                        {% endif %}
+                    </div>
 
+                    <!-- Album Info -->
+                    <div class="p-5">
+                        <div class="mb-3">
+                            <h3 class="font-bold text-gray-900 text-lg truncate">{{ album.title }}</h3>
+                            <p class="text-teal-600 text-sm font-medium mb-1">{{ album.artist.artist|default:album.artist }}</p>
+                        </div>
+                        
+                        <!-- Additional Info -->
+                        <div class="flex items-center justify-between pt-4 border-t border-gray-100">
+                            <div class="flex items-center space-x-3">
+                                <!-- Song Count -->
+                                <div class="flex items-center text-gray-500 text-sm">
+                                    <i class="fas fa-music mr-1 text-xs"></i>
+                                    <span>{{ album.songs.count|default:"0" }} songs</span>
+                                </div>
+                                
+                                <!-- Duration if available -->
+                                {% if album.total_duration %}
+                                <div class="flex items-center text-gray-500 text-sm">
+                                    <i class="fas fa-clock mr-1 text-xs"></i>
+                                    <span>{{ album.total_duration }}</span>
+                                </div>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- View Details -->
+                            <a href="{% url 'album-detail' album.id %}" 
+                               class="inline-flex items-center text-sm text-teal-600 hover:text-teal-700 font-medium">
+                                <span>View Album</span>
+                                <i class="fas fa-arrow-right ml-1 text-xs"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <!-- Empty State -->
+            <div class="text-center py-16">
+                <div class="max-w-md mx-auto">
+                    <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-record-vinyl text-gray-400 text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-semibold text-gray-700 mb-3">No albums found</h3>
+                    <p class="text-gray-500 mb-8">There are no albums in the collection yet. Be the first to add one!</p>
+                    <a href="{% url 'music-page' %}" 
+                       class="inline-flex items-center gap-2 px-6 py-3 bg-teal-500 text-white rounded-xl hover:bg-teal-600 transition-all duration-200 shadow-lg hover:shadow-xl">
+                        <i class="fas fa-plus"></i>
+                        <span>Add Album</span>
+                    </a>
+                </div>
+            </div>
+        {% endif %}
+
+        <!-- Pagination (if needed) -->
+        {% if is_paginated %}
+        <div class="mt-12 flex items-center justify-between">
+            <div class="flex-1 flex justify-between sm:hidden">
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}" 
+                       class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                        Previous
+                    </a>
+                {% endif %}
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}" 
+                       class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                        Next
+                    </a>
+                {% endif %}
+            </div>
+            <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                <div>
+                    <p class="text-sm text-gray-700">
+                        Showing <span class="font-medium">{{ page_obj.start_index }}</span> to 
+                        <span class="font-medium">{{ page_obj.end_index }}</span> of 
+                        <span class="font-medium">{{ page_obj.paginator.count }}</span> results
+                    </p>
+                </div>
+                <div>
+                    <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                        {% if page_obj.has_previous %}
+                            <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}" 
+                               class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                <span class="sr-only">Previous</span>
+                                <i class="fas fa-chevron-left"></i>
+                            </a>
+                        {% endif %}
+                        
+                        {% for num in page_obj.paginator.page_range %}
+                            {% if page_obj.number == num %}
+                                <span class="relative inline-flex items-center px-4 py-2 border border-teal-500 bg-teal-50 text-sm font-medium text-teal-600">
+                                    {{ num }}
+                                </span>
+                            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                <a href="?page={{ num }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}" 
+                                   class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
+                                    {{ num }}
+                                </a>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        {% if page_obj.has_next %}
+                            <a href="?page={{ page_obj.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}" 
+                               class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                <span class="sr-only">Next</span>
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                        {% endif %}
+                    </nav>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- View Types Toggle - Only on large screens -->
+    <div class="hidden lg:block fixed bottom-6 right-6 z-40">
+        <div class="flex items-center space-x-2 bg-white rounded-xl shadow-lg p-2 border border-gray-200">
+            <button class="p-2 text-gray-400 hover:text-teal-600 rounded-lg hover:bg-gray-100 transition-colors">
+                <i class="fas fa-th-large text-lg"></i>
+            </button>
+            <button class="p-2 text-gray-400 hover:text-teal-600 rounded-lg hover:bg-gray-100 transition-colors">
+                <i class="fas fa-list text-lg"></i>
+            </button>
+        </div>
+    </div>
+
+    {% include "partials/footer.html" %}
+
+    <style>
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        
+        /* Smooth image loading */
+        img {
+            transition: opacity 0.3s ease-in-out;
+        }
+        
+        img[data-src] {
+            opacity: 0;
+        }
+        
+        img.loaded {
+            opacity: 1;
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Lazy loading images
+            const images = document.querySelectorAll('img');
+            const imageObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.getAttribute('data-src') || img.src;
+                        img.classList.add('loaded');
+                        observer.unobserve(img);
+                    }
+                });
+            });
+
+            images.forEach(img => {
+                if (img.complete) {
+                    img.classList.add('loaded');
+                } else {
+                    imageObserver.observe(img);
+                }
+            });
+
+            // Back button functionality
+            function goBack() {
+                window.history.back();
+            }
+
+            // Add smooth hover effects
+            const albumCards = document.querySelectorAll('.group');
+            albumCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-4px)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+
+            // Search form submission
+            const searchForm = document.querySelector('form[method="get"]');
+            if (searchForm) {
+                const searchInput = searchForm.querySelector('input[name="search"]');
+                searchInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        searchForm.submit();
+                    }
+                });
+            }
+        });
+    </script>
+{% endblock %}

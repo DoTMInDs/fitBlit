@@ -5,207 +5,410 @@
 {% block content %}
     {% include "partials/nav.html" %}
     
-    <!-- Edit Article Page -->
-    <div class="min-h-screen bg-gray-50">
-        <!-- Header -->
-        <div class="bg-gradient-to-br from-teal-500 via-teal-600 to-teal-700 px-4 py-8 md:py-12">
-            <div class="max-w-7xl mx-auto">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-4 bg-teal-500 rounded-md">
-                        <a href="{% url 'user-dashboard' %}" class="flex items-center space-x-2 text-white p-4 hover:text-teal-100 transition-colors">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-                            </svg>
-                            <span class="text-sm font-medium">Back to Dashboard</span>
-                        </a>
-                    </div>
-                    <div class="text-center md:text-right">
-                        <h1 class="text-2xl md:text-3xl font-bold text-white mb-2">Edit Article</h1>
-                        <p class="text-teal-100 text-sm md:text-base">Update your article content and settings</p>
-                    </div>
+    <!-- Mobile-First Edit Article Page -->
+    <main class="min-h-screen bg-gray-50">
+        <!-- Mobile Header -->
+        <header class="max-w-7xl mx-auto px-4 py-6 sticky top-0 z-40 bg-white border-b border-gray-200 shadow-sm">
+            <div class="flex items-center justify-between h-16 px-4">
+                <!-- Back Button -->
+                <a href="{% url 'user-dashboard' %}" 
+                   class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors">
+                    <i class="fa-solid fa-arrow-left text-gray-700"></i>
+                </a>
+                
+                <!-- Page Title -->
+                <div class="flex-1 mx-4">
+                    <h1 class="text-base font-semibold text-gray-900 truncate">Edit Article</h1>
                 </div>
+                
+                <!-- Save Button (Mobile) -->
+                <button type="submit" form="editForm"
+                        class="px-4 py-2 bg-gradient-to-r from-teal-500 to-cyan-500 text-white text-sm font-medium rounded-xl hover:from-teal-600 hover:to-cyan-600 transition-colors">
+                    Save
+                </button>
             </div>
-        </div>
+        </header>
 
         <!-- Main Content -->
-        <div class="max-w-7xl mx-auto px-4 py-6 md:py-8">
-            <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-                <!-- Form Header -->
-                <div class="bg-gradient-to-r from-teal-500 to-teal-600 px-6 py-4">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
-                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                            </svg>
+        <div class="max-w-7xl mx-auto px-4 py-6">
+            <div class="flex flex-col lg:flex-row gap-8">
+                <!-- Main Form Column -->
+                <div class="flex-1">
+                    <!-- Article Preview Card -->
+                    <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden mb-6">
+                        <div class="bg-gradient-to-r from-teal-500 to-cyan-500 px-4 py-3">
+                            <div class="flex items-center space-x-2">
+                                <i class="fa-solid fa-eye text-white"></i>
+                                <h2 class="text-sm font-semibold text-white">Preview</h2>
+                            </div>
                         </div>
-                        <div>
-                            <h2 class="text-lg font-semibold text-white">Article Details</h2>
-                            <p class="text-teal-100 text-sm">Update your article information</p>
+                        <div class="p-4">
+                            <div class="space-y-3">
+                                <h3 class="font-bold text-gray-900 text-lg" id="previewTitle">
+                                    {{ form.title.value|default:"Article Title" }}
+                                </h3>
+                                {% if articles.image %}
+                                <div class="rounded-lg overflow-hidden">
+                                    <img src="{{ articles.image.url }}" 
+                                         alt="Current article image"
+                                         class="w-full h-40 object-cover"
+                                         id="currentImage">
+                                </div>
+                                {% endif %}
+                                <p class="text-sm text-gray-600" id="previewContent">
+                                    {{ form.article_content.value|truncatechars:100|default:"Article content preview..." }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Edit Form -->
+                    <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+                        <!-- Form Header -->
+                        <div class="bg-gradient-to-r from-teal-500 to-cyan-500 px-6 py-4">
+                            <h2 class="text-lg font-semibold text-white flex items-center">
+                                <i class="fa-solid fa-pen-to-square mr-2"></i>
+                                Edit Article
+                            </h2>
+                        </div>
+
+                        <!-- Form Content -->
+                        <div class="p-4 md:p-6">
+                            <form action="" method="POST" enctype="multipart/form-data" class="space-y-6" id="editForm">
+                                {% csrf_token %}
+                                
+                                <!-- Form Fields Grid -->
+                                <div class="space-y-4">
+                                    <!-- Title -->
+                                    <div>
+                                        <label for="{{ form.title.id_for_label }}" 
+                                               class="block mb-2 text-sm font-medium text-gray-900">
+                                            Title *
+                                        </label>
+                                        <input type="text" 
+                                               name="{{ form.title.name }}" 
+                                               id="{{ form.title.id_for_label }}" 
+                                               value="{{ form.title.value|default:'' }}"
+                                               class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 focus:outline-none transition-all"
+                                               placeholder="Enter article title"
+                                               required
+                                               oninput="updatePreview('title', this.value)">
+                                        {% if form.title.errors %}
+                                        <p class="mt-1 text-sm text-red-600">{{ form.title.errors.0 }}</p>
+                                        {% endif %}
+                                    </div>
+
+                                    <!-- Sub Title -->
+                                    <div>
+                                        <label for="{{ form.sub_title.id_for_label }}" 
+                                               class="block mb-2 text-sm font-medium text-gray-900">
+                                            Subtitle
+                                        </label>
+                                        <input type="text" 
+                                               name="{{ form.sub_title.name }}" 
+                                               id="{{ form.sub_title.id_for_label }}" 
+                                               value="{{ form.sub_title.value|default:'' }}"
+                                               class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 focus:outline-none transition-all"
+                                               placeholder="Enter subtitle (optional)">
+                                    </div>
+
+                                    <!-- Slug -->
+                                    <div>
+                                        <label for="{{ form.slug.id_for_label }}" 
+                                               class="block mb-2 text-sm font-medium text-gray-900">
+                                            URL Slug
+                                        </label>
+                                        <div class="relative">
+                                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm">
+                                                fitblit.com/articles/
+                                            </span>
+                                            <input type="text" 
+                                                   name="{{ form.slug.name }}" 
+                                                   id="{{ form.slug.id_for_label }}" 
+                                                   value="{{ form.slug.value|default:'' }}"
+                                                   class="w-full pl-36 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 focus:outline-none transition-all"
+                                                   placeholder="url-slug">
+                                        </div>
+                                    </div>
+
+                                    <!-- Article Content -->
+                                    <div>
+                                        <label for="{{ form.article_content.id_for_label }}" 
+                                               class="block mb-2 text-sm font-medium text-gray-900">
+                                            Content *
+                                        </label>
+                                        <textarea name="{{ form.article_content.name }}" 
+                                                  id="{{ form.article_content.id_for_label }}" 
+                                                  rows="8"
+                                                  class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 focus:outline-none transition-all resize-none"
+                                                  placeholder="Write your article content here..."
+                                                  required
+                                                  oninput="updatePreview('content', this.value)">{{ form.article_content.value|default:'' }}</textarea>
+                                        {% if form.article_content.errors %}
+                                        <p class="mt-1 text-sm text-red-600">{{ form.article_content.errors.0 }}</p>
+                                        {% endif %}
+                                    </div>
+
+                                    <!-- Image Upload -->
+                                    <div>
+                                        <label for="{{ form.image.id_for_label }}" 
+                                               class="block mb-2 text-sm font-medium text-gray-900">
+                                            Article Image
+                                        </label>
+                                        <div class="space-y-3">
+                                            {% if articles.image %}
+                                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
+                                                <div class="flex items-center space-x-3">
+                                                    <div class="w-12 h-12 rounded-lg overflow-hidden">
+                                                        <img src="{{ articles.image.url }}" 
+                                                             alt="Current image"
+                                                             class="w-full h-full object-cover">
+                                                    </div>
+                                                    <div>
+                                                        <p class="text-sm font-medium text-gray-900">Current Image</p>
+                                                        <p class="text-xs text-gray-500">Click to change</p>
+                                                    </div>
+                                                </div>
+                                                <button type="button" 
+                                                        onclick="clearImage()"
+                                                        class="text-red-600 hover:text-red-700">
+                                                    <i class="fa-solid fa-trash"></i>
+                                                </button>
+                                            </div>
+                                            {% endif %}
+                                            <div class="relative">
+                                                <input type="file" 
+                                                       name="{{ form.image.name }}" 
+                                                       id="{{ form.image.id_for_label }}" 
+                                                       class="hidden"
+                                                       accept="image/*"
+                                                       onchange="previewImage(event)">
+                                                <label for="{{ form.image.id_for_label }}"
+                                                       class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-200 border-dashed rounded-xl cursor-pointer hover:border-teal-300 transition-colors bg-gray-50">
+                                                    <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                                        <i class="fa-solid fa-cloud-arrow-up text-gray-400 text-2xl mb-2"></i>
+                                                        <p class="text-sm text-gray-600">Click to upload image</p>
+                                                        <p class="text-xs text-gray-500">PNG, JPG, GIF (Max 5MB)</p>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                            <div id="imagePreview" class="hidden">
+                                                <div class="rounded-xl overflow-hidden mt-3">
+                                                    <img id="previewImg" 
+                                                         class="w-full h-48 object-cover">
+                                                    <div class="flex justify-center p-3 bg-gray-50">
+                                                        <button type="button" 
+                                                                onclick="removePreview()"
+                                                                class="text-red-600 hover:text-red-700 text-sm">
+                                                            <i class="fa-solid fa-trash mr-1"></i>
+                                                            Remove Image
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Status -->
+                                    <div>
+                                        <label for="{{ form.status.id_for_label }}" 
+                                               class="block mb-2 text-sm font-medium text-gray-900">
+                                            Publication Status
+                                        </label>
+                                        <div class="grid grid-cols-2 gap-3">
+                                            <label class="relative">
+                                                <input type="radio" 
+                                                       name="{{ form.status.name }}" 
+                                                       value="0" 
+                                                       {% if form.status.value == 0 %}checked{% endif %}
+                                                       class="sr-only peer">
+                                                <div class="p-4 border-2 border-gray-200 rounded-xl text-center cursor-pointer peer-checked:border-teal-500 peer-checked:bg-teal-50 transition-all">
+                                                    <i class="fa-solid fa-file-lines text-gray-600 mb-2"></i>
+                                                    <p class="font-medium text-gray-900">Draft</p>
+                                                    <p class="text-xs text-gray-500">Save privately</p>
+                                                </div>
+                                            </label>
+                                            <label class="relative">
+                                                <input type="radio" 
+                                                       name="{{ form.status.name }}" 
+                                                       value="1" 
+                                                       {% if form.status.value == 1 %}checked{% endif %}
+                                                       class="sr-only peer">
+                                                <div class="p-4 border-2 border-gray-200 rounded-xl text-center cursor-pointer peer-checked:border-teal-500 peer-checked:bg-teal-50 transition-all">
+                                                    <i class="fa-solid fa-earth-americas text-teal-600 mb-2"></i>
+                                                    <p class="font-medium text-gray-900">Published</p>
+                                                    <p class="text-xs text-gray-500">Visible to everyone</p>
+                                                </div>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Form Actions (Desktop) -->
+                                <div class="flex space-x-3 pt-8 border-t border-gray-100">
+                                    <button type="submit" 
+                                            class="flex-1 px-6 py-3 bg-gradient-to-r from-teal-500 to-cyan-500 text-white font-medium rounded-xl hover:from-teal-600 hover:to-cyan-600 transition-colors shadow-lg hover:shadow-xl"
+                                            id="submitBtn">
+                                        <i class="fa-solid fa-floppy-disk mr-2"></i>
+                                        <span id="submitText">Save Changes</span>
+                                        <i class="fa-solid fa-spinner fa-spin ml-2 hidden" id="loadingIcon"></i>
+                                    </button>
+                                    <a href="{% url 'user-dashboard' %}" 
+                                       class="flex-1 px-6 py-3 border-2 border-gray-200 text-gray-700 font-medium rounded-xl hover:border-gray-300 hover:bg-gray-50 transition-colors text-center">
+                                        <i class="fa-solid fa-xmark mr-2"></i>
+                                        Cancel
+                                    </a>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
 
-                <!-- Form Content -->
-                <div class="p-6 md:p-8">
-                    <form action="" method="POST" enctype="multipart/form-data" class="space-y-6" id="editForm">
-                        {% csrf_token %}
-                        
-                        <!-- Article Title -->
-                        <div>
-                            <label for="{{ form.title.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900">
-                                <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
-                                </svg>
-                                Article Title
-                            </label>
-                            <div class="relative">
-                                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                    <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
-                                    </svg>
+                <!-- Sidebar (Hidden on Mobile) -->
+                <div class="block lg:w-80">
+                    <div class="sticky top-24 space-y-6">
+                        <!-- Help & Tips -->
+                        <div class="bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+                            <div class="bg-gradient-to-r from-teal-500 to-cyan-500 px-6 py-4">
+                                <h3 class="text-lg font-bold text-white flex items-center">
+                                    <i class="fa-solid fa-lightbulb mr-2"></i>
+                                    Editing Tips
+                                </h3>
+                            </div>
+                            <div class="p-6">
+                                <div class="space-y-4">
+                                    <div class="flex items-start space-x-3">
+                                        <div class="w-8 h-8 bg-teal-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                            <i class="fa-solid fa-1 text-teal-600 text-sm"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm font-medium text-gray-900">Use descriptive titles</p>
+                                            <p class="text-xs text-gray-500">Make your title clear and compelling</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start space-x-3">
+                                        <div class="w-8 h-8 bg-teal-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                            <i class="fa-solid fa-2 text-teal-600 text-sm"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm font-medium text-gray-900">Add relevant images</p>
+                                            <p class="text-xs text-gray-500">Images increase engagement</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start space-x-3">
+                                        <div class="w-8 h-8 bg-teal-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                            <i class="fa-solid fa-3 text-teal-600 text-sm"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm font-medium text-gray-900">Check spelling & grammar</p>
+                                            <p class="text-xs text-gray-500">Ensure your content is error-free</p>
+                                        </div>
+                                    </div>
                                 </div>
-                                <input type="text" name="{{ form.title.name }}" id="{{ form.title.id_for_label }}" 
-                                       value="{{ form.title.value|default:'' }}"
-                                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full pl-10 p-2.5" 
-                                       placeholder="Enter article title" required>
                             </div>
                         </div>
 
-                        <!-- Sub Title -->
-                        <div>
-                            <label for="{{ form.sub_title.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900">
-                                <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                                </svg>
-                                Sub Title (Optional)
-                            </label>
-                            <div class="relative">
-                                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                    <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                                    </svg>
+                        <!-- Trending Now -->
+                        <div class="bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+                            <div class="bg-gradient-to-r from-teal-500 to-cyan-500 px-6 py-4">
+                                <h3 class="text-lg font-bold text-white flex items-center">
+                                    <i class="fa-solid fa-fire mr-2"></i>
+                                    Trending Now
+                                </h3>
+                            </div>
+                            <div class="p-6">
+                                <div class="space-y-4">
+                                    {% for blog_post in posts|slice:":3" %}
+                                    <a href="{% url 'blog-postmodel-detail' blog_post.id %}" 
+                                       class="group block">
+                                        <div class="flex items-start space-x-3">
+                                            <div class="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-teal-100 to-cyan-100 rounded-xl overflow-hidden">
+                                                {% if blog_post.image %}
+                                                <img src="{{ blog_post.image.url }}" 
+                                                     alt="{{ blog_post.title }}"
+                                                     class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                                                {% else %}
+                                                <div class="w-full h-full flex items-center justify-center">
+                                                    <i class="fa-solid fa-newspaper text-teal-600"></i>
+                                                </div>
+                                                {% endif %}
+                                            </div>
+                                            <div class="flex-1 min-w-0">
+                                                <h4 class="text-sm font-semibold text-gray-900 group-hover:text-teal-600 transition-colors line-clamp-2">
+                                                    {{ blog_post.title }}
+                                                </h4>
+                                                <div class="mt-1 flex items-center text-xs text-gray-500">
+                                                    <span>{{ blog_post.created_on|date:"M d" }}</span>
+                                                    <span class="mx-1">•</span>
+                                                    <span>{{ blog_post.post_comment_count }} comments</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    {% endfor %}
                                 </div>
-                                <input type="text" name="{{ form.sub_title.name }}" id="{{ form.sub_title.id_for_label }}" 
-                                       value="{{ form.sub_title.value|default:'' }}"
-                                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full pl-10 p-2.5" 
-                                       placeholder="Enter sub title (optional)">
                             </div>
                         </div>
 
-                        <!-- Slug -->
-                        <div>
-                            <label for="{{ form.slug.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900">
-                                <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                                </svg>
-                                Slug (URL)
-                            </label>
-                            <div class="relative">
-                                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                    <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                                    </svg>
+                        <!-- Popular Categories -->
+                        <div class="bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+                            <div class="bg-gradient-to-r from-cyan-500 to-teal-500 px-6 py-4">
+                                <h3 class="text-lg font-bold text-white flex items-center">
+                                    <i class="fa-solid fa-tags mr-2"></i>
+                                    Popular Topics
+                                </h3>
+                            </div>
+                            <div class="p-6">
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="px-3 py-1.5 bg-gradient-to-r from-teal-50 to-cyan-50 text-teal-700 rounded-lg text-sm font-medium hover:from-teal-100 hover:to-cyan-100 transition-colors cursor-pointer">
+                                        Fitness
+                                    </span>
+                                    <span class="px-3 py-1.5 bg-gradient-to-r from-teal-50 to-cyan-50 text-teal-700 rounded-lg text-sm font-medium hover:from-teal-100 hover:to-cyan-100 transition-colors cursor-pointer">
+                                        Wellness
+                                    </span>
+                                    <span class="px-3 py-1.5 bg-gradient-to-r from-teal-50 to-cyan-50 text-teal-700 rounded-lg text-sm font-medium hover:from-teal-100 hover:to-cyan-100 transition-colors cursor-pointer">
+                                        Nutrition
+                                    </span>
+                                    <span class="px-3 py-1.5 bg-gradient-to-r from-teal-50 to-cyan-50 text-teal-700 rounded-lg text-sm font-medium hover:from-teal-100 hover:to-cyan-100 transition-colors cursor-pointer">
+                                        Training
+                                    </span>
+                                    <span class="px-3 py-1.5 bg-gradient-to-r from-teal-50 to-cyan-50 text-teal-700 rounded-lg text-sm font-medium hover:from-teal-100 hover:to-cyan-100 transition-colors cursor-pointer">
+                                        Mental Health
+                                    </span>
+                                    <span class="px-3 py-1.5 bg-gradient-to-r from-teal-50 to-cyan-50 text-teal-700 rounded-lg text-sm font-medium hover:from-teal-100 hover:to-cyan-100 transition-colors cursor-pointer">
+                                        Community
+                                    </span>
                                 </div>
-                                <input type="text" name="{{ form.slug.name }}" id="{{ form.slug.id_for_label }}" 
-                                       value="{{ form.slug.value|default:'' }}"
-                                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full pl-10 p-2.5" 
-                                       placeholder="Enter URL slug">
                             </div>
                         </div>
 
-                        <!-- Article Content -->
-                        <div>
-                            <label for="{{ form.article_content.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900">
-                                <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                                </svg>
-                                Article Content
-                            </label>
-                            <div class="relative">
-                                <div class="absolute top-3 left-0 flex items-center pl-3 pointer-events-none">
-                                    <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                                    </svg>
+                        <!-- Newsletter -->
+                        <div class="bg-gradient-to-br from-teal-500 to-cyan-600 rounded-2xl shadow-lg overflow-hidden">
+                            <div class="p-6 text-center">
+                                <div class="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <i class="fa-solid fa-envelope text-white text-2xl"></i>
                                 </div>
-                                <textarea name="{{ form.article_content.name }}" id="{{ form.article_content.id_for_label }}" 
-                                          rows="6" required
-                                          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full pl-10 p-2.5" 
-                                          placeholder="Write your article content here...">{{ form.article_content.value|default:'' }}</textarea>
+                                <h3 class="text-xl font-bold text-white mb-2">Stay Updated</h3>
+                                <p class="text-teal-100 mb-6">Get the latest articles delivered to your inbox</p>
+                                <form class="space-y-3">
+                                    <input type="email" 
+                                           placeholder="Your email address"
+                                           class="w-full px-4 py-3 bg-white/20 backdrop-blur-sm border border-white/30 text-white placeholder-teal-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-white/50">
+                                    <button type="submit" 
+                                            class="w-full px-4 py-3 bg-white text-teal-700 font-semibold rounded-xl hover:bg-teal-50 transition-colors">
+                                        Subscribe Now
+                                    </button>
+                                </form>
                             </div>
                         </div>
-
-                        <!-- Article Image -->
-                        <div>
-                            <label for="{{ form.image.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900">
-                                <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                                </svg>
-                                Article Image
-                            </label>
-                            <div class="relative">
-                                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                    <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                                    </svg>
-                                </div>
-                                <input type="file" name="{{ form.image.name }}" id="{{ form.image.id_for_label }}" 
-                                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full pl-10 p-2.5" 
-                                       accept="image/*">
-                            </div>
-                        </div>
-
-                        <!-- Status -->
-                        <div>
-                            <label for="{{ form.status.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900">
-                                <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                                Publication Status
-                            </label>
-                            <div class="relative">
-                                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                    <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                    </svg>
-                                </div>
-                                <select name="{{ form.status.name }}" id="{{ form.status.id_for_label }}" 
-                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full pl-10 p-2.5">
-                                    <option value="0" {% if form.status.value == 0 %}selected{% endif %}>Draft</option>
-                                    <option value="1" {% if form.status.value == 1 %}selected{% endif %}>Published</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <!-- Form Actions -->
-                        <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3 pt-6">
-                            <button type="submit" 
-                                    class="flex-1 inline-flex items-center justify-center px-6 py-3 bg-teal-600 text-white text-sm font-medium rounded-lg hover:bg-teal-700 transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
-                                    id="submitBtn">
-                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" id="saveIcon">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                </svg>
-                                <span id="submitText">Save Changes</span>
-                                <svg class="hidden w-5 h-5 animate-spin ml-2" fill="none" viewBox="0 0 24 24" id="loadingIcon">
-                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                </svg>
-                            </button>
-                            <a href="{% url 'user-dashboard' %}" 
-                               class="flex-1 inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-all focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
-                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                                </svg>
-                                Cancel
-                            </a>
-                        </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Mobile Bottom Spacer -->
-    <div class="h-16 md:hidden"></div>
+        <!-- Mobile Bottom Spacer -->
+        <div class="h-20 md:hidden"></div>
+    </main>
 
     <script>
         // Form submission with loading state
@@ -213,7 +416,6 @@
             const editForm = document.getElementById('editForm');
             const submitBtn = document.getElementById('submitBtn');
             const submitText = document.getElementById('submitText');
-            const saveIcon = document.getElementById('saveIcon');
             const loadingIcon = document.getElementById('loadingIcon');
 
             if (editForm && submitBtn) {
@@ -221,18 +423,78 @@
                     // Show loading state
                     submitBtn.disabled = true;
                     submitText.textContent = 'Saving...';
-                    saveIcon.classList.add('hidden');
                     loadingIcon.classList.remove('hidden');
                     
                     // Add loading styles
                     submitBtn.classList.add('opacity-75', 'cursor-not-allowed');
-                    
-                    // Optional: Add a small delay to show the loading state
-                    setTimeout(() => {
-                        // Form will submit normally
-                    }, 100);
                 });
             }
         });
+
+        // Preview functions
+        function updatePreview(type, value) {
+            if (type === 'title') {
+                document.getElementById('previewTitle').textContent = value || 'Article Title';
+            } else if (type === 'content') {
+                document.getElementById('previewContent').textContent = 
+                    (value.length > 100 ? value.substring(0, 100) + '...' : value) || 'Article content preview...';
+            }
+        }
+
+        function previewImage(event) {
+            const input = event.target;
+            const preview = document.getElementById('imagePreview');
+            const previewImg = document.getElementById('previewImg');
+            
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    previewImg.src = e.target.result;
+                    preview.classList.remove('hidden');
+                }
+                
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function removePreview() {
+            const input = document.getElementById('{{ form.image.id_for_label }}');
+            const preview = document.getElementById('imagePreview');
+            
+            input.value = '';
+            preview.classList.add('hidden');
+        }
+
+        function clearImage() {
+            if (confirm('Are you sure you want to remove the current image?')) {
+                const input = document.getElementById('{{ form.image.id_for_label }}');
+                input.value = '';
+                
+                // You might want to add a hidden field to indicate image deletion
+                // For now, just clear the current preview
+                const currentImage = document.getElementById('currentImage');
+                if (currentImage) {
+                    currentImage.style.opacity = '0.5';
+                }
+            }
+        }
+
+        // Auto-generate slug from title
+        const titleInput = document.getElementById('{{ form.title.id_for_label }}');
+        const slugInput = document.getElementById('{{ form.slug.id_for_label }}');
+        
+        if (titleInput && slugInput && !slugInput.value) {
+            titleInput.addEventListener('blur', function() {
+                if (!slugInput.value) {
+                    const slug = titleInput.value
+                        .toLowerCase()
+                        .replace(/[^\w\s]/gi, '')
+                        .replace(/\s+/g, '-')
+                        .substring(0, 50);
+                    slugInput.value = slug;
+                }
+            });
+        }
     </script>
 {% endblock %}

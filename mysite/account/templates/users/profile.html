@@ -1,100 +1,347 @@
 {% extends "base.html" %}
 {% load static %}
 {% load tailwind_filters %}
-{% block title %}Profile{% endblock  %}
+{% block title %}Profile - {{ profile.user.username }}{% endblock %}
+
 {% block content %}
     {% include "partials/nav.html" %}
-    <div class="flex justify-center items-center px-[0.5rem] md:px-0  w-[100%] md:w-[80%] m-auto mobile-profile mobile-profile-modal">
-        <div class="w-[100%] md:w-[65%] m-auto p-[30px] rounded shadow border-t-[4px] border-slate-500  bg-slate-50">
-          <h1 class="font-bold text-[18px] md:text-[25px] text-[#3D5361]">Member Information</h1>
-          <hr>
-            <div class="flex justify-between items-center mb-[2rem]">
-                <div class="w-[150px] h-[150px] mobile-img-profile">
-                  {% if profile.image %}
-                    <img src="{{ profile.image.url }}" alt="profile.img" class="w-[150px] h-[150px] rounded-[50%] object-cover object-center mobile-img-image">
-                    {% else %}
-                    <img src="{% static "images/default.png" %} " alt="profile.img" class="w-[150px] h-[150px] rounded-[50%] object-cover object-center mobile-img-image">
-                  {% endif %}
-                </div>
-                <!-- Button trigger modal -->
-                 {% if profile.user == user %}
-                  <button 
-                    type="button" 
-                    data-bs-toggle="modal" 
-                    data-bs-target="#staticBackdrop" 
-                    class="my-[30px] text-[#3D5361] transition-all duration-200 hover:text-teal-600 py-[4px] px-[8px] text-[15px] ">
-                    Edit Profile
-                    <i class="fa-regular fa-pen-to-square fa-xl ml-[10px]"></i>
-                  </button>
-                {% endif %}
-            </div>
-           <div class="">
-              <div class="flex items-center border-t border-[#e7e0e07e] py-[10px]">
-                  <h3 class="text-[18px] basis-2/6">Full Name</h3>
-                  <p class="mt-[10px] basis-3/5">{{ profile.full_name }} </p>
-              </div>
-              <div class="flex items-center border-t border-[#e7e0e07e] py-[10px]">
-                <h3 class="text-[18px] basis-2/6">Username</h3>
-                <p class="mt-[10px] basis-3/5">{{ profile.user.username }} </p>
-              </div>
-              <div class="flex items-center border-t border-[#e7e0e07e] py-[10px]">
-                <h3 class="text-[18px] basis-2/6">Email address</h3>
-                <p class="mt-[10px] basis-3/5">{{ profile.user.email }} </p>
-              </div>
-              <div class="flex  border-t border-[#e7e0e07e] py-[10px]">
-                <h3 class="text-[18px] basis-2/6">Talks About</h3>
-                <p class=" basis-3/5">{{ profile.talks_about }} </p>
-              </div>
-              <div class="flex  border-t border-[#e7e0e07e] py-[10px]">
-                <h3 class="text-[18px] basis-2/6">About me</h3>
-                <p class=" basis-3/5">{{ profile.about }} </p>
-              </div>
-           </div>
-        </div>
-    </div>
-
     
-
-  <!-- Modal -->    
-  <div class="modal fade mobile-profile-modal" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-fullscreen-lg-down">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit Profile <i class="fa-regular fa-pen-to-square"></i></h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="flex justify-center flex-col items-center w-full p-[10px] gap-[25px]">
-              <div class="w-[250px] mobile-img-profile">
-                {% if profile.image %}
-                  <img src="{{ profile.image.url }}" alt="profile.png" class="rounded-[50%] w-[250px] h-[250px] object-cover object-center mobile-img-image">
-                  {% else %}
-                  <img src="{% static "images/default.png" %} " alt="profile.png" class="rounded-[50%] w-[250px] h-[250px] object-cover object-center mobile-img-image">
-                {% endif %}
-              </div>
-              <div class="w-[100%]">
-                <form action="" method="POST" enctype="multipart/form-data">
-                    {% csrf_token %}
-
-                    {{ u_form|crispy }}
-                    {{ p_form|crispy }}
-
-                    <div class="modal-footer ">
-                      <div class="flex justify-center items-center w-full gap-[20px] __delet_btn_wrapper">
-                        <button type="button" class="md:w-[100%] w-[100%] px-[50px] py-[12px] rounded-full border-[1px] border-slate-300 bg-[#fcfcfc]" data-bs-dismiss="modal">cancel</button>
-                        <button type="submit" class="md:w-[100%] w-[100%] bg-[#3D5361] px-[50px] py-[12px] rounded-full text-[#fefefefe] text-[14px] font-medium">Save</button>
-                      </div>
+    <main class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-6xl mx-auto">
+            <!-- Profile Card -->
+            <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+                <!-- Profile Header -->
+                <div class="bg-gradient-to-r from-slate-700 to-slate-800 p-6 md:p-8 text-white">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                        <div class="flex items-center gap-6">
+                            <div class="relative">
+                                <div class="w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-white/20 overflow-hidden shadow-lg">
+                                    {% if profile.image %}
+                                        <img src="{{ profile.image.url }}" 
+                                             alt="{{ profile.full_name }}" 
+                                             class="w-full h-full object-cover">
+                                    {% else %}
+                                        <img src="{% static 'images/default.png' %}" 
+                                             alt="Default profile" 
+                                             class="w-full h-full object-cover">
+                                    {% endif %}
+                                </div>
+                                {% if profile.user == user %}
+                                <button type="button" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#editProfileModal"
+                                        class="absolute -bottom-2 -right-2 bg-teal-500 hover:bg-teal-600 text-white p-2 rounded-full shadow-lg transition-all duration-200 hover:scale-110">
+                                    <i class="fas fa-camera text-sm"></i>
+                                </button>
+                                {% endif %}
+                            </div>
+                            
+                            <div>
+                                <h1 class="text-2xl md:text-3xl font-bold mb-2">{{ profile.full_name }}</h1>
+                                <p class="text-slate-200 flex items-center gap-2">
+                                    <i class="fas fa-at text-sm"></i>
+                                    <span class="font-mono">{{ profile.user.username }}</span>
+                                </p>
+                                <div class="flex items-center gap-2 mt-3 text-slate-300">
+                                    <i class="fas fa-calendar-alt text-sm"></i>
+                                    <span class="text-sm">Member since {{ profile.user.date_joined|date:"F j, Y" }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        {% if profile.user == user %}
+                        <button type="button" 
+                                data-bs-toggle="modal" 
+                                data-bs-target="#editProfileModal"
+                                class="flex items-center gap-3 px-6 py-3 bg-white/10 backdrop-blur-sm rounded-xl hover:bg-white/20 transition-all duration-200 border border-white/20">
+                            <i class="fas fa-edit"></i>
+                            <span class="font-medium">Edit Profile</span>
+                        </button>
+                        {% endif %}
                     </div>
-                   
-                </form>
-              </div>
-          </div>
+                </div>
+                
+                <!-- Profile Details -->
+                <div class="p-6 md:p-8">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <!-- Left Column -->
+                        <div class="space-y-6">
+                            <div class="bg-slate-50 rounded-xl p-6">
+                                <h3 class="text-lg font-semibold text-slate-700 mb-4 flex items-center gap-2">
+                                    <i class="fas fa-user-circle text-teal-500"></i>
+                                    Personal Information
+                                </h3>
+                                <div class="space-y-4">
+                                    <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 py-3 border-b border-slate-200">
+                                        <div class="flex items-center gap-2 text-slate-600 min-w-32">
+                                            <i class="fas fa-user text-sm"></i>
+                                            <span class="font-medium">Full Name</span>
+                                        </div>
+                                        <p class="text-slate-800 font-medium">{{ profile.full_name }}</p>
+                                    </div>
+                                    
+                                    <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 py-3 border-b border-slate-200">
+                                        <div class="flex items-center gap-2 text-slate-600 min-w-32">
+                                            <i class="fas fa-envelope text-sm"></i>
+                                            <span class="font-medium">Email</span>
+                                        </div>
+                                        <a href="mailto:{{ profile.user.email }}" 
+                                           class="text-teal-600 hover:text-teal-700 font-medium hover:underline">
+                                            {{ profile.user.email }}
+                                        </a>
+                                    </div>
+                                    
+                                    <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 py-3 border-b border-slate-200">
+                                        <div class="flex items-center gap-2 text-slate-600 min-w-32">
+                                            <i class="fas fa-hashtag text-sm"></i>
+                                            <span class="font-medium">Username</span>
+                                        </div>
+                                        <p class="text-slate-800 font-mono font-medium">{{ profile.user.username }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Right Column -->
+                        <div class="space-y-6">
+                            <div class="bg-slate-50 rounded-xl p-6">
+                                <h3 class="text-lg font-semibold text-slate-700 mb-4 flex items-center gap-2">
+                                    <i class="fas fa-comments text-teal-500"></i>
+                                    Talks About
+                                </h3>
+                                <div class="bg-white rounded-lg p-4 min-h-[120px] border border-slate-200">
+                                    {% if profile.talks_about %}
+                                        <p class="text-slate-700 leading-relaxed">{{ profile.talks_about }}</p>
+                                    {% else %}
+                                        <p class="text-slate-400 italic">No topics specified yet</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="bg-slate-50 rounded-xl p-6">
+                                <h3 class="text-lg font-semibold text-slate-700 mb-4 flex items-center gap-2">
+                                    <i class="fas fa-info-circle text-teal-500"></i>
+                                    About Me
+                                </h3>
+                                <div class="bg-white rounded-lg p-4 min-h-[150px] border border-slate-200">
+                                    {% if profile.about %}
+                                        <p class="text-slate-700 leading-relaxed whitespace-pre-line">{{ profile.about }}</p>
+                                    {% else %}
+                                        <p class="text-slate-400 italic">No bio added yet</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        
-      </div>
+    </main>
+    
+    <!-- Edit Profile Modal -->
+    <div class="modal fade" id="editProfileModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" 
+         aria-labelledby="editProfileModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 shadow-2xl">
+                <!-- Modal Header -->
+                <div class="modal-header bg-gradient-to-r from-slate-700 to-slate-800 text-white p-6 rounded-t-xl">
+                    <div class="flex items-center gap-3">
+                        <i class="fas fa-user-edit text-xl"></i>
+                        <h2 class="modal-title text-xl font-bold" id="editProfileModalLabel">Edit Profile</h2>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                
+                <!-- Modal Body -->
+                <div class="modal-body p-6">
+                    <!-- Profile Image at Top -->
+                    <div class="text-center mb-8">
+                        <div class="relative inline-block mb-4">
+                            <div class="w-32 h-32 rounded-full border-4 border-slate-200 overflow-hidden shadow-lg mx-auto">
+                                <img id="imagePreview" 
+                                     src="{% if profile.image %}{{ profile.image.url }}{% else %}{% static 'images/default.png' %}{% endif %}" 
+                                     alt="Profile preview" 
+                                     class="w-full h-full object-cover">
+                            </div>
+                            <label for="id_image" 
+                                   class="absolute bottom-0 right-4 bg-teal-500 hover:bg-teal-600 text-white p-2 rounded-full shadow-lg cursor-pointer transition-all duration-200 hover:scale-110">
+                                <i class="fas fa-camera"></i>
+                            </label>
+                        </div>
+                        <p class="text-sm text-slate-500">Click camera icon to change photo</p>
+                    </div>
+                    
+                    <!-- Edit Form -->
+                    <div class="w-full">
+                        <form action="" method="POST" enctype="multipart/form-data" class="space-y-6">
+                            {% csrf_token %}
+                            
+                            <div class="hidden">
+                                {{ p_form.image }}
+                            </div>
+                            
+                            <!-- Two Column Layout for Forms -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <!-- Left Column - Account Details -->
+                                <div class="space-y-6">
+                                    <div class="bg-slate-50 rounded-xl p-5">
+                                        <h3 class="font-semibold text-slate-700 text-lg mb-4 flex items-center gap-2">
+                                            <i class="fas fa-user-circle text-teal-500"></i>
+                                            Account Details
+                                        </h3>
+                                        <div class="space-y-4">
+                                            <div>
+                                                <label class="block text-sm font-medium text-slate-700 mb-2">
+                                                    Username
+                                                </label>
+                                                <div class="relative">
+                                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                        <i class="fas fa-at text-slate-400"></i>
+                                                    </div>
+                                                    {{ u_form.username }}
+                                                </div>
+                                                {% if u_form.username.errors %}
+                                                    <div class="text-red-500 text-sm mt-1">{{ u_form.username.errors }}</div>
+                                                {% endif %}
+                                            </div>
+                                            
+                                            <div>
+                                                <label class="block text-sm font-medium text-slate-700 mb-2">
+                                                    Email Address
+                                                </label>
+                                                <div class="relative">
+                                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                        <i class="fas fa-envelope text-slate-400"></i>
+                                                    </div>
+                                                    {{ u_form.email }}
+                                                </div>
+                                                {% if u_form.email.errors %}
+                                                    <div class="text-red-500 text-sm mt-1">{{ u_form.email.errors }}</div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Right Column - Profile Information -->
+                                <div class="space-y-6">
+                                    <div class="bg-slate-50 rounded-xl p-5">
+                                        <h3 class="font-semibold text-slate-700 text-lg mb-4 flex items-center gap-2">
+                                            <i class="fas fa-id-card text-teal-500"></i>
+                                            Profile Information
+                                        </h3>
+                                        <div class="space-y-4">
+                                            <div>
+                                                <label class="block text-sm font-medium text-slate-700 mb-2">
+                                                    Full Name
+                                                </label>
+                                                <div class="relative">
+                                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                        <i class="fas fa-user text-slate-400"></i>
+                                                    </div>
+                                                    {{ p_form.full_name }}
+                                                </div>
+                                                {% if p_form.full_name.errors %}
+                                                    <div class="text-red-500 text-sm mt-1">{{ p_form.full_name.errors }}</div>
+                                                {% endif %}
+                                            </div>
+                                            
+                                            <div>
+                                                <label class="block text-sm font-medium text-slate-700 mb-2">
+                                                    Talks About
+                                                </label>
+                                                <div class="relative">
+                                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                        <i class="fas fa-comments text-slate-400"></i>
+                                                    </div>
+                                                    {{ p_form.talks_about }}
+                                                </div>
+                                                {% if p_form.talks_about.errors %}
+                                                    <div class="text-red-500 text-sm mt-1">{{ p_form.talks_about.errors }}</div>
+                                                {% endif %}
+                                            </div>
+                                            
+                                            <div>
+                                                <label class="block text-sm font-medium text-slate-700 mb-2">
+                                                    About Me
+                                                </label>
+                                                <div class="relative">
+                                                    <div class="absolute inset-y-0 left-0 pl-3 pt-3 pointer-events-none">
+                                                        <i class="fas fa-info-circle text-slate-400"></i>
+                                                    </div>
+                                                    {{ p_form.about }}
+                                                </div>
+                                                {% if p_form.about.errors %}
+                                                    <div class="text-red-500 text-sm mt-1">{{ p_form.about.errors }}</div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Modal Footer -->
+                            <div class="modal-footer border-t border-slate-200 pt-6 mt-6">
+                                <div class="flex flex-col sm:flex-row gap-4 w-full">
+                                    <button type="button" 
+                                            class="flex-1 px-6 py-3 border-2 border-slate-300 text-slate-700 rounded-xl hover:bg-slate-50 transition-all duration-200 font-medium"
+                                            data-bs-dismiss="modal">
+                                        <i class="fas fa-times mr-2"></i>
+                                        Cancel
+                                    </button>
+                                    <button type="submit" 
+                                            class="flex-1 px-6 py-3 bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-xl hover:from-teal-600 hover:to-teal-700 transition-all duration-200 shadow-lg hover:shadow-xl font-medium">
+                                        <i class="fas fa-save mr-2"></i>
+                                        Save Changes
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-
-
-  {% include "partials/footer.html" %}
-{% endblock  %}
+    
+    <!-- JavaScript for Image Preview -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const imageInput = document.getElementById('id_image');
+            const imagePreview = document.getElementById('imagePreview');
+            
+            if (imageInput) {
+                imageInput.addEventListener('change', function() {
+                    if (this.files && this.files[0]) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            imagePreview.src = e.target.result;
+                        }
+                        reader.readAsDataURL(this.files[0]);
+                    }
+                });
+            }
+            
+            // Open file dialog when camera icon is clicked
+            document.querySelector('label[for="id_image"]').addEventListener('click', function(e) {
+                e.preventDefault();
+                if (imageInput) {
+                    imageInput.click();
+                }
+            });
+            
+            // Add styling to form fields
+            document.querySelectorAll('input, textarea').forEach(function(field) {
+                field.classList.add('w-full', 'px-10', 'py-3', 'border', 'border-slate-300', 'rounded-lg', 
+                                   'focus:outline-none', 'focus:ring-2', 'focus:ring-teal-500', 'focus:border-transparent');
+            });
+            
+            // Style the about textarea specifically
+            const aboutField = document.querySelector('#id_about');
+            if (aboutField) {
+                aboutField.classList.add('h-32', 'resize-none');
+            }
+        });
+    </script>
+    
+    {% include "partials/footer.html" %}
+{% endblock %}

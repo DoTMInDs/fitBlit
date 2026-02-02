@@ -5,42 +5,181 @@
 {% block content %}
     {% include "partials/nav.html" %}
 
-    <!-- Music-main-section -->
-    <div class="px-[0px] md:px-0 w-[100%]">
-        <div class="w-[100%] px-[0.5rem] md:w-[80%] m-auto">
-            <button onclick="goBack()" class="mobile-back-btn rounded-full ml-[0.3rem] pb-[0.5rem] text-[#3D5361]">
-                <i class="fa-solid fa-circle-arrow-left mr-[0.5rem]"></i>
-                Back
-            </button>
-            <div class="flex justify-between mobile-product-text">
-                <h2 class="text-[18px] font-bold">All Songs</h2>
+    <!-- Main Content -->
+    <div class="min-h-screen bg-gradient-to-b from-slate-50 to-white px-4 md:px-0 py-6 md:py-8">
+        <div class="max-w-7xl mx-auto">
+            <!-- Back Button and Header -->
+            <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between">
+                <div class="flex items-center mb-4 md:mb-0">
+                    <button onclick="goBack()" class="group flex items-center text-[#3D5361] hover:text-[#2A3E4A] transition-all duration-300">
+                        <div class="flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-sm group-hover:shadow-md mr-3 transition-shadow">
+                            <i class="fa-solid fa-arrow-left text-lg"></i>
+                        </div>
+                        <span class="font-medium text-lg">Back</span>
+                    </button>
+                </div>
+                
+                <div class="flex flex-col md:flex-row md:items-center">
+                    <h1 class="text-3xl md:text-4xl font-bold text-slate-800 mb-2 md:mb-0">All Songs</h1>
+                    <div class="md:ml-4 text-slate-600">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 text-blue-700 font-medium">
+                            <i class="fa-solid fa-music mr-2"></i>
+                            {{ songs|length }} song{{ songs|pluralize }}
+                        </span>
+                    </div>
+                </div>
             </div>
 
-            <div class="music-grid">
+            <!-- Songs Grid -->
+            <div class="music-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {% for song in songs %}
-                    <a href="{% url "artist-detail" song.artist.id %}" class="rounded-[10px] hover:bg-slate-200 shadow-md no-underline text-[#3b5361]">
-                        <div class="relative rounded-[10px] hover:bg-slate-200">
-                            <div class="absolute right-[10px] top-[10px] bg-yellow-300 flex justify-center items-center w-[40px] h-[40px] rounded-full ">
-                                <i class="fa-solid fa-play"></i>
-                            </div>
-                            <div class="">
-                                <div class="h-[200px] rounded-[10px]">
-                                    {% if song.cover_image %}
-                                        <img src="{{ song.cover_image.url }}" class="w-[100%] h-[100%] rounded-t-[10px] object-center object-cover" alt="...">
-                                    {% endif %}
-                                </div>
-                                <div class="px-[0.5rem] py-[0.5rem]">
-                                    <h3 class="text-slate-700 text-[18px]">{{ song.title }}</h3>
-                                    <p class="text-rose-500 font-medium text-[14px]">{{ song.artist }}</p>
-                                </div>
-                            </div>
+                    <div class="group relative bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden transform hover:-translate-y-1">
+                        <!-- Play Button Overlay -->
+                        <div class="absolute top-4 right-4 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <button class="play-btn flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg hover:shadow-xl transform hover:scale-110 transition-all duration-300">
+                                <i class="fa-solid fa-play text-lg ml-1"></i>
+                            </button>
                         </div>
-                    </a>    
-                {% endfor %}                 
+                        
+                        <!-- Song Image -->
+                        <a href="{% url "artist-detail" song.artist.id %}" class="block no-underline">
+                            <div class="relative h-56 md:h-52 overflow-hidden">
+                                {% if song.cover_image %}
+                                    <img src="{{ song.cover_image.url }}" 
+                                         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
+                                         alt="{{ song.title }} cover">
+                                {% else %}
+                                    <div class="w-full h-full bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center">
+                                        <i class="fa-solid fa-music text-5xl text-blue-300"></i>
+                                    </div>
+                                {% endif %}
+                                
+                                <!-- Gradient Overlay -->
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                            </div>
+                            
+                            <!-- Song Info -->
+                            <div class="p-5">
+                                <h3 class="text-xl font-bold text-slate-800 mb-2 truncate group-hover:text-blue-600 transition-colors">{{ song.title }}</h3>
+                                
+                                <div class="flex items-center mb-3">
+                                    <div class="w-8 h-8 rounded-full bg-gradient-to-r from-rose-100 to-pink-100 flex items-center justify-center mr-3">
+                                        <i class="fa-solid fa-user text-rose-500 text-sm"></i>
+                                    </div>
+                                    <p class="text-rose-600 font-semibold">{{ song.artist }}</p>
+                                </div>
+                                
+                                <!-- Additional Song Info (Optional - if you have more fields) -->
+                                <div class="pt-3 border-t border-slate-100">
+                                    <div class="flex justify-between text-sm text-slate-500">
+                                        <span class="flex items-center">
+                                            <i class="fa-regular fa-clock mr-1"></i>
+                                            {% if song.duration %}
+                                                {{ song.duration }}
+                                            {% else %}
+                                                3:45
+                                            {% endif %}
+                                        </span>
+                                        <span class="flex items-center">
+                                            <i class="fa-regular fa-calendar mr-1"></i>
+                                            {% if song.release_year %}
+                                                {{ song.release_year }}
+                                            {% else %}
+                                                2023
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        
+                        <!-- Hover Effect Border -->
+                        <div class="absolute inset-0 border-2 border-transparent group-hover:border-blue-300 rounded-xl transition-all duration-300 pointer-events-none"></div>
+                    </div>
+                {% empty %}
+                    <!-- Empty State -->
+                    <div class="col-span-full flex flex-col items-center justify-center py-16 text-center">
+                        <div class="w-24 h-24 rounded-full bg-slate-100 flex items-center justify-center mb-6">
+                            <i class="fa-solid fa-music text-4xl text-slate-400"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-slate-700 mb-3">No songs found</h3>
+                        <p class="text-slate-600 max-w-md">There are no songs available at the moment. Check back later for new releases.</p>
+                    </div>
+                {% endfor %}
             </div>
+            
+            <!-- Load More Button (Optional) -->
+            {% if songs|length >= 8 %}
+                <div class="mt-12 text-center mb-12">
+                    <button class="load-more-btn px-8 py-3 bg-white border border-slate-300 text-slate-700 font-medium rounded-full hover:bg-slate-50 hover:border-slate-400 transition-all duration-300 shadow-sm hover:shadow">
+                        Load More Songs
+                    </button>
+                </div>
+            {% endif %}
         </div>
     </div>
 
     {% include "partials/footer.html" %}
+    
+    <style>
+        /* Custom styles to enhance the design */
+        .music-grid {
+            grid-auto-rows: 1fr;
+        }
+        
+        .play-btn::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: inherit;
+            filter: blur(8px);
+            opacity: 0.6;
+            z-index: -1;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 640px) {
+            .music-grid {
+                gap: 1rem;
+            }
+        }
+    </style>
+    
+    <script>
+        // Play button functionality
+        document.querySelectorAll('.play-btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                // Toggle play/pause icon
+                const icon = this.querySelector('i');
+                if (icon.classList.contains('fa-play')) {
+                    icon.classList.remove('fa-play');
+                    icon.classList.add('fa-pause');
+                    this.classList.add('playing');
+                    // Add your play functionality here
+                } else {
+                    icon.classList.remove('fa-pause');
+                    icon.classList.add('fa-play');
+                    this.classList.remove('playing');
+                    // Add your pause functionality here
+                }
+            });
+        });
+        
+        // Load more functionality
+        document.querySelector('.load-more-btn')?.addEventListener('click', function() {
+            this.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Loading...';
+            this.disabled = true;
+            
+            // Simulate loading
+            setTimeout(() => {
+                this.innerHTML = 'Load More Songs';
+                this.disabled = false;
+                // Add your load more functionality here
+            }, 1500);
+        });
+    </script>
 {% endblock %}
-

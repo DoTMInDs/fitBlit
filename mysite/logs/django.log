@@ -1,0 +1,276 @@
+INFO 2026-02-02 04:36:58,826 autoreload 49560 47288 Watching for file changes with StatReloader
+INFO 2026-02-02 04:37:01,606 basehttp 49560 46444 "GET /news/ HTTP/1.1" 200 123024
+INFO 2026-02-02 04:37:01,801 basehttp 49560 46444 "GET /static/css/style.css HTTP/1.1" 200 4098
+INFO 2026-02-02 04:37:01,803 basehttp 49560 49640 "GET /static/css/dist/styles.css?v=1770050221 HTTP/1.1" 200 177889
+INFO 2026-02-02 04:37:02,956 basehttp 49560 48656 "GET /serviceworker.js HTTP/1.1" 200 1946
+WARNING 2026-02-02 04:37:03,002 log 49560 48656 Not Found: /css/django-pwa-app.css
+WARNING 2026-02-02 04:37:03,008 log 49560 46172 Not Found: /images/icons/icon-72x72.png
+WARNING 2026-02-02 04:37:03,009 basehttp 49560 48656 "GET /css/django-pwa-app.css HTTP/1.1" 404 12055
+WARNING 2026-02-02 04:37:03,010 basehttp 49560 46172 "GET /images/icons/icon-72x72.png HTTP/1.1" 404 12070
+INFO 2026-02-02 04:37:03,013 basehttp 49560 9268 "GET /offline/ HTTP/1.1" 200 456
+WARNING 2026-02-02 04:37:03,029 log 49560 48656 Not Found: /images/icons/icon-128x128.png
+WARNING 2026-02-02 04:37:03,033 log 49560 46172 Not Found: /images/icons/icon-96x96.png
+INFO 2026-02-02 04:37:03,035 basehttp 49560 48656 - Broken pipe from ('127.0.0.1', 52351)
+WARNING 2026-02-02 04:37:03,039 log 49560 9268 Not Found: /images/icons/icon-144x144.png
+INFO 2026-02-02 04:37:03,040 basehttp 49560 46172 - Broken pipe from ('127.0.0.1', 63505)
+WARNING 2026-02-02 04:37:03,046 log 49560 42968 Not Found: /images/icons/icon-152x152.png
+INFO 2026-02-02 04:37:03,046 basehttp 49560 9268 - Broken pipe from ('127.0.0.1', 49430)
+INFO 2026-02-02 04:37:03,047 basehttp 49560 42968 - Broken pipe from ('127.0.0.1', 52108)
+INFO 2026-02-02 04:37:03,111 basehttp 49560 700 "GET /static/css/style.css HTTP/1.1" 200 4098
+INFO 2026-02-02 04:37:03,113 basehttp 49560 35212 "GET /static/css/dist/styles.css?v=1770050221 HTTP/1.1" 200 177889
+INFO 2026-02-02 04:37:08,361 basehttp 49560 29128 "GET /news/ HTTP/1.1" 200 123024
+INFO 2026-02-02 04:37:08,430 basehttp 49560 29128 "GET /static/css/style.css HTTP/1.1" 200 4098
+INFO 2026-02-02 04:37:08,436 basehttp 49560 46256 "GET /static/js/app.js HTTP/1.1" 200 910
+INFO 2026-02-02 04:37:08,442 basehttp 49560 42156 "GET /static/css/dist/styles.css?v=1770050228 HTTP/1.1" 200 177889
+INFO 2026-02-02 04:37:08,513 basehttp 49560 42156 "GET /static/images/fitblog-logo.png HTTP/1.1" 200 29022
+INFO 2026-02-02 04:37:08,540 basehttp 49560 42156 "GET /serviceworker.js HTTP/1.1" 200 1946
+WARNING 2026-02-02 04:37:08,578 log 49560 42156 Not Found: /css/django-pwa-app.css
+WARNING 2026-02-02 04:37:08,582 log 49560 46256 Not Found: /images/icons/icon-72x72.png
+INFO 2026-02-02 04:37:08,583 basehttp 49560 29128 "GET /offline/ HTTP/1.1" 200 456
+WARNING 2026-02-02 04:37:08,583 basehttp 49560 42156 "GET /css/django-pwa-app.css HTTP/1.1" 404 12055
+WARNING 2026-02-02 04:37:08,583 basehttp 49560 46256 "GET /images/icons/icon-72x72.png HTTP/1.1" 404 12070
+WARNING 2026-02-02 04:37:08,603 log 49560 46256 Not Found: /images/icons/icon-96x96.png
+INFO 2026-02-02 04:37:08,604 basehttp 49560 46256 - Broken pipe from ('127.0.0.1', 57885)
+INFO 2026-02-02 04:37:08,664 basehttp 49560 29128 "GET /serviceworker.js HTTP/1.1" 200 1946
+WARNING 2026-02-02 04:37:08,726 log 49560 29128 Not Found: /css/django-pwa-app.css
+WARNING 2026-02-02 04:37:08,730 log 49560 42156 Not Found: /images/icons/icon-72x72.png
+INFO 2026-02-02 04:37:08,732 basehttp 49560 42260 "GET /offline/ HTTP/1.1" 200 456
+WARNING 2026-02-02 04:37:08,732 basehttp 49560 29128 "GET /css/django-pwa-app.css HTTP/1.1" 404 12055
+WARNING 2026-02-02 04:37:08,732 basehttp 49560 42156 "GET /images/icons/icon-72x72.png HTTP/1.1" 404 12070
+INFO 2026-02-02 04:37:08,798 basehttp 49560 42260 "GET /serviceworker.js HTTP/1.1" 200 1946
+WARNING 2026-02-02 04:37:08,841 log 49560 42260 Not Found: /css/django-pwa-app.css
+WARNING 2026-02-02 04:37:08,847 log 49560 42156 Not Found: /images/icons/icon-72x72.png
+INFO 2026-02-02 04:37:08,848 basehttp 49560 29128 "GET /offline/ HTTP/1.1" 200 456
+WARNING 2026-02-02 04:37:08,849 basehttp 49560 42156 "GET /images/icons/icon-72x72.png HTTP/1.1" 404 12070
+WARNING 2026-02-02 04:37:08,849 basehttp 49560 42260 "GET /css/django-pwa-app.css HTTP/1.1" 404 12055
+INFO 2026-02-02 04:37:09,799 basehttp 49560 42156 "GET /static/django-browser-reload/reload-listener.js HTTP/1.1" 200 623
+INFO 2026-02-02 04:37:09,810 basehttp 49560 42156 "GET /static/django-browser-reload/reload-worker.js HTTP/1.1" 200 2711
+INFO 2026-02-02 04:37:10,431 basehttp 49560 42260 "GET /news/ HTTP/1.1" 200 123024
+INFO 2026-02-02 04:37:10,456 basehttp 49560 42260 "GET /static/css/dist/styles.css?v=1770050230 HTTP/1.1" 200 177889
+INFO 2026-02-02 04:37:10,502 basehttp 49560 42260 "GET /serviceworker.js HTTP/1.1" 200 1946
+WARNING 2026-02-02 04:37:10,541 log 49560 42260 Not Found: /css/django-pwa-app.css
+WARNING 2026-02-02 04:37:10,549 log 49560 29128 Not Found: /images/icons/icon-72x72.png
+WARNING 2026-02-02 04:37:10,551 basehttp 49560 42260 "GET /css/django-pwa-app.css HTTP/1.1" 404 12055
+INFO 2026-02-02 04:37:10,551 basehttp 49560 41148 "GET /offline/ HTTP/1.1" 200 456
+WARNING 2026-02-02 04:37:10,552 basehttp 49560 29128 "GET /images/icons/icon-72x72.png HTTP/1.1" 404 12070
+INFO 2026-02-02 04:37:10,635 basehttp 49560 35212 "GET /static/css/style.css HTTP/1.1" 200 4098
+INFO 2026-02-02 04:37:10,639 basehttp 49560 700 "GET /static/css/dist/styles.css?v=1770050230 HTTP/1.1" 200 177889
+INFO 2026-02-02 04:37:10,684 basehttp 49560 29128 "GET /static/images/main-logo-new.png HTTP/1.1" 200 26862
+INFO 2026-02-02 04:37:11,901 basehttp 49560 29128 - Broken pipe from ('127.0.0.1', 56748)
+INFO 2026-02-02 04:37:11,913 basehttp 49560 41148 "GET /news/ HTTP/1.1" 200 123024
+INFO 2026-02-02 04:37:11,946 basehttp 49560 41148 "GET /static/css/dist/styles.css?v=1770050231 HTTP/1.1" 200 177889
+INFO 2026-02-02 04:37:11,979 basehttp 49560 41148 "GET /serviceworker.js HTTP/1.1" 200 1946
+WARNING 2026-02-02 04:37:12,026 log 49560 41148 Not Found: /css/django-pwa-app.css
+WARNING 2026-02-02 04:37:12,034 log 49560 42260 Not Found: /images/icons/icon-72x72.png
+INFO 2026-02-02 04:37:12,034 basehttp 49560 37128 "GET /offline/ HTTP/1.1" 200 456
+WARNING 2026-02-02 04:37:12,034 basehttp 49560 41148 "GET /css/django-pwa-app.css HTTP/1.1" 404 12055
+WARNING 2026-02-02 04:37:12,035 basehttp 49560 42260 "GET /images/icons/icon-72x72.png HTTP/1.1" 404 12070
+WARNING 2026-02-02 04:37:12,060 log 49560 42260 Not Found: /images/icons/icon-96x96.png
+WARNING 2026-02-02 04:37:12,074 log 49560 37128 Not Found: /images/icons/icon-144x144.png
+INFO 2026-02-02 04:37:12,078 basehttp 49560 42260 - Broken pipe from ('127.0.0.1', 60510)
+WARNING 2026-02-02 04:37:12,087 log 49560 41148 Not Found: /images/icons/icon-128x128.png
+WARNING 2026-02-02 04:37:12,100 log 49560 24616 Not Found: /images/icons/icon-192x192.png
+INFO 2026-02-02 04:37:12,100 basehttp 49560 37128 - Broken pipe from ('127.0.0.1', 56550)
+WARNING 2026-02-02 04:37:12,105 log 49560 45388 Not Found: /images/icons/icon-152x152.png
+INFO 2026-02-02 04:37:12,107 basehttp 49560 41148 - Broken pipe from ('127.0.0.1', 62147)
+INFO 2026-02-02 04:37:12,109 basehttp 49560 24616 - Broken pipe from ('127.0.0.1', 55151)
+WARNING 2026-02-02 04:37:12,118 log 49560 20756 Not Found: /images/icons/icon-384x384.png
+INFO 2026-02-02 04:37:12,129 basehttp 49560 45388 - Broken pipe from ('127.0.0.1', 51322)
+WARNING 2026-02-02 04:37:12,132 log 49560 43992 Not Found: /images/icons/icon-512x512.png
+INFO 2026-02-02 04:37:12,135 basehttp 49560 20756 - Broken pipe from ('127.0.0.1', 58331)
+INFO 2026-02-02 04:37:12,137 basehttp 49560 43992 - Broken pipe from ('127.0.0.1', 60883)
+INFO 2026-02-02 04:37:12,139 basehttp 49560 42732 - Broken pipe from ('127.0.0.1', 49944)
+INFO 2026-02-02 04:37:12,142 basehttp 49560 43524 - Broken pipe from ('127.0.0.1', 56204)
+INFO 2026-02-02 04:37:12,144 basehttp 49560 46012 - Broken pipe from ('127.0.0.1', 63587)
+INFO 2026-02-02 04:37:12,146 basehttp 49560 44500 - Broken pipe from ('127.0.0.1', 57397)
+INFO 2026-02-02 04:37:12,148 basehttp 49560 16488 - Broken pipe from ('127.0.0.1', 57030)
+INFO 2026-02-02 04:37:12,152 basehttp 49560 25764 - Broken pipe from ('127.0.0.1', 54466)
+INFO 2026-02-02 04:37:12,179 basehttp 49560 13516 "GET /serviceworker.js HTTP/1.1" 200 1946
+WARNING 2026-02-02 04:37:12,241 log 49560 13516 Not Found: /css/django-pwa-app.css
+WARNING 2026-02-02 04:37:12,246 log 49560 49412 Not Found: /images/icons/icon-72x72.png
+WARNING 2026-02-02 04:37:12,249 basehttp 49560 13516 "GET /css/django-pwa-app.css HTTP/1.1" 404 12055
+INFO 2026-02-02 04:37:12,252 basehttp 49560 32656 "GET /offline/ HTTP/1.1" 200 456
+WARNING 2026-02-02 04:37:12,253 basehttp 49560 49412 "GET /images/icons/icon-72x72.png HTTP/1.1" 404 12070
+WARNING 2026-02-02 04:37:12,278 log 49560 13516 Not Found: /images/icons/icon-144x144.png
+WARNING 2026-02-02 04:37:12,289 log 49560 32656 Not Found: /images/icons/icon-128x128.png
+INFO 2026-02-02 04:37:12,289 basehttp 49560 13516 - Broken pipe from ('127.0.0.1', 59948)
+WARNING 2026-02-02 04:37:12,298 log 49560 50032 Not Found: /images/icons/icon-152x152.png
+WARNING 2026-02-02 04:37:12,308 log 49560 49412 Not Found: /images/icons/icon-96x96.png
+INFO 2026-02-02 04:37:12,318 basehttp 49560 32656 - Broken pipe from ('127.0.0.1', 61752)
+WARNING 2026-02-02 04:37:12,324 log 49560 48176 Not Found: /images/icons/icon-192x192.png
+WARNING 2026-02-02 04:37:12,334 log 49560 32532 Not Found: /images/icons/icon-384x384.png
+INFO 2026-02-02 04:37:12,336 basehttp 49560 50032 - Broken pipe from ('127.0.0.1', 53791)
+WARNING 2026-02-02 04:37:12,347 log 49560 48916 Not Found: /images/icons/icon-512x512.png
+INFO 2026-02-02 04:37:12,347 basehttp 49560 49412 - Broken pipe from ('127.0.0.1', 50529)
+INFO 2026-02-02 04:37:12,351 basehttp 49560 48176 - Broken pipe from ('127.0.0.1', 56341)
+INFO 2026-02-02 04:37:12,353 basehttp 49560 32532 - Broken pipe from ('127.0.0.1', 62765)
+INFO 2026-02-02 04:37:12,357 basehttp 49560 48916 - Broken pipe from ('127.0.0.1', 62238)
+INFO 2026-02-02 04:37:12,369 basehttp 49560 46092 - Broken pipe from ('127.0.0.1', 64756)
+INFO 2026-02-02 04:37:12,373 basehttp 49560 10636 - Broken pipe from ('127.0.0.1', 64521)
+INFO 2026-02-02 04:37:12,380 basehttp 49560 30508 - Broken pipe from ('127.0.0.1', 57690)
+INFO 2026-02-02 04:37:12,381 basehttp 49560 21932 - Broken pipe from ('127.0.0.1', 64113)
+INFO 2026-02-02 04:37:12,382 basehttp 49560 43408 - Broken pipe from ('127.0.0.1', 51656)
+INFO 2026-02-02 04:37:12,385 basehttp 49560 44260 - Broken pipe from ('127.0.0.1', 51879)
+INFO 2026-02-02 04:37:12,385 basehttp 49560 32352 "GET /serviceworker.js HTTP/1.1" 200 1946
+WARNING 2026-02-02 04:37:12,441 log 49560 32352 Not Found: /css/django-pwa-app.css
+WARNING 2026-02-02 04:37:12,446 log 49560 26944 Not Found: /images/icons/icon-72x72.png
+INFO 2026-02-02 04:37:12,447 basehttp 49560 40372 "GET /offline/ HTTP/1.1" 200 456
+WARNING 2026-02-02 04:37:12,448 basehttp 49560 32352 "GET /css/django-pwa-app.css HTTP/1.1" 404 12055
+WARNING 2026-02-02 04:37:12,451 basehttp 49560 26944 "GET /images/icons/icon-72x72.png HTTP/1.1" 404 12070
+WARNING 2026-02-02 04:37:12,476 log 49560 26944 Not Found: /images/icons/icon-96x96.png
+WARNING 2026-02-02 04:37:12,494 log 49560 40372 Not Found: /images/icons/icon-144x144.png
+WARNING 2026-02-02 04:37:12,504 log 49560 32352 Not Found: /images/icons/icon-128x128.png
+WARNING 2026-02-02 04:37:12,516 log 49560 37692 Not Found: /images/icons/icon-152x152.png
+INFO 2026-02-02 04:37:12,517 basehttp 49560 26944 - Broken pipe from ('127.0.0.1', 62364)
+INFO 2026-02-02 04:37:12,519 basehttp 49560 40372 - Broken pipe from ('127.0.0.1', 60756)
+INFO 2026-02-02 04:37:12,525 basehttp 49560 32352 - Broken pipe from ('127.0.0.1', 59246)
+INFO 2026-02-02 04:37:12,527 basehttp 49560 37692 - Broken pipe from ('127.0.0.1', 50574)
+WARNING 2026-02-02 04:37:12,539 log 49560 49340 Not Found: /images/icons/icon-192x192.png
+WARNING 2026-02-02 04:37:12,549 log 49560 18500 Not Found: /images/icons/icon-384x384.png
+WARNING 2026-02-02 04:37:12,561 log 49560 44296 Not Found: /images/icons/icon-512x512.png
+INFO 2026-02-02 04:37:12,563 basehttp 49560 49340 - Broken pipe from ('127.0.0.1', 50987)
+INFO 2026-02-02 04:37:12,564 basehttp 49560 18500 - Broken pipe from ('127.0.0.1', 49263)
+INFO 2026-02-02 04:37:12,565 basehttp 49560 44296 - Broken pipe from ('127.0.0.1', 58861)
+INFO 2026-02-02 04:37:12,572 basehttp 49560 49440 - Broken pipe from ('127.0.0.1', 62524)
+INFO 2026-02-02 04:37:12,575 basehttp 49560 37492 - Broken pipe from ('127.0.0.1', 53871)
+INFO 2026-02-02 04:37:12,575 basehttp 49560 47776 - Broken pipe from ('127.0.0.1', 55204)
+INFO 2026-02-02 04:37:12,577 basehttp 49560 48004 - Broken pipe from ('127.0.0.1', 59666)
+INFO 2026-02-02 04:37:12,582 basehttp 49560 47612 - Broken pipe from ('127.0.0.1', 56482)
+INFO 2026-02-02 04:37:12,583 basehttp 49560 46004 - Broken pipe from ('127.0.0.1', 50232)
+INFO 2026-02-02 04:37:12,842 basehttp 49560 49200 "GET /manifest.json HTTP/1.1" 200 709
+INFO 2026-02-02 04:37:14,740 basehttp 49560 35032 "GET / HTTP/1.1" 200 107206
+INFO 2026-02-02 04:37:14,778 basehttp 49560 35032 "GET /static/css/dist/styles.css?v=1770050234 HTTP/1.1" 200 177889
+INFO 2026-02-02 04:37:14,804 basehttp 49560 35032 "GET /serviceworker.js HTTP/1.1" 200 1946
+WARNING 2026-02-02 04:37:14,849 log 49560 35032 Not Found: /css/django-pwa-app.css
+WARNING 2026-02-02 04:37:14,858 log 49560 34616 Not Found: /images/icons/icon-72x72.png
+WARNING 2026-02-02 04:37:14,859 basehttp 49560 35032 "GET /css/django-pwa-app.css HTTP/1.1" 404 12055
+WARNING 2026-02-02 04:37:14,860 basehttp 49560 34616 "GET /images/icons/icon-72x72.png HTTP/1.1" 404 12070
+INFO 2026-02-02 04:37:14,861 basehttp 49560 46900 "GET /offline/ HTTP/1.1" 200 456
+WARNING 2026-02-02 04:37:14,881 log 49560 35032 Not Found: /images/icons/icon-144x144.png
+WARNING 2026-02-02 04:37:14,891 log 49560 34616 Not Found: /images/icons/icon-128x128.png
+WARNING 2026-02-02 04:37:14,896 log 49560 46900 Not Found: /images/icons/icon-96x96.png
+INFO 2026-02-02 04:37:14,898 basehttp 49560 35032 - Broken pipe from ('127.0.0.1', 59556)
+INFO 2026-02-02 04:37:14,899 basehttp 49560 46900 - Broken pipe from ('127.0.0.1', 62333)
+WARNING 2026-02-02 04:37:14,916 log 49560 47684 Not Found: /images/icons/icon-152x152.png
+INFO 2026-02-02 04:37:14,917 basehttp 49560 34616 - Broken pipe from ('127.0.0.1', 61510)
+WARNING 2026-02-02 04:37:14,938 log 49560 47356 Not Found: /images/icons/icon-192x192.png
+WARNING 2026-02-02 04:37:14,952 log 49560 3604 Not Found: /images/icons/icon-384x384.png
+INFO 2026-02-02 04:37:14,952 basehttp 49560 47684 - Broken pipe from ('127.0.0.1', 49945)
+INFO 2026-02-02 04:37:14,956 basehttp 49560 47356 - Broken pipe from ('127.0.0.1', 59628)
+INFO 2026-02-02 04:37:14,959 basehttp 49560 3604 - Broken pipe from ('127.0.0.1', 60064)
+INFO 2026-02-02 04:37:14,968 basehttp 49560 12416 - Broken pipe from ('127.0.0.1', 53350)
+INFO 2026-02-02 04:37:14,970 basehttp 49560 24652 - Broken pipe from ('127.0.0.1', 53990)
+INFO 2026-02-02 04:37:14,972 basehttp 49560 43272 - Broken pipe from ('127.0.0.1', 58096)
+INFO 2026-02-02 04:37:14,973 basehttp 49560 27384 - Broken pipe from ('127.0.0.1', 58324)
+INFO 2026-02-02 04:37:14,982 basehttp 49560 23076 - Broken pipe from ('127.0.0.1', 63725)
+INFO 2026-02-02 04:37:14,983 basehttp 49560 21008 - Broken pipe from ('127.0.0.1', 51902)
+INFO 2026-02-02 04:37:14,983 basehttp 49560 40684 "GET /serviceworker.js HTTP/1.1" 200 1946
+WARNING 2026-02-02 04:37:15,026 log 49560 40684 Not Found: /css/django-pwa-app.css
+WARNING 2026-02-02 04:37:15,032 log 49560 34000 Not Found: /images/icons/icon-72x72.png
+WARNING 2026-02-02 04:37:15,034 basehttp 49560 40684 "GET /css/django-pwa-app.css HTTP/1.1" 404 12055
+INFO 2026-02-02 04:37:15,034 basehttp 49560 39848 "GET /offline/ HTTP/1.1" 200 456
+WARNING 2026-02-02 04:37:15,035 basehttp 49560 34000 "GET /images/icons/icon-72x72.png HTTP/1.1" 404 12070
+WARNING 2026-02-02 04:37:15,056 log 49560 34000 Not Found: /images/icons/icon-96x96.png
+WARNING 2026-02-02 04:37:15,064 log 49560 39848 Not Found: /images/icons/icon-128x128.png
+WARNING 2026-02-02 04:37:15,075 log 49560 40684 Not Found: /images/icons/icon-144x144.png
+INFO 2026-02-02 04:37:15,078 basehttp 49560 34000 - Broken pipe from ('127.0.0.1', 63919)
+WARNING 2026-02-02 04:37:15,083 log 49560 41836 Not Found: /images/icons/icon-152x152.png
+INFO 2026-02-02 04:37:15,084 basehttp 49560 39848 - Broken pipe from ('127.0.0.1', 60029)
+INFO 2026-02-02 04:37:15,086 basehttp 49560 40684 - Broken pipe from ('127.0.0.1', 63324)
+WARNING 2026-02-02 04:37:15,096 log 49560 16048 Not Found: /images/icons/icon-192x192.png
+WARNING 2026-02-02 04:37:15,107 log 49560 8408 Not Found: /images/icons/icon-384x384.png
+INFO 2026-02-02 04:37:15,108 basehttp 49560 41836 - Broken pipe from ('127.0.0.1', 50585)
+WARNING 2026-02-02 04:37:15,118 log 49560 49180 Not Found: /images/icons/icon-512x512.png
+INFO 2026-02-02 04:37:15,119 basehttp 49560 16048 - Broken pipe from ('127.0.0.1', 61636)
+INFO 2026-02-02 04:37:15,120 basehttp 49560 8408 - Broken pipe from ('127.0.0.1', 60137)
+INFO 2026-02-02 04:37:15,125 basehttp 49560 49180 - Broken pipe from ('127.0.0.1', 57377)
+INFO 2026-02-02 04:37:15,129 basehttp 49560 39036 - Broken pipe from ('127.0.0.1', 52226)
+INFO 2026-02-02 04:37:15,138 basehttp 49560 31612 - Broken pipe from ('127.0.0.1', 59554)
+INFO 2026-02-02 04:37:15,139 basehttp 49560 40704 - Broken pipe from ('127.0.0.1', 64659)
+INFO 2026-02-02 04:37:15,140 basehttp 49560 47908 - Broken pipe from ('127.0.0.1', 62865)
+INFO 2026-02-02 04:37:15,140 basehttp 49560 49900 - Broken pipe from ('127.0.0.1', 61568)
+INFO 2026-02-02 04:37:15,141 basehttp 49560 48328 - Broken pipe from ('127.0.0.1', 55418)
+INFO 2026-02-02 04:37:15,211 basehttp 49560 49200 "GET /manifest.json HTTP/1.1" 200 709
+INFO 2026-02-02 04:42:45,959 basehttp 49560 48928 "GET / HTTP/1.1" 200 107206
+WARNING 2026-02-02 04:42:45,990 basehttp 49560 48928 "GET /static/css/dist/styles.css?v=1770050565 HTTP/1.1" 404 1997
+INFO 2026-02-02 04:42:46,482 basehttp 49560 50080 "GET /serviceworker.js HTTP/1.1" 200 1946
+WARNING 2026-02-02 04:42:46,487 basehttp 49560 46796 "GET /static/css/dist/styles.css?v=1770050565 HTTP/1.1" 404 1997
+WARNING 2026-02-02 04:42:46,513 log 49560 50080 Not Found: /css/django-pwa-app.css
+WARNING 2026-02-02 04:42:46,523 log 49560 23160 Not Found: /images/icons/icon-72x72.png
+WARNING 2026-02-02 04:42:46,526 basehttp 49560 50080 "GET /css/django-pwa-app.css HTTP/1.1" 404 12055
+INFO 2026-02-02 04:42:46,527 basehttp 49560 42400 "GET /offline/ HTTP/1.1" 200 456
+WARNING 2026-02-02 04:42:46,527 basehttp 49560 23160 "GET /images/icons/icon-72x72.png HTTP/1.1" 404 12070
+WARNING 2026-02-02 04:42:46,551 log 49560 23160 Not Found: /images/icons/icon-96x96.png
+WARNING 2026-02-02 04:42:46,557 log 49560 50080 Not Found: /images/icons/icon-144x144.png
+WARNING 2026-02-02 04:42:46,557 basehttp 49560 44884 "GET /static/css/dist/styles.css?v=1770050565 HTTP/1.1" 404 1997
+WARNING 2026-02-02 04:42:46,566 log 49560 42400 Not Found: /images/icons/icon-128x128.png
+INFO 2026-02-02 04:42:46,567 basehttp 49560 23160 - Broken pipe from ('127.0.0.1', 49495)
+INFO 2026-02-02 04:42:46,569 basehttp 49560 50080 - Broken pipe from ('127.0.0.1', 49167)
+WARNING 2026-02-02 04:42:46,575 log 49560 26944 Not Found: /images/icons/icon-152x152.png
+WARNING 2026-02-02 04:42:46,582 log 49560 43356 Not Found: /images/icons/icon-192x192.png
+INFO 2026-02-02 04:42:46,584 basehttp 49560 42400 - Broken pipe from ('127.0.0.1', 61822)
+WARNING 2026-02-02 04:42:46,591 log 49560 43592 Not Found: /images/icons/icon-384x384.png
+INFO 2026-02-02 04:42:46,592 basehttp 49560 26944 - Broken pipe from ('127.0.0.1', 61425)
+WARNING 2026-02-02 04:42:46,598 log 49560 31616 Not Found: /images/icons/icon-512x512.png
+INFO 2026-02-02 04:42:46,599 basehttp 49560 43356 - Broken pipe from ('127.0.0.1', 53679)
+INFO 2026-02-02 04:42:46,601 basehttp 49560 43592 - Broken pipe from ('127.0.0.1', 51752)
+INFO 2026-02-02 04:42:46,604 basehttp 49560 31616 - Broken pipe from ('127.0.0.1', 50989)
+INFO 2026-02-02 04:42:46,605 basehttp 49560 30036 - Broken pipe from ('127.0.0.1', 57414)
+INFO 2026-02-02 04:42:46,608 basehttp 49560 50136 - Broken pipe from ('127.0.0.1', 57201)
+INFO 2026-02-02 04:42:46,608 basehttp 49560 34960 - Broken pipe from ('127.0.0.1', 50572)
+INFO 2026-02-02 04:42:46,610 basehttp 49560 41848 - Broken pipe from ('127.0.0.1', 52513)
+INFO 2026-02-02 04:42:46,611 basehttp 49560 46104 "GET /serviceworker.js HTTP/1.1" 200 1946
+INFO 2026-02-02 04:42:46,612 basehttp 49560 48204 - Broken pipe from ('127.0.0.1', 56959)
+INFO 2026-02-02 04:42:46,612 basehttp 49560 30044 - Broken pipe from ('127.0.0.1', 51858)
+WARNING 2026-02-02 04:42:46,645 log 49560 46104 Not Found: /css/django-pwa-app.css
+WARNING 2026-02-02 04:42:46,652 log 49560 46416 Not Found: /images/icons/icon-72x72.png
+INFO 2026-02-02 04:42:46,653 basehttp 49560 41264 "GET /offline/ HTTP/1.1" 200 456
+WARNING 2026-02-02 04:42:46,653 basehttp 49560 46104 "GET /css/django-pwa-app.css HTTP/1.1" 404 12055
+WARNING 2026-02-02 04:42:46,653 basehttp 49560 46416 "GET /images/icons/icon-72x72.png HTTP/1.1" 404 12070
+WARNING 2026-02-02 04:42:46,667 log 49560 46416 Not Found: /images/icons/icon-96x96.png
+INFO 2026-02-02 04:42:46,670 basehttp 49560 46416 - Broken pipe from ('127.0.0.1', 51822)
+WARNING 2026-02-02 04:42:46,676 log 49560 46104 Not Found: /images/icons/icon-144x144.png
+WARNING 2026-02-02 04:42:46,684 log 49560 41264 Not Found: /images/icons/icon-128x128.png
+WARNING 2026-02-02 04:42:46,694 log 49560 22112 Not Found: /images/icons/icon-152x152.png
+INFO 2026-02-02 04:42:46,695 basehttp 49560 46104 - Broken pipe from ('127.0.0.1', 57511)
+INFO 2026-02-02 04:42:46,698 basehttp 49560 41264 - Broken pipe from ('127.0.0.1', 53066)
+INFO 2026-02-02 04:42:46,702 basehttp 49560 22112 - Broken pipe from ('127.0.0.1', 51138)
+WARNING 2026-02-02 04:42:46,710 log 49560 49948 Not Found: /images/icons/icon-192x192.png
+WARNING 2026-02-02 04:42:46,722 log 49560 35240 Not Found: /images/icons/icon-384x384.png
+INFO 2026-02-02 04:42:46,724 basehttp 49560 49948 - Broken pipe from ('127.0.0.1', 50589)
+INFO 2026-02-02 04:42:46,725 basehttp 49560 35240 - Broken pipe from ('127.0.0.1', 52783)
+INFO 2026-02-02 04:42:46,727 basehttp 49560 12684 - Broken pipe from ('127.0.0.1', 53351)
+INFO 2026-02-02 04:42:46,731 basehttp 49560 32864 - Broken pipe from ('127.0.0.1', 52043)
+INFO 2026-02-02 04:42:46,731 basehttp 49560 44148 - Broken pipe from ('127.0.0.1', 64837)
+INFO 2026-02-02 04:42:46,732 basehttp 49560 39848 "GET /manifest.json HTTP/1.1" 200 709
+INFO 2026-02-02 04:42:46,733 basehttp 49560 24620 - Broken pipe from ('127.0.0.1', 65012)
+INFO 2026-02-02 04:42:46,734 basehttp 49560 43060 - Broken pipe from ('127.0.0.1', 57634)
+INFO 2026-02-02 04:42:50,095 basehttp 49560 13592 "GET / HTTP/1.1" 200 107206
+INFO 2026-02-02 04:42:50,164 basehttp 49560 13592 "GET /static/css/dist/styles.css?v=1770050570 HTTP/1.1" 200 142421
+INFO 2026-02-02 04:42:50,191 basehttp 49560 13592 "GET /serviceworker.js HTTP/1.1" 200 1946
+WARNING 2026-02-02 04:42:50,223 log 49560 34076 Not Found: /css/django-pwa-app.css
+WARNING 2026-02-02 04:42:50,230 log 49560 11248 Not Found: /images/icons/icon-72x72.png
+INFO 2026-02-02 04:42:50,231 basehttp 49560 47668 "GET /offline/ HTTP/1.1" 200 456
+WARNING 2026-02-02 04:42:50,231 basehttp 49560 34076 "GET /css/django-pwa-app.css HTTP/1.1" 404 12055
+WARNING 2026-02-02 04:42:50,232 basehttp 49560 11248 "GET /images/icons/icon-72x72.png HTTP/1.1" 404 12070
+WARNING 2026-02-02 04:42:50,241 log 49560 47668 Not Found: /images/icons/icon-96x96.png
+INFO 2026-02-02 04:42:50,244 basehttp 49560 47668 - Broken pipe from ('127.0.0.1', 64866)
+WARNING 2026-02-02 04:42:50,253 log 49560 11248 Not Found: /images/icons/icon-128x128.png
+WARNING 2026-02-02 04:42:50,257 log 49560 34076 Not Found: /images/icons/icon-144x144.png
+WARNING 2026-02-02 04:42:50,266 log 49560 40484 Not Found: /images/icons/icon-152x152.png
+INFO 2026-02-02 04:42:50,270 basehttp 49560 34076 - Broken pipe from ('127.0.0.1', 63611)
+INFO 2026-02-02 04:42:50,271 basehttp 49560 11248 - Broken pipe from ('127.0.0.1', 60460)
+INFO 2026-02-02 04:42:50,272 basehttp 49560 40484 - Broken pipe from ('127.0.0.1', 64611)
+WARNING 2026-02-02 04:42:50,279 log 49560 3292 Not Found: /images/icons/icon-192x192.png
+WARNING 2026-02-02 04:42:50,289 log 49560 43064 Not Found: /images/icons/icon-384x384.png
+WARNING 2026-02-02 04:42:50,299 log 49560 30936 Not Found: /images/icons/icon-512x512.png
+INFO 2026-02-02 04:42:50,305 basehttp 49560 3292 - Broken pipe from ('127.0.0.1', 64653)
+INFO 2026-02-02 04:42:50,305 basehttp 49560 43064 - Broken pipe from ('127.0.0.1', 53771)
+INFO 2026-02-02 04:42:50,306 basehttp 49560 30936 - Broken pipe from ('127.0.0.1', 58264)
+INFO 2026-02-02 04:42:50,310 basehttp 49560 14056 - Broken pipe from ('127.0.0.1', 50666)
+INFO 2026-02-02 04:42:50,312 basehttp 49560 40532 - Broken pipe from ('127.0.0.1', 53418)
+INFO 2026-02-02 04:42:50,314 basehttp 49560 42096 - Broken pipe from ('127.0.0.1', 53655)
+INFO 2026-02-02 04:42:50,315 basehttp 49560 41268 - Broken pipe from ('127.0.0.1', 59550)
+INFO 2026-02-02 04:42:50,317 basehttp 49560 28052 - Broken pipe from ('127.0.0.1', 59651)
+INFO 2026-02-02 04:42:50,318 basehttp 49560 33084 - Broken pipe from ('127.0.0.1', 52721)
+INFO 2026-02-02 04:42:50,325 basehttp 49560 40880 "GET /manifest.json HTTP/1.1" 200 709

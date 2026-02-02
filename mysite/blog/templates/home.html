@@ -5,119 +5,127 @@
 {% block content %}
     {% include "partials/nav.html" %}
     
-    <!-- Hero Section -->
-    <section class="relative bg-gradient-to-br from-teal-600 via-teal-700 to-teal-800 text-white py-16 md:py-24">
-        <div class="absolute inset-0 bg-black opacity-20"></div>
+    <!-- Hero Section - Mobile First -->
+    <section class="relative bg-gradient-to-br from-teal-600 via-teal-700 to-teal-800 text-white py-12 md:py-24">
+        <div class="absolute inset-0 bg-black opacity-10"></div>
         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center">
-                <h1 class="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-                    Welcome to <span class="text-yellow-300">FitBlit</span>
-                </h1>
-                <p class="text-xl md:text-2xl mb-8 text-teal-100 max-w-3xl mx-auto">
-                    Your ultimate digital hub for news, music, and marketplace. Discover trending stories, 
-                    listen to amazing music, and find great deals all in one place.
-                </p>
-                <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                    <a href="{% url 'news-page' %}" class="bg-white text-teal-700 px-8 py-3 rounded-full font-semibold hover:bg-teal-50 transition duration-300 flex items-center justify-center gap-2">
+                <div class="mb-6">
+                    <h1 class="text-3xl font-bold mb-4 leading-tight sm:text-4xl md:text-6xl">
+                        Welcome to <span class="text-yellow-300 block sm:inline">FitBlit</span>
+                    </h1>
+                    <p class="text-lg text-teal-100 max-w-2xl mx-auto px-4 sm:px-0 sm:text-xl md:text-2xl">
+                        Your ultimate digital hub for news, music, and marketplace. All in one place.
+                    </p>
+                </div>
+                <div class="flex flex-col gap-3 sm:flex-row sm:gap-4 justify-center px-4 sm:px-0">
+                    <a href="{% url 'news-page' %}" class="bg-white text-teal-700 px-6 py-4 rounded-full font-semibold hover:bg-teal-50 transition duration-300 flex items-center justify-center gap-2 shadow-lg active:scale-95">
                         <i class="fa-regular fa-newspaper"></i>
-                        Explore News
+                        <span>Explore News</span>
                     </a>
-                    <a href="{% url 'music-page' %}" class="border-2 border-white text-white px-8 py-3 rounded-full font-semibold hover:bg-white hover:text-teal-700 transition duration-300 flex items-center justify-center gap-2">
+                    <a href="{% url 'music-page' %}" class="border-2 border-white text-white px-6 py-4 rounded-full font-semibold hover:bg-white hover:text-teal-700 transition duration-300 flex items-center justify-center gap-2 active:scale-95">
                         <i class="fa-solid fa-music"></i>
-                        Discover Music
+                        <span>Discover Music</span>
                     </a>
                 </div>
             </div>
         </div>
+        
+        <!-- Decorative elements for mobile -->
+        <div class="absolute -bottom-6 left-1/2 transform -translate-x-1/2 w-64 h-3 bg-gradient-to-r from-transparent via-yellow-400/30 to-transparent rounded-full sm:hidden"></div>
     </section>
 
     <!-- Main Content -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pb-20 md:pb-12">
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-20 md:pb-12">
         
         <!-- Trending News Section -->
-        <section class="mb-16">
-            <div class="flex items-center justify-between mb-8">
-                <div>
-                    <h2 class="text-3xl font-bold text-gray-900 mb-2">Trending News</h2>
-                    <p class="text-gray-600">Stay updated with the latest stories and insights</p>
+        <section class="mb-12 md:mb-16">
+            <div class="flex flex-col gap-4 mb-6 sm:flex-row sm:items-center sm:justify-between">
+                <div class="order-2 sm:order-1">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-1 sm:text-3xl">Trending News</h2>
+                    <p class="text-gray-600 text-sm sm:text-base">Stay updated with the latest stories</p>
                 </div>
-                <a href="{% url 'news-page' %}" class="inline-flex items-center gap-2 text-teal-600 hover:text-teal-700 font-semibold transition duration-300">
-                    View All
-                    <i class="fa-solid fa-arrow-right"></i>
+                <a href="{% url 'news-page' %}" class="order-1 sm:order-2 inline-flex items-center gap-2 text-teal-600 hover:text-teal-700 font-semibold transition duration-300 self-end sm:self-auto">
+                    <span>View All</span>
+                    <i class="fa-solid fa-arrow-right text-sm"></i>
                 </a>
             </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {% for article in articles|slice:":6" %}
-                <article class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition duration-300 overflow-hidden group">
-                    {% if article.image %}
-                    <div class="relative h-48 overflow-hidden">
-                        <img src="{{ article.image.url }}" alt="{{ article.title }}" 
-                             class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-                    </div>
-                    {% endif %}
-                    <div class="p-6">
-                        <div class="flex items-center gap-2 mb-3">
-                            <span class="bg-teal-100 text-teal-800 text-xs font-medium px-2.5 py-0.5 rounded-full">News</span>
-                            <span class="text-gray-500 text-sm">{{ article.dated_on|date:"M d, Y" }}</span>
+            <div class="overflow-x-auto pb-4 md:overflow-visible md:pb-0">
+                <div class="flex gap-4 min-w-max md:grid md:min-w-0 md:grid-cols-2 lg:grid-cols-3 md:gap-6">
+                    {% for article in articles|slice:":6" %}
+                    <article class="bg-white rounded-xl shadow-lg hover:shadow-xl transition duration-300 overflow-hidden group min-w-[280px] md:min-w-0">
+                        {% if article.image %}
+                        <div class="relative h-40 overflow-hidden md:h-48">
+                            <img src="{{ article.image.url }}" alt="{{ article.title }}" 
+                                 class="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                                 loading="lazy">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
                         </div>
-                        <h3 class="text-xl font-bold text-gray-900 mb-3 line-clamp-2">{{ article.title }}</h3>
-                        <p class="text-gray-600 mb-4 line-clamp-3">{{ article.article_content|truncatewords:15 }}</p>
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-2">
-                                <div class="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center">
-                                    <i class="fa-solid fa-user text-teal-600 text-sm"></i>
-                                </div>
-                                <span class="text-sm text-gray-600">{{ article.author.username }}</span>
+                        {% endif %}
+                        <div class="p-4 md:p-6">
+                            <div class="flex items-center gap-2 mb-2 md:mb-3">
+                                <span class="bg-teal-100 text-teal-800 text-xs font-medium px-2 py-0.5 rounded-full">News</span>
+                                <span class="text-gray-500 text-xs md:text-sm">{{ article.dated_on|date:"M d, Y" }}</span>
                             </div>
-                            <a href="{% url 'blog-post-detail' article.id %}" 
-                               class="inline-flex items-center gap-1 text-teal-600 hover:text-teal-700 font-medium text-sm transition duration-300">
-                                Read More
-                                <i class="fa-solid fa-arrow-right text-xs"></i>
-                            </a>
+                            <h3 class="text-lg font-bold text-gray-900 mb-2 line-clamp-2 md:text-xl">{{ article.title }}</h3>
+                            <p class="text-gray-600 text-sm mb-3 line-clamp-2 md:line-clamp-3 md:text-base">{{ article.article_content|truncatewords:15 }}</p>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-7 h-7 bg-teal-100 rounded-full flex items-center justify-center md:w-8 md:h-8">
+                                        <i class="fa-solid fa-user text-teal-600 text-xs md:text-sm"></i>
+                                    </div>
+                                    <span class="text-xs text-gray-600 md:text-sm">{{ article.author.username|truncatechars:12 }}</span>
+                                </div>
+                                <a href="{% url 'blog-post-detail' article.id %}" 
+                                   class="inline-flex items-center gap-1 text-teal-600 hover:text-teal-700 font-medium text-xs transition duration-300 md:text-sm">
+                                    Read
+                                    <i class="fa-solid fa-arrow-right text-xs"></i>
+                                </a>
+                            </div>
                         </div>
-                    </div>
-                </article>
-                {% endfor %}
+                    </article>
+                    {% endfor %}
+                </div>
             </div>
         </section>
 
         <!-- Trending Music Section -->
-        <section class="mb-16">
-            <div class="flex items-center justify-between mb-8">
-                <div>
-                    <h2 class="text-3xl font-bold text-gray-900 mb-2">Trending Music</h2>
-                    <p class="text-gray-600">Discover the latest hits and emerging artists</p>
+        <section class="mb-12 md:mb-16">
+            <div class="flex flex-col gap-4 mb-6 sm:flex-row sm:items-center sm:justify-between">
+                <div class="order-2 sm:order-1">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-1 sm:text-3xl">Trending Music</h2>
+                    <p class="text-gray-600 text-sm sm:text-base">Discover the latest hits</p>
                 </div>
-                <a href="{% url 'all-songs' %}" class="inline-flex items-center gap-2 text-teal-600 hover:text-teal-700 font-semibold transition duration-300">
-                    View All
-                    <i class="fa-solid fa-arrow-right"></i>
+                <a href="{% url 'all-songs' %}" class="order-1 sm:order-2 inline-flex items-center gap-2 text-teal-600 hover:text-teal-700 font-semibold transition duration-300 self-end sm:self-auto">
+                    <span>View All</span>
+                    <i class="fa-solid fa-arrow-right text-sm"></i>
                 </a>
             </div>
             
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+            <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-4 lg:grid-cols-4 xl:grid-cols-5">
                 {% for song in songs|slice:":10" %}
-                <div class="group cursor-pointer">
-                    <div class="relative bg-white rounded-2xl shadow-lg hover:shadow-xl transition duration-300 overflow-hidden">
+                <div class="group">
+                    <div class="relative bg-white rounded-xl shadow-md hover:shadow-lg transition duration-300 overflow-hidden active:scale-95">
                         <div class="relative aspect-square overflow-hidden">
                             {% if song.cover_image %}
                             <img src="{{ song.cover_image.url }}" alt="{{ song.title }}" 
-                                 class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                                class="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                                loading="lazy">
                             {% else %}
                             <div class="w-full h-full bg-gradient-to-br from-teal-400 to-teal-600 flex items-center justify-center">
-                                <i class="fa-solid fa-music text-white text-3xl"></i>
+                                <i class="fa-solid fa-music text-white text-2xl md:text-3xl"></i>
                             </div>
                             {% endif %}
                             <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
-                                <div class="w-12 h-12 bg-white/90 rounded-full flex items-center justify-center">
+                                <a href="{% url 'artist-detail' song.artist.id %}" class="w-10 h-10 bg-white/90 rounded-full flex items-center justify-center md:w-12 md:h-12">
                                     <i class="fa-solid fa-play text-teal-600"></i>
-                                </div>
+                                </a>
                             </div>
                         </div>
-                        <div class="p-4">
-                            <h3 class="font-semibold text-gray-900 mb-1 line-clamp-1">{{ song.title }}</h3>
-                            <p class="text-sm text-gray-600 line-clamp-1">{{ song.artist.artist }}</p>
+                        <div class="p-3 md:p-4">
+                            <h3 class="font-semibold text-gray-900 text-sm mb-1 line-clamp-1 md:text-base">{{ song.title }}</h3>
+                            <p class="text-xs text-gray-600 line-clamp-1 md:text-sm">{{ song.artist.artist|truncatechars:15 }}</p>
                         </div>
                     </div>
                 </div>
@@ -126,50 +134,51 @@
         </section>
 
         <!-- Marketplace Section -->
-        <section class="mb-16">
-            <div class="flex items-center justify-between mb-8">
-                <div>
-                    <h2 class="text-3xl font-bold text-gray-900 mb-2">Featured Items</h2>
-                    <p class="text-gray-600">Great deals and unique finds in our marketplace</p>
+        <section class="mb-12 md:mb-16">
+            <div class="flex flex-col gap-4 mb-6 sm:flex-row sm:items-center sm:justify-between">
+                <div class="order-2 sm:order-1">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-1 sm:text-3xl">Featured Items</h2>
+                    <p class="text-gray-600 text-sm sm:text-base">Great deals and unique finds</p>
                 </div>
-                <a href="{% url 'all-items' %}" class="inline-flex items-center gap-2 text-teal-600 hover:text-teal-700 font-semibold transition duration-300">
-                    View All
-                    <i class="fa-solid fa-arrow-right"></i>
+                <a href="{% url 'all-items' %}" class="order-1 sm:order-2 inline-flex items-center gap-2 text-teal-600 hover:text-teal-700 font-semibold transition duration-300 self-end sm:self-auto">
+                    <span>View All</span>
+                    <i class="fa-solid fa-arrow-right text-sm"></i>
                 </a>
             </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 lg:grid-cols-3 xl:grid-cols-4">
                 {% for item in items|slice:":8" %}
-                <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition duration-300 overflow-hidden group">
+                <div class="bg-white rounded-xl shadow-md hover:shadow-lg transition duration-300 overflow-hidden group active:scale-[0.98]">
                     <div class="relative aspect-square overflow-hidden">
                         {% if item.image %}
                         <img src="{{ item.image.url }}" alt="{{ item.title }}" 
-                             class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                             class="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                             loading="lazy">
                         {% else %}
-                        <div class="w-full h-full bg-gradient-to-br from-gray-300 to-gray-400 flex items-center justify-center">
-                            <i class="fa-solid fa-image text-gray-500 text-3xl"></i>
+                        <div class="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
+                            <i class="fa-solid fa-image text-gray-400 text-2xl md:text-3xl"></i>
                         </div>
                         {% endif %}
-                        <div class="absolute top-3 right-3">
+                        <div class="absolute top-2 right-2 md:top-3 md:right-3">
                             <span class="bg-teal-500 text-white text-xs font-medium px-2 py-1 rounded-full">
                                 {{ item.item_status|default:"Available" }}
                             </span>
                         </div>
                     </div>
-                    <div class="p-4">
-                        <div class="flex items-center justify-between mb-2">
-                            <h3 class="font-semibold text-gray-900 line-clamp-1">{{ item.title }}</h3>
-                            <span class="text-lg font-bold text-teal-600">GHS {{ item.price }}</span>
+                    <div class="p-3 md:p-4">
+                        <div class="flex items-start justify-between mb-2">
+                            <h3 class="font-semibold text-gray-900 text-sm line-clamp-1 pr-2 md:text-base">{{ item.title }}</h3>
+                            <span class="text-base font-bold text-teal-600 whitespace-nowrap md:text-lg">GHS {{ item.price }}</span>
                         </div>
-                        <p class="text-sm text-gray-600 mb-3 line-clamp-2">{{ item.description }}</p>
+                        <p class="text-xs text-gray-600 mb-3 line-clamp-2 md:text-sm">{{ item.description }}</p>
                         <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-1 text-sm text-gray-500">
-                                <i class="fa-solid fa-location-dot"></i>
-                                <span>{{ item.location }}</span>
+                            <div class="flex items-center gap-1 text-xs text-gray-500 md:text-sm">
+                                <i class="fa-solid fa-location-dot text-xs"></i>
+                                <span class="truncate max-w-[100px] md:max-w-[120px]">{{ item.location|truncatechars:20 }}</span>
                             </div>
                             <a href="{% url 'item-detail' item.id %}" 
-                               class="inline-flex items-center gap-1 text-teal-600 hover:text-teal-700 font-medium text-sm transition duration-300">
-                                View Details
+                               class="inline-flex items-center gap-1 text-teal-600 hover:text-teal-700 font-medium text-xs transition duration-300 md:text-sm">
+                                View
                                 <i class="fa-solid fa-arrow-right text-xs"></i>
                             </a>
                         </div>
@@ -180,33 +189,34 @@
         </section>
 
         <!-- Call to Action Section -->
-        <section class="bg-gradient-to-r from-teal-600 to-teal-700 rounded-3xl p-8 md:p-12 text-white text-center">
+        <section class="bg-gradient-to-r from-teal-600 to-teal-700 rounded-2xl p-6 md:rounded-3xl md:p-12 text-white text-center">
             <div class="max-w-3xl mx-auto">
-                <h2 class="text-3xl md:text-4xl font-bold mb-4">Join the FitBlit Community</h2>
-                <p class="text-xl mb-8 text-teal-100">Share your stories, upload your music, and discover amazing content from creators around the world.</p>
-                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <h2 class="text-2xl font-bold mb-3 md:text-4xl">Join the FitBlit Community</h2>
+                <p class="text-teal-100 mb-6 text-sm md:text-xl md:mb-8">Share, upload, and discover amazing content.</p>
+                <div class="flex flex-col gap-3 sm:flex-row sm:gap-4 justify-center">
                     {% if user.is_authenticated %}
-                    <a href="{% url 'user-dashboard' %}" class="bg-white text-teal-700 px-8 py-3 rounded-full font-semibold hover:bg-teal-50 transition duration-300 flex items-center justify-center gap-2">
+                    <a href="{% url 'user-dashboard' %}" class="bg-white text-teal-700 px-6 py-3 rounded-full font-semibold hover:bg-teal-50 transition duration-300 flex items-center justify-center gap-2 shadow-lg active:scale-95">
                         <i class="fa-solid fa-plus"></i>
-                        Create Content
+                        <span class="text-sm md:text-base">Create Content</span>
                     </a>
                     {% else %}
-                    <a href="{% url 'sign_up' %}" class="bg-white text-teal-700 px-8 py-3 rounded-full font-semibold hover:bg-teal-50 transition duration-300 flex items-center justify-center gap-2">
+                    <a href="{% url 'sign_up' %}" class="bg-white text-teal-700 px-6 py-3 rounded-full font-semibold hover:bg-teal-50 transition duration-300 flex items-center justify-center gap-2 shadow-lg active:scale-95">
                         <i class="fa-solid fa-user-plus"></i>
-                        Sign Up Free
+                        <span class="text-sm md:text-base">Sign Up Free</span>
                     </a>
-                    <a href="{% url 'login' %}" class="border-2 border-white text-white px-8 py-3 rounded-full font-semibold hover:bg-white hover:text-teal-700 transition duration-300 flex items-center justify-center gap-2">
+                    <a href="{% url 'login' %}" class="border-2 border-white text-white px-6 py-3 rounded-full font-semibold hover:bg-white hover:text-teal-700 transition duration-300 flex items-center justify-center gap-2 active:scale-95">
                         <i class="fa-solid fa-sign-in-alt"></i>
-                        Sign In
+                        <span class="text-sm md:text-base">Sign In</span>
                     </a>
                     {% endif %}
                 </div>
             </div>
         </section>
-    </div>
+    </main>
 
-    <!-- Custom CSS for line clamping and mobile optimization -->
+    <!-- Mobile-First CSS -->
     <style>
+        /* Line clamping utilities */
         .line-clamp-1 {
             overflow: hidden;
             display: -webkit-box;
@@ -226,20 +236,36 @@
             -webkit-line-clamp: 3;
         }
         
-        /* Mobile-specific optimizations */
-        @media (max-width: 768px) {
-            .aspect-square {
-                aspect-ratio: 1 / 1;
+        /* Touch-friendly interactions */
+        @media (max-width: 640px) {
+            a, button {
+                -webkit-tap-highlight-color: transparent;
+            }
+            
+            /* Improve scrolling performance */
+            .overflow-x-auto {
+                -webkit-overflow-scrolling: touch;
             }
         }
         
-        /* Ensure proper spacing for bottom navigation on mobile */
-        @media (max-width: 768px) {
-            main {
-                padding-bottom: 4rem;
+        /* Ensure proper spacing for mobile navigation */
+        main {
+            padding-bottom: env(safe-area-inset-bottom, 1rem);
+        }
+        
+        /* Optimize images for mobile */
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        /* Responsive typography */
+        @media (max-width: 640px) {
+            html {
+                font-size: 14px;
             }
         }
     </style>
 
+    {% include "partials/footer.html" %}
 {% endblock content %}
-

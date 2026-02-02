@@ -1,68 +1,345 @@
 {% extends "base.html" %}
 {% load static %}
 {% load tailwind_filters %}
-{% block title %}Album {{albums.artist}}{% endblock  %}
+{% block title %}{{ album.title }} - Album{% endblock %}
+
 {% block content %}
     {% include "partials/nav.html" %}
-    <!-- Album-header -->
-    <div class="px-[0.5rem] md:px-0 w-[100%] md:w-[80%] m-auto mobile-padding">
-        <div class="mb-[80px]">
-            <button onclick="goBack()" class="mobile-back-btn rounded-full py-[6px] hover:shadow-md  px-[18px] text-[#3D5361]">
-                <i class="fa-solid fa-circle-arrow-left mr-[0.3rem]"></i>
-                Back
-            </button>
-            <div class="mt-[1.5rem]">
-                <div class="album_detail_bg rounded-t-[10px]">
-                    <div class="md:flex md:flex-row flex-col justify-start items-center w-[95%] gap-[3rem] h-[350px] p-[1.5rem]">
-                        <div class="w-[300px] md:w-[250px] h-[200px] md:h-[280px] rounded">
-                            {% if album.cover_image %}
-                                <img src="{{ album.cover_image.url }}" alt="" class="w-[100%] h-[100%] object-center object-cover rounded">
-                            {% endif %}
+
+    <!-- Album Hero Section -->
+    <div class="relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+        <!-- Background Pattern -->
+        <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-800/50 via-slate-900/30 to-transparent"></div>
+        
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+            <!-- Breadcrumb Navigation -->
+            <div class="mb-6 md:mb-8">
+                <nav class="flex items-center space-x-2 text-sm" aria-label="Breadcrumb">
+                    <a href="{% url 'home' %}" class="text-slate-300 hover:text-white transition-colors">
+                        <i class="fas fa-home mr-1"></i>
+                        Home
+                    </a>
+                    <span class="text-slate-400">
+                        <i class="fas fa-chevron-right text-xs"></i>
+                    </span>
+                    <a href="{% url 'music-page' %}" class="text-slate-300 hover:text-white transition-colors">
+                        <i class="fas fa-music mr-1"></i>
+                        Music
+                    </a>
+                    <span class="text-slate-400">
+                        <i class="fas fa-chevron-right text-xs"></i>
+                    </span>
+                    <a href="{% url 'all-album' %}" class="text-slate-300 hover:text-white transition-colors">
+                        Albums
+                    </a>
+                    <span class="text-slate-400">
+                        <i class="fas fa-chevron-right text-xs"></i>
+                    </span>
+                    <span class="text-white font-medium truncate">{{ album.title }}</span>
+                </nav>
+            </div>
+
+            <!-- Album Info Section -->
+            <div class="flex flex-col lg:flex-row items-center lg:items-start gap-8">
+                <!-- Album Cover -->
+                <div class="relative group">
+                    <div class="relative w-56 h-56 md:w-72 md:h-72 lg:w-80 lg:h-80 rounded-2xl overflow-hidden shadow-2xl">
+                        {% if album.cover_image %}
+                            <img src="{{ album.cover_image.url }}" 
+                                 alt="{{ album.title }}" 
+                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        {% else %}
+                            <div class="w-full h-full bg-gradient-to-br from-teal-500 to-teal-600 flex items-center justify-center">
+                                <i class="fas fa-record-vinyl text-white text-6xl"></i>
+                            </div>
+                        {% endif %}
+                        <!-- Album Badge -->
+                        <div class="absolute top-4 left-4 bg-teal-500 text-white px-3 py-1 rounded-full text-sm font-medium shadow-lg">
+                            <i class="fas fa-record-vinyl mr-1"></i>
+                            Album
                         </div>
-                        <div class="py-[0.5rem] flex flex-col">
-                            <p class="text-slate-50">Album</p>
-                            <h1 class="text-[2rem] text-nowrap md:text-[6rem] font-bold text-slate-50">{{ album.title }}</h1>
-                            <div class="flex gap-[0.3rem] items-center">
-                                <div class="w-[30px] h-[30px] rounded-full">
-                                    <img src="{{ album.artist.artist_profile.url }}" alt="" class="w-[100%] rounded-full object-cover object-center">
+                    </div>
+                    
+                    <!-- Artist Profile Badge -->
+                    {% if album.artist.artist_profile %}
+                    <div class="absolute -bottom-4 -right-4 w-20 h-20 rounded-full border-4 border-slate-900 overflow-hidden shadow-xl">
+                        <img src="{{ album.artist.artist_profile.url }}" 
+                             alt="{{ album.artist }}" 
+                             class="w-full h-full object-cover">
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Album Details -->
+                <div class="flex-1 text-center lg:text-left">
+                    <div class="mb-4">
+                        <span class="inline-flex items-center px-4 py-1.5 rounded-full bg-teal-500/20 text-teal-300 text-sm font-medium mb-3">
+                            <i class="fas fa-compact-disc mr-2"></i>
+                            {{ album.artist.artist_genre|default:"Music" }}
+                        </span>
+                    </div>
+                    
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4">
+                        {{ album.title }}
+                    </h1>
+                    
+                    <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 mb-6">
+                        <a href="{% url 'artist-detail' album.artist.id %}" 
+                           class="flex items-center text-slate-300 hover:text-white transition-colors group">
+                            <div class="w-8 h-8 rounded-full overflow-hidden mr-2">
+                                <img src="{{ album.artist.artist_profile.url|default:'#' }}" 
+                                     alt="{{ album.artist }}" 
+                                     class="w-full h-full object-cover">
+                            </div>
+                            <span class="font-medium group-hover:text-teal-300">{{ album.artist }}</span>
+                        </a>
+                        
+                        <div class="flex items-center text-slate-300">
+                            <i class="fas fa-calendar-alt mr-2"></i>
+                            <span>{{ album.release_date|date:"F j, Y"|default:"Not released" }}</span>
+                        </div>
+                        
+                        <div class="flex items-center text-slate-300">
+                            <i class="fas fa-music mr-2"></i>
+                            <span>{{ album.songs.count }} songs</span>
+                        </div>
+                        
+                        {% if album.artist.user == user %}
+                        <div class="ml-auto">
+                            <button data-modal-target="add-song-modal" data-modal-toggle="add-song-modal" 
+                                    class="flex items-center gap-2 px-6 py-3 bg-teal-500 text-white rounded-xl hover:bg-teal-600 transition-all duration-200 shadow-lg hover:shadow-xl">
+                                <i class="fas fa-plus"></i>
+                                <span>Add Song</span>
+                            </button>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex flex-wrap gap-3 mb-8 justify-center lg:justify-start">
+                        <button class="inline-flex items-center gap-2 px-6 py-3 bg-teal-500 text-white rounded-xl hover:bg-teal-600 transition-all shadow-lg hover:shadow-xl">
+                            <i class="fas fa-play"></i>
+                            <span>Play All</span>
+                        </button>
+                        <button class="inline-flex items-center gap-2 px-6 py-3 bg-white/10 backdrop-blur-sm text-white rounded-xl hover:bg-white/20 transition-all">
+                            <i class="fas fa-shuffle"></i>
+                            <span>Shuffle</span>
+                        </button>
+                        <button class="inline-flex items-center gap-2 px-6 py-3 bg-white/10 backdrop-blur-sm text-white rounded-xl hover:bg-white/20 transition-all">
+                            <i class="fas fa-heart"></i>
+                            <span>Like Album</span>
+                        </button>
+                        <button class="inline-flex items-center gap-2 px-6 py-3 bg-white/10 backdrop-blur-sm text-white rounded-xl hover:bg-white/20 transition-all">
+                            <i class="fas fa-share-alt"></i>
+                            <span>Share</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Songs Section -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Section Header -->
+        <div class="flex items-center justify-between mb-8">
+            <div>
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-900">Album Tracks</h2>
+                <p class="text-gray-600 mt-1">All songs from "{{ album.title }}"</p>
+            </div>
+            <div class="flex items-center gap-4">
+                <span class="text-sm text-gray-500">{{ album.songs.count }} tracks</span>
+                <button class="inline-flex items-center gap-2 px-4 py-2 bg-teal-50 text-teal-600 rounded-xl hover:bg-teal-100 transition-all">
+                    <i class="fas fa-sort"></i>
+                    <span class="text-sm font-medium">Sort</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Songs List -->
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+            <!-- Table Header -->
+            <div class="grid grid-cols-12 gap-4 p-6 border-b border-gray-100 bg-gray-50/50">
+                <div class="col-span-1 flex justify-center">
+                    <span class="text-gray-500 font-medium">#</span>
+                </div>
+                <div class="col-span-7">
+                    <span class="text-gray-500 font-medium">Title</span>
+                </div>
+                <div class="col-span-2">
+                    <span class="text-gray-500 font-medium">Duration</span>
+                </div>
+                <div class="col-span-2 flex justify-end">
+                    <span class="text-gray-500 font-medium">Actions</span>
+                </div>
+            </div>
+
+            <!-- Songs List -->
+            <div class="divide-y divide-gray-100">
+                {% for song in album.songs.all %}
+                <div class="grid grid-cols-12 gap-4 p-6 items-center hover:bg-gray-50/50 transition-colors group">
+                    <!-- Track Number -->
+                    <div class="col-span-1 flex justify-center">
+                        <div class="relative">
+                            <span class="text-gray-700 font-medium group-hover:invisible">{{ forloop.counter }}</span>
+                            <button class="absolute inset-0 flex items-center justify-center invisible group-hover:visible song-play-btn"
+                                    data-song-url="{% if song.song_file %}{{ song.song_file.url }}{% endif %}"
+                                    data-song-title="{{ song.title }}"
+                                    data-song-artist="{{ song.artist }}">
+                                <i class="fas fa-play text-teal-500 text-lg"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Song Info -->
+                    <div class="col-span-7">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-lg overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
+                                {% if song.cover_image %}
+                                    <img src="{{ song.cover_image.url }}" 
+                                         alt="{{ song.title }}" 
+                                         class="w-full h-full object-cover">
+                                {% else %}
+                                    <div class="w-full h-full flex items-center justify-center">
+                                        <i class="fas fa-music text-gray-400"></i>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-900">{{ song.title }}</h4>
+                                <div class="flex items-center gap-2 mt-1">
+                                    {% if song.genre %}
+                                    <span class="text-xs px-2 py-1 bg-gray-100 text-gray-600 rounded-full">
+                                        {{ song.genre }}
+                                    </span>
+                                    {% endif %}
                                 </div>
-                                <p  class="text-slate-50 font-medium">{{album.artist}} </p> 
-                                <span class="text-slate-50">- {{album.release_date|date:"Y"}} - {{ album.songs.count }} songs</span>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="bg-[#eee5e52d] rounded-b-[10px] border-opacity-20 border border-slate-600 p-[1rem] w-full shadow-sm">
-                    {% if album.artist.user == user %}
-                        <button id="albumSongBtn" type="button" class="hover:bg-slate-200 p-[0.5rem] rounded-full hover:shadow-md flex items-center text-[#3D5361]">
-                            <i class="fa-solid fa-plus-circle text-[1.5rem] text-slate-500 mr-[10px] "></i>
-                            Add Song
+                    
+                    <!-- Duration -->
+                    <div class="col-span-2">
+                        <span class="text-gray-600">{{ song.duration|default:"3:45" }}</span>
+                    </div>
+                    
+                    <!-- Actions -->
+                    <div class="col-span-2 flex justify-end space-x-3">
+                        {% if song.song_file %}
+                        <a href="{{ song.song_file.url }}" download 
+                           class="w-9 h-9 flex items-center justify-center text-gray-400 hover:text-teal-500 rounded-lg hover:bg-gray-100 transition-colors"
+                           title="Download">
+                            <i class="fas fa-download"></i>
+                        </a>
+                        {% endif %}
+                        
+                        <button class="w-9 h-9 flex items-center justify-center text-gray-400 hover:text-red-500 rounded-lg hover:bg-gray-100 transition-colors"
+                                title="Like">
+                            <i class="far fa-heart"></i>
                         </button>
-                    {% endif %}
-                    <div class=" mt-[1rem]">
-                        <div class="border-b border-slate-200 px-[1rem] flex justify-between items-center">
-                            <div class="flex gap-[1rem] md:gap-[3rem] items-center">
-                                <p class="font-bold text-[1.5rem] mt-[0.5rem]">#</p>
-                                <h5 class="text-[1.2rem] font-bold text-[#3D5361]"> Title</h5>
-                            </div>
-                            <div class="md:mr-[4.5rem] mr-[2rem]"><i class="fa-solid fa-clock"></i></div>
+                        
+                        <button class="w-9 h-9 flex items-center justify-center text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition-colors"
+                                title="More options">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                    </div>
+                </div>
+                {% empty %}
+                <!-- Empty State -->
+                <div class="col-span-12 p-12 text-center">
+                    <div class="max-w-md mx-auto">
+                        <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-music text-gray-400 text-2xl"></i>
                         </div>
+                        <h3 class="text-xl font-semibold text-gray-700 mb-2">No songs yet</h3>
+                        <p class="text-gray-500 mb-6">This album doesn't have any songs yet</p>
+                        {% if album.artist.user == user %}
+                        <button data-modal-target="add-song-modal" data-modal-toggle="add-song-modal" 
+                                class="inline-flex items-center gap-2 px-6 py-3 bg-teal-500 text-white rounded-xl hover:bg-teal-600 transition-all duration-200 shadow-lg hover:shadow-xl">
+                            <i class="fas fa-plus"></i>
+                            <span>Add First Song</span>
+                        </button>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 
-                        {% for song in album.songs.all %}
-                        <div class="flex justify-between items-center hover:bg-slate-100 ">
-                            <div class="flex items-center gap-[1rem] md:gap-[3rem] py-[1rem]">
-                                <div class="text-slate-500 hover:text-slate-700"><a href="#!"><i class="fa-solid fa-play"></i></a></div>
-                                <div class="">
-                                    <h5 class=" text-[1.2rem] font-bold text-[#3D5361] m-0 p-0"> {{song.title}}</h5>
-                                    <p class="text-[1rem] text-[#666666] m-0 p-0 hover:underline"><a href="#!" class="">@{{song.artist}}</a></p>
+    <!-- Album Info Section -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 mb-12">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- About Album -->
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">About This Album</h3>
+                    <div class="space-y-6">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-gray-50 rounded-xl p-4">
+                                <p class="text-sm text-gray-500 mb-1">Release Date</p>
+                                <p class="font-medium text-gray-900">{{ album.release_date|date:"F j, Y"|default:"Not specified" }}</p>
+                            </div>
+                            <div class="bg-gray-50 rounded-xl p-4">
+                                <p class="text-sm text-gray-500 mb-1">Genre</p>
+                                <p class="font-medium text-gray-900">{{ album.artist.artist_genre|default:"Not specified" }}</p>
+                            </div>
+                        </div>
+                        
+                        {% if album.artist %}
+                        <div class="bg-gray-50 rounded-xl p-4">
+                            <div class="flex items-center justify-between mb-3">
+                                <p class="text-sm text-gray-500">Artist</p>
+                                <a href="{% url 'artist-detail' album.artist.id %}" 
+                                   class="text-teal-600 hover:text-teal-700 text-sm font-medium">
+                                    View Profile
+                                </a>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 rounded-full overflow-hidden">
+                                    <img src="{{ album.artist.artist_profile.url|default:'#' }}" 
+                                         alt="{{ album.artist }}" 
+                                         class="w-full h-full object-cover">
+                                </div>
+                                <div>
+                                    <p class="font-medium text-gray-900">{{ album.artist }}</p>
+                                    <p class="text-sm text-gray-600">{{ album.songs.count }} songs in album</p>
                                 </div>
                             </div>
-                            <div class="flex items-center gap-[1rem] md:gap-[3rem] py-[1rem]">
-                                <p class="text-slate-500 hover:text-slate-700"><a href="#!"><i class="fa-solid fa-download"></i></a></p>
-                                <p class="text-[0.9rem] font-bold text-[#666666]">{{song.album.release_date|date:"yy"}}</p>
-                                <p class="text-slate-500 hover:text-slate-700"><a href="#!"><i class="fa-solid fa-ellipsis"></i></a></p>
-                            </div>
                         </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- More Albums by Artist -->
+            <div>
+                <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">More by {{ album.artist }}</h3>
+                    <div class="space-y-4">
+                        {% for other_album in album.artist.album_set.all|slice:"3" %}
+                            {% if other_album.id != album.id %}
+                            <a href="{% url 'album-detail' other_album.id %}" 
+                               class="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors">
+                                <div class="w-12 h-12 rounded-lg overflow-hidden">
+                                    {% if other_album.cover_image %}
+                                        <img src="{{ other_album.cover_image.url }}" 
+                                             alt="{{ other_album.title }}" 
+                                             class="w-full h-full object-cover">
+                                    {% else %}
+                                        <div class="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                                            <i class="fas fa-record-vinyl text-gray-400"></i>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="flex-1">
+                                    <p class="font-medium text-gray-900 text-sm truncate">{{ other_album.title }}</p>
+                                    <p class="text-xs text-gray-500">{{ other_album.songs.count }} songs</p>
+                                </div>
+                            </a>
+                            {% endif %}
+                        {% empty %}
+                            <p class="text-gray-500 text-sm text-center py-4">No other albums by this artist</p>
                         {% endfor %}
                     </div>
                 </div>
@@ -70,70 +347,231 @@
         </div>
     </div>
 
- 
-
-    <!-- Modal -->
-    <div id="albumSongDropDown" class="hidden fixed top-0 left-0 w-[100%] h-screen bg-[#000000] bg-opacity-20">
-        <div class="mobile-album-song w-[100%] md:w-[50%] m-auto fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] bg-slate-50 shadow rounded-[1rem]">
-            <div class="modal-content">
-                <div class="flex justify-between items-center mb-[1rem] border-b border-slate-200 p-[1rem]">
-                    <h1 class="modal-title " id="exampleModalLabel">Post your Song <i class="fa-solid fa-headphones ml-[10px] mt-[3px]"></i></h1>
-                    <button type="button" class="closeBtn cursor-pointer" >
-                        <i class="fa-solid fa-close text-[22px]"></i>
+    <!-- Add Song Modal -->
+    <div id="add-song-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div class="relative p-4 w-full max-w-2xl">
+            <div class="relative bg-white rounded-2xl shadow-xl flex flex-col" style="max-height: 90vh;">
+                <!-- Modal Header -->
+                <div class="relative bg-gradient-to-r from-teal-600 to-teal-700 p-6 rounded-t-2xl flex justify-between items-center flex-shrink-0">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-plus-circle text-white text-2xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h2 class="text-xl font-bold text-white">Add Song to Album</h2>
+                            <p class="text-teal-100 text-sm">Add a new song to "{{ album.title }}"</p>
+                        </div>
+                    </div>
+                    <button type="button" class="text-white bg-transparent hover:bg-white hover:text-teal-600 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center transition-all" data-modal-hide="add-song-modal">
+                        <i class="fas fa-times"></i>
                     </button>
                 </div>
-                <div class="p-[1rem]">
-                    <form action="" method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        {{ song_form|crispy }}
-                        <input type="hidden" name="song_form" value="song_form">
-                        <div class="md:flex gap-[10px] justify-center items-center flex-row">
-                            <button type="button" class=" w-[100%] text-[#3D5361] border border-[#3D5361] border-opacity-20 rounded-full my-[10px] md:my-0 py-[10px] px-[5rem]">Cancel</button>
-                            <input type="submit" value="Upload Song" class="w-[100%] cursor-pointer text-slate-50 hover:bg-slate-500 bg-slate-600 rounded-full py-[10px] px-[5rem]">
+                
+                <!-- Form Content -->
+                <form action="" method="post" enctype="multipart/form-data" class="flex flex-col flex-grow bg-white">
+                    {% csrf_token %}
+                    <input type="hidden" name="song_form" value="true">
+                    
+                    <!-- Scrollable Form Content -->
+                    <div class="p-6 overflow-y-auto flex-grow space-y-6">
+                        <!-- Cover Image Preview -->
+                        <div class="text-center">
+                            <div class="relative inline-block">
+                                <div id="song-cover-preview" class="w-40 h-40 rounded-xl overflow-hidden border-2 border-dashed border-gray-300 mx-auto mb-4 bg-gray-50">
+                                    <div id="default-preview" class="w-full h-full flex flex-col items-center justify-center text-gray-400">
+                                        <i class="fas fa-music text-3xl mb-2"></i>
+                                        <span class="text-sm">No cover selected</span>
+                                    </div>
+                                    <img id="song-cover-image" class="w-full h-full object-cover hidden" src="#" alt="Cover preview" />
+                                </div>
+                                <label for="id_cover_image" 
+                                       class="absolute -bottom-2 -right-2 bg-teal-500 hover:bg-teal-600 text-white p-2 rounded-full shadow-lg cursor-pointer transition-all duration-200 hover:scale-110">
+                                    <i class="fas fa-camera"></i>
+                                </label>
+                            </div>
+                            <p class="text-sm text-gray-500">Click camera icon to add cover image</p>
                         </div>
-                    </form>
-                </div>
+
+                        <!-- Form Fields -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block mb-2 text-sm font-medium text-gray-900">Song Title *</label>
+                                    <input type="text" name="title" id="id_title" 
+                                           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full p-2.5" 
+                                           placeholder="Enter song title" required>
+                                </div>
+                                
+                                <div>
+                                    <label class="block mb-2 text-sm font-medium text-gray-900">Genre</label>
+                                    <input type="text" name="genre" id="id_genre" 
+                                           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full p-2.5" 
+                                           placeholder="Enter genre">
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block mb-2 text-sm font-medium text-gray-900">Duration</label>
+                                    <input type="text" name="duration" id="id_duration" 
+                                           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full p-2.5" 
+                                           placeholder="MM:SS">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- File Uploads -->
+                        <div class="space-y-6">
+                            <!-- Song File Upload -->
+                            <div>
+                                <label class="block mb-2 text-sm font-medium text-gray-900">Song File *</label>
+                                <div class="flex items-center justify-center w-full">
+                                    <label for="id_song_file" class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors">
+                                        <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                            <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
+                                            <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Click to upload</span> or drag and drop</p>
+                                            <p class="text-xs text-gray-500">MP3, WAV, FLAC (MAX. 50MB)</p>
+                                        </div>
+                                        <input type="file" name="song_file" id="id_song_file" class="hidden" accept="audio/*" required>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Modal Footer -->
+                    <div class="p-6 bg-gray-50 rounded-b-2xl flex-shrink-0">
+                        <div class="flex space-x-3">
+                            <button type="submit" 
+                                    class="flex-1 inline-flex items-center justify-center px-6 py-3 bg-teal-600 text-white text-sm font-medium rounded-xl hover:bg-teal-700 transition-all duration-200 shadow-lg hover:shadow-xl">
+                                <i class="fas fa-cloud-upload-alt mr-2"></i>
+                                Upload Song
+                            </button>
+                            <button type="button" 
+                                    class="flex-1 inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-gray-700 text-sm font-medium rounded-xl hover:bg-gray-50 transition-all duration-200"
+                                    data-modal-hide="add-song-modal">
+                                <i class="fas fa-times mr-2"></i>
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 
-
     {% include "partials/footer.html" %}
+
+    <style>
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        
+        /* Hover effects */
+        .hover-lift:hover {
+            transform: translateY(-2px);
+            transition: transform 0.2s ease;
+        }
+    </style>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Album Song Modal Toggle
-            const albumSongBtn = document.getElementById('albumSongBtn');
-            const albumSongDropdown = document.getElementById('albumSongDropDown');
-            const closeBtns = document.querySelectorAll('.closeBtn');
-    
-            // Toggle modal with albumSongBtn
-            if(albumSongBtn && albumSongDropdown) {
-                albumSongBtn.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    albumSongDropdown.classList.toggle('hidden');
+            // Image preview for modal
+            const coverImageInput = document.getElementById('id_cover_image');
+            const coverPreview = document.getElementById('song-cover-image');
+            const defaultPreview = document.getElementById('default-preview');
+
+            if (coverImageInput) {
+                coverImageInput.addEventListener('change', function(event) {
+                    const file = event.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            coverPreview.src = e.target.result;
+                            coverPreview.classList.remove('hidden');
+                            defaultPreview.classList.add('hidden');
+                        }
+                        reader.readAsDataURL(file);
+                    }
                 });
             }
-    
-            // Close modal with close button
-            closeBtns.forEach(btn => {
+
+            // Song playback functionality
+            const audioPlayer = document.getElementById('audio-player');
+            const audioElement = document.getElementById('audio-element');
+            const playPauseBtn = document.getElementById('play-pause-btn');
+            
+            document.querySelectorAll('.song-play-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
-                    albumSongDropdown.classList.add('hidden');
+                    const songUrl = this.getAttribute('data-song-url');
+                    const songTitle = this.getAttribute('data-song-title');
+                    const songArtist = this.getAttribute('data-song-artist');
+                    
+                    if (songUrl && audioPlayer && audioElement) {
+                        // Update player info
+                        document.getElementById('player-title').textContent = songTitle;
+                        document.getElementById('player-artist').textContent = songArtist;
+                        
+                        // Update audio source
+                        audioElement.src = songUrl;
+                        
+                        // Show and play
+                        audioPlayer.classList.remove('translate-y-full');
+                        audioPlayer.classList.add('translate-y-0');
+                        
+                        // Play the audio
+                        audioElement.play();
+                        if (playPauseBtn) {
+                            playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                        }
+                    }
                 });
             });
-    
-            // Close modal on escape key
+
+            // Modal handling
+            const addSongModal = document.getElementById('add-song-modal');
+            const closeModalBtn = document.querySelector('[data-modal-hide="add-song-modal"]');
+            
+            if (addSongModal && closeModalBtn) {
+                closeModalBtn.addEventListener('click', function() {
+                    addSongModal.classList.add('hidden');
+                });
+            }
+
+            // Close modal on escape
             document.addEventListener('keydown', function(e) {
-                if(e.key === 'Escape') {
-                    albumSongDropdown.classList.add('hidden');
+                if (e.key === 'Escape') {
+                    if (addSongModal) {
+                        addSongModal.classList.add('hidden');
+                    }
                 }
             });
-        });
-    
-        // Back button functionality
-        function goBack() {
-            window.history.back();
-        }
-    </script>
-{% endblock content %}
 
+            // Play all button functionality
+            const playAllBtn = document.querySelector('button:contains("Play All")');
+            if (playAllBtn) {
+                playAllBtn.addEventListener('click', function() {
+                    const firstSongBtn = document.querySelector('.song-play-btn');
+                    if (firstSongBtn) {
+                        firstSongBtn.click();
+                    }
+                });
+            }
+        });
+    </script>
+{% endblock %}

@@ -4,187 +4,259 @@
 {% block title %}Dashboard - FitBlit{% endblock %}
 {% block content %}
     {% include "dashboard/dashboard_nav.html" %}
+    
     <!-- Messages Display -->
     {% if messages %}
-        <div class="fixed top-4 right-4 z-50 space-y-2" id="message-container">
+        <div class="fixed top-20 right-4 z-50 space-y-2" id="message-container">
             {% for message in messages %}
-                <div class="{% if message.tags == 'error' %}bg-red-50 border border-red-200 text-red-700{% elif message.tags == 'success' %}bg-green-50 border border-green-200 text-green-700{% elif message.tags == 'warning' %}bg-yellow-50 border border-yellow-200 text-yellow-700{% else %}bg-blue-50 border border-blue-200 text-blue-700{% endif %} p-4 rounded-lg shadow-lg max-w-sm">
-                    <div class="flex items-center">
-                        {% if message.tags == 'error' %}
-                            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
-                            </svg>
-                        {% elif message.tags == 'success' %}
-                            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                            </svg>
-                        {% elif message.tags == 'warning' %}
-                            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
-                            </svg>
-                        {% else %}
-                            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
-                            </svg>
-                        {% endif %}
-                        <span class="text-sm font-medium">{{ message }}</span>
+                <div class="{% if message.tags == 'error' %}bg-red-50 border-l-4 border-red-500 text-red-700{% elif message.tags == 'success' %}bg-green-50 border-l-4 border-green-500 text-green-700{% elif message.tags == 'warning' %}bg-yellow-50 border-l-4 border-yellow-500 text-yellow-700{% else %}bg-blue-50 border-l-4 border-blue-500 text-blue-700{% endif %} p-4 rounded-r-lg shadow-lg max-w-sm transform transition-all duration-300 translate-x-0 hover:shadow-xl">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            {% if message.tags == 'error' %}
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                                </svg>
+                            {% elif message.tags == 'success' %}
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                            {% elif message.tags == 'warning' %}
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                                </svg>
+                            {% else %}
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                                </svg>
+                            {% endif %}
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium">{{ message }}</p>
+                        </div>
                     </div>
                 </div>
             {% endfor %}
         </div>
     {% endif %}
 
-    
     <!-- Dashboard Header -->
-    <div class="bg-gradient-to-br from-teal-500 via-teal-600 to-teal-700 px-4 py-8 md:py-12">
-        <div class="max-w-7xl mx-auto">
-            <div class="text-center md:text-left">
-                <h1 class="text-3xl md:text-4xl font-bold text-white mb-2">Your Dashboard</h1>
-                <p class="text-teal-100 text-lg">Manage your articles and content</p>
+    <div class="bg-gradient-to-r from-teal-500 via-teal-600 to-teal-700 px-4 py-8 md:py-12 relative overflow-hidden">
+        <div class="absolute inset-0 bg-grid-white/10 bg-grid-16"></div>
+        <div class="relative max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row md:items-center justify-between">
+                <div>
+                    <h1 class="text-3xl md:text-4xl font-bold text-white mb-3">Your Dashboard</h1>
+                    <p class="text-teal-100/90 text-lg max-w-2xl">Manage your articles, track performance, and create amazing content for the community</p>
+                </div>
+                <button data-modal-target="post-modal" data-modal-toggle="post-modal"
+                        class="mt-6 md:mt-0 bg-white text-teal-700 px-6 py-3 rounded-xl font-semibold hover:bg-teal-50 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center space-x-2">
+                    <i class="fa-solid fa-plus"></i>
+                    <span>New Article</span>
+                </button>
             </div>
         </div>
     </div>
 
     <!-- Dashboard Content -->
-    <div class="max-w-7xl mx-auto px-4 py-6 md:py-8">
-        <!-- Stats Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-            <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+    <div class="max-w-7xl mx-auto px-4 py-6 md:py-8 mb-16">
+        <!-- Stats Overview -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6 mb-8">
+            <div class="bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-lg p-6 border border-gray-100/50 backdrop-blur-sm">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm font-medium text-gray-600">Total Articles</p>
-                        <p class="text-2xl font-bold text-gray-900">{{ article_page_obj.paginator.count }}</p>
+                        <p class="text-sm font-medium text-gray-600 mb-1">Total Articles</p>
+                        <p class="text-2xl md:text-3xl font-bold text-gray-900">{{ article_page_obj.paginator.count }}</p>
                     </div>
-                    <div class="w-12 h-12 bg-gradient-to-br from-teal-500 to-teal-600 rounded-xl flex items-center justify-center">
-                        <i class="fa-solid fa-newspaper text-white text-lg"></i>
+                    <div class="w-12 h-12 bg-gradient-to-br from-teal-100 to-teal-200 rounded-xl flex items-center justify-center">
+                        <i class="fa-solid fa-newspaper text-teal-600 text-lg"></i>
                     </div>
+                </div>
+                <div class="mt-4 pt-4 border-t border-gray-100">
+                    <p class="text-xs text-gray-500">Your published content</p>
                 </div>
             </div>
             
-            <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+            <div class="bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-lg p-6 border border-gray-100/50 backdrop-blur-sm">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm font-medium text-gray-600">Published</p>
-                        <p class="text-2xl font-bold text-gray-900">{{ article_page_obj.paginator.count }}</p>
+                        <p class="text-sm font-medium text-gray-600 mb-1">Published</p>
+                        <p class="text-2xl md:text-3xl font-bold text-gray-900">{{ article_page_obj.paginator.count }}</p>
                     </div>
-                    <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center">
-                        <i class="fa-solid fa-check text-white text-lg"></i>
+                    <div class="w-12 h-12 bg-gradient-to-br from-green-100 to-green-200 rounded-xl flex items-center justify-center">
+                        <i class="fa-solid fa-check text-green-600 text-lg"></i>
                     </div>
+                </div>
+                <div class="mt-4 pt-4 border-t border-gray-100">
+                    <p class="text-xs text-gray-500">Live articles</p>
                 </div>
             </div>
             
-            <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+            <div class="bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-lg p-6 border border-gray-100/50 backdrop-blur-sm">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm font-medium text-gray-600">Total Comments</p>
-                        <p class="text-2xl font-bold text-gray-900">0</p>
+                        <p class="text-sm font-medium text-gray-600 mb-1">Total Views</p>
+                        <p class="text-2xl md:text-3xl font-bold text-gray-900">1,234</p>
                     </div>
-                    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
-                        <i class="fa-solid fa-comments text-white text-lg"></i>
+                    <div class="w-12 h-12 bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl flex items-center justify-center">
+                        <i class="fa-solid fa-eye text-blue-600 text-lg"></i>
+                    </div>
+                </div>
+                <div class="mt-4 pt-4 border-t border-gray-100">
+                    <p class="text-xs text-gray-500">Article views</p>
+                </div>
+            </div>
+            
+            <div class="bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-lg p-6 border border-gray-100/50 backdrop-blur-sm">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600 mb-1">Total Comments</p>
+                        <p class="text-2xl md:text-3xl font-bold text-gray-900">0</p>
+                    </div>
+                    <div class="w-12 h-12 bg-gradient-to-br from-purple-100 to-purple-200 rounded-xl flex items-center justify-center">
+                        <i class="fa-solid fa-comments text-purple-600 text-lg"></i>
+                    </div>
+                </div>
+                <div class="mt-4 pt-4 border-t border-gray-100">
+                    <p class="text-xs text-gray-500">Community engagement</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Header -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between mb-6">
+            <div>
+                <h2 class="text-2xl font-bold text-gray-900">Your Articles</h2>
+                <p class="text-gray-600 mt-1">Manage and edit your published content</p>
+            </div>
+            <div class="mt-4 md:mt-0 flex items-center space-x-3">
+                <div class="relative">
+                    <select class="appearance-none bg-white border border-gray-200 text-gray-700 py-2.5 px-4 pr-10 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 focus:outline-none text-sm">
+                        <option>Sort by: Newest</option>
+                        <option>Sort by: Oldest</option>
+                        <option>Sort by: Popular</option>
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
+                        <i class="fa-solid fa-chevron-down text-sm"></i>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Articles Grid -->
-        <div class="space-y-6">
+        {% if article_page_obj %}
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {% for article in article_page_obj %}
-                <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition duration-300">
+                <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
                     <!-- Article Header -->
-                    <div class="p-6 pb-4">
+                    <div class="p-6">
                         <div class="flex items-start justify-between mb-4">
-                            <div class="flex-1">
-                                <h3 class="text-xl font-bold text-gray-900 mb-2 line-clamp-2">{{ article.title }}</h3>
-                                <div class="flex items-center space-x-4 text-sm text-gray-500">
-                                    <div class="flex items-center space-x-1">
-                                        <i class="fa-solid fa-clock text-gray-400"></i>
-                                        <span>{{ article.dated_on|date:"M d, Y" }}</span>
+                            <div class="flex-1 pr-4">
+                                <div class="flex items-center space-x-2 mb-3">
+                                    <span class="px-2.5 py-1 bg-teal-50 text-teal-700 rounded-lg text-xs font-semibold">
+                                        Published
+                                    </span>
+                                    <span class="text-xs text-gray-500">•</span>
+                                    <span class="text-sm text-gray-500">{{ article.dated_on|date:"M d, Y" }}</span>
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-900 mb-3 line-clamp-2 hover:text-teal-600 transition-colors">{{ article.title }}</h3>
+                                <p class="text-gray-600 line-clamp-3 mb-4">{{ article.article_content|truncatewords:30 }}</p>
+                                
+                                <!-- Stats -->
+                                <div class="flex items-center space-x-6 text-sm text-gray-500">
+                                    <div class="flex items-center space-x-2">
+                                        <i class="fa-regular fa-eye"></i>
+                                        <span>1.2k</span>
                                     </div>
-                                    <div class="flex items-center space-x-1">
-                                        <i class="fa-solid fa-comments text-gray-400"></i>
-                                        <span>{{ article.article_comment_count }} Comments</span>
+                                    <div class="flex items-center space-x-2">
+                                        <i class="fa-regular fa-comment"></i>
+                                        <span>{{ article.article_comment_count }}</span>
                                     </div>
-                                    <div class="flex items-center space-x-1">
-                                        <i class="fa-solid fa-user text-gray-400"></i>
-                                        <span>{{ article.author }}</span>
+                                    <div class="flex items-center space-x-2">
+                                        <i class="fa-regular fa-heart"></i>
+                                        <span>45</span>
                                     </div>
                                 </div>
                             </div>
                             
                             <!-- Article Image -->
                             {% if article.image %}
-                                <div class="ml-4 flex-shrink-0">
+                                <div class="flex-shrink-0">
                                     <img src="{{ article.image.url }}" alt="{{ article.title }}" 
-                                         class="w-20 h-20 md:w-24 md:h-24 rounded-xl object-cover shadow-md">
+                                         class="w-20 h-20 md:w-24 md:h-24 rounded-xl object-cover shadow-lg">
                                 </div>
                             {% endif %}
                         </div>
                         
-                        <!-- Article Content -->
-                        <p class="text-gray-600 line-clamp-3">{{ article.article_content|truncatewords:20 }}</p>
-                    </div>
-                    
-                    <!-- Article Actions -->
-                    {% if article.author == request.user %}
-                        <div class="border-t border-gray-100 p-6 pt-4">
-                            <div class="flex items-center justify-end space-x-3">
-                                <a href="{% url 'user-dashboard-edit' article.id %}" 
-                                   class="flex items-center space-x-2 px-4 py-2 text-gray-700 bg-gray-50 rounded-xl hover:bg-gray-100 transition duration-300">
-                                    <i class="fa-regular fa-pen-to-square text-sm"></i>
-                                    <span class="text-sm font-medium">Edit</span>
-                                </a>
-                                <button data-modal-target="popup-modal-{{article.id}}" data-modal-toggle="popup-modal-{{article.id}}" 
-                                   class="flex items-center space-x-2 px-4 py-2 text-red-600 bg-red-50 rounded-xl hover:bg-red-100 transition duration-300">
-                                    <i class="fa-solid fa-trash-can text-sm"></i>
-                                    <span class="text-sm font-medium">Delete</span>
-                                </button>
+                        <!-- Article Actions -->
+                        {% if article.author == request.user %}
+                            <div class="border-t border-gray-100 pt-4 mt-4">
+                                <div class="flex items-center justify-end space-x-3">
+                                    <a href="{% url 'user-dashboard-edit' article.id %}" 
+                                       class="flex items-center space-x-2 px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-xl transition-all duration-300 text-sm font-medium">
+                                        <i class="fa-regular fa-pen-to-square"></i>
+                                        <span>Edit</span>
+                                    </a>
+                                    <a href="{% url 'blog-post-detail' article.id %}" 
+                                       class="flex items-center space-x-2 px-4 py-2 text-teal-600 bg-teal-50 hover:bg-teal-100 rounded-xl transition-all duration-300 text-sm font-medium">
+                                        <i class="fa-solid fa-external-link"></i>
+                                        <span>View</span>
+                                    </a>
+                                    <button data-modal-target="popup-modal-{{article.id}}" data-modal-toggle="popup-modal-{{article.id}}" 
+                                       class="flex items-center space-x-2 px-4 py-2 text-red-600 bg-red-50 hover:bg-red-100 rounded-xl transition-all duration-300 text-sm font-medium">
+                                        <i class="fa-solid fa-trash-can"></i>
+                                        <span>Delete</span>
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                    {% endif %}
-                </div>
-            {% empty %}
-                <!-- Empty State -->
-                <div class="text-center py-12">
-                    <div class="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <i class="fa-solid fa-newspaper text-gray-400 text-3xl"></i>
+                        {% endif %}
                     </div>
-                    <h3 class="text-xl font-semibold text-gray-900 mb-2">No articles yet</h3>
-                    <p class="text-gray-600 mb-6">Start creating your first article to see it here</p>
-                    <button data-modal-target="post-modal" data-modal-toggle="post-modal" 
-                            class="bg-gradient-to-r from-teal-500 to-teal-600 text-white px-6 py-3 rounded-xl font-semibold hover:from-teal-600 hover:to-teal-700 transition duration-300 shadow-lg hover:shadow-xl">
-                        <i class="fa-solid fa-plus mr-2"></i>
-                        Create Your First Article
-                    </button>
                 </div>
             {% endfor %}
         </div>
+        {% else %}
+            <!-- Empty State -->
+            <div class="text-center py-16 px-4">
+                <div class="w-32 h-32 bg-gradient-to-br from-gray-50 to-gray-100 rounded-full flex items-center justify-center mx-auto mb-8 shadow-inner">
+                    <i class="fa-solid fa-newspaper text-gray-300 text-4xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 mb-3">Start Your Journey</h3>
+                <p class="text-gray-600 mb-8 max-w-md mx-auto">Create your first article and share your knowledge with the community. Your content will appear here once published.</p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <button data-modal-target="post-modal" data-modal-toggle="post-modal" 
+                            class="bg-gradient-to-r from-teal-500 to-teal-600 text-white px-6 py-3 rounded-xl font-semibold hover:from-teal-600 hover:to-teal-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                        <i class="fa-solid fa-plus mr-2"></i>
+                        Create First Article
+                    </button>
+                    <a href="{% url 'news-page' %}" 
+                       class="border-2 border-gray-200 text-gray-700 px-6 py-3 rounded-xl font-semibold hover:border-teal-200 hover:bg-teal-50 transition-all duration-300">
+                        <i class="fa-solid fa-book-open mr-2"></i>
+                        Browse Articles
+                    </a>
+                </div>
+            </div>
+        {% endif %}
 
         <!-- Pagination -->
         {% if article_page_obj.has_other_pages %}
-            <div class="mt-8 flex justify-center">
-                <nav class="flex items-center space-x-2 bg-white rounded-2xl shadow-lg border border-gray-100 px-4 py-2">
+            <div class="mt-12 flex justify-center">
+                <nav class="inline-flex items-center space-x-2 bg-white rounded-2xl shadow-lg border border-gray-100 px-6 py-3">
                     {% if article_page_obj.has_previous %}
                         <a href="?article_page={{ article_page_obj.previous_page_number }}" 
-                           class="flex items-center space-x-1 px-3 py-2 text-gray-600 hover:text-teal-600 transition duration-300">
-                            <i class="fa-solid fa-chevron-left text-sm"></i>
-                            <span class="text-sm font-medium">Previous</span>
+                           class="flex items-center space-x-2 px-4 py-2 text-gray-600 hover:text-teal-600 bg-gray-50 hover:bg-gray-100 rounded-xl transition-all duration-300">
+                            <i class="fa-solid fa-chevron-left"></i>
+                            <span class="text-sm font-medium">Prev</span>
                         </a>
-                    {% else %}
-                        <span class="flex items-center space-x-1 px-3 py-2 text-gray-400">
-                            <i class="fa-solid fa-chevron-left text-sm"></i>
-                            <span class="text-sm font-medium">Previous</span>
-                        </span>
                     {% endif %}
 
                     <div class="flex items-center space-x-1">
                         {% for num in article_page_obj.paginator.page_range %}
                             {% if article_page_obj.number == num %}
-                                <span class="w-8 h-8 bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-lg flex items-center justify-center text-sm font-semibold">
+                                <span class="w-9 h-9 bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-lg flex items-center justify-center text-sm font-semibold">
                                     {{ num }}
                                 </span>
                             {% elif num > article_page_obj.number|add:'-3' and num < article_page_obj.number|add:'3' %}
                                 <a href="?article_page={{ num }}" 
-                                   class="w-8 h-8 text-gray-600 hover:text-teal-600 rounded-lg flex items-center justify-center text-sm font-medium hover:bg-gray-50 transition duration-300">
+                                   class="w-9 h-9 text-gray-600 hover:text-teal-600 rounded-lg flex items-center justify-center text-sm font-medium hover:bg-gray-50 transition-all duration-300">
                                     {{ num }}
                                 </a>
                             {% endif %}
@@ -193,64 +265,51 @@
 
                     {% if article_page_obj.has_next %}
                         <a href="?article_page={{ article_page_obj.next_page_number }}" 
-                           class="flex items-center space-x-1 px-3 py-2 text-gray-600 hover:text-teal-600 transition duration-300">
+                           class="flex items-center space-x-2 px-4 py-2 text-gray-600 hover:text-teal-600 bg-gray-50 hover:bg-gray-100 rounded-xl transition-all duration-300">
                             <span class="text-sm font-medium">Next</span>
-                            <i class="fa-solid fa-chevron-right text-sm"></i>
+                            <i class="fa-solid fa-chevron-right"></i>
                         </a>
-                    {% else %}
-                        <span class="flex items-center space-x-1 px-3 py-2 text-gray-400">
-                            <span class="text-sm font-medium">Next</span>
-                            <i class="fa-solid fa-chevron-right text-sm"></i>
-                        </span>
                     {% endif %}
                 </nav>
             </div>
         {% endif %}
     </div>
 
-    <!-- Post Modal -->
-    <div id="post-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <!-- Create Article Modal -->
+    <div id="post-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full backdrop-blur-sm">
         <div class="relative p-4 w-full max-w-2xl max-h-full">
-            <!-- Modal content -->
-            <div class="relative bg-white rounded-xl shadow-xl">
-                <!-- Modal header -->
-                <div class="relative bg-teal-600 p-6 rounded-t-xl flex justify-between items-center">
-                    <div class="flex items-center">
-                        <div class="flex-shrink-0">
-                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
-                            </svg>
+            <div class="relative bg-white rounded-2xl shadow-2xl">
+                <!-- Modal Header -->
+                <div class="sticky top-0 bg-gradient-to-r from-teal-500 to-teal-600 p-6 rounded-t-2xl flex justify-between items-center z-10">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                            <i class="fa-solid fa-plus text-white text-lg"></i>
                         </div>
-                        <div class="ml-4">
+                        <div>
                             <h2 class="text-xl font-bold text-white">Create New Article</h2>
-                            <p class="text-teal-100 text-sm">Share your story with the community</p>
+                            <p class="text-teal-100/90 text-sm">Share your knowledge with the community</p>
                         </div>
                     </div>
-                    <button type="button" class="text-white bg-transparent hover:bg-white hover:text-teal-600 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center transition-all" data-modal-hide="post-modal">
-                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                        </svg>
-                        <span class="sr-only">Close modal</span>
+                    <button type="button" 
+                            class="text-white/80 hover:text-white bg-white/10 hover:bg-white/20 rounded-xl w-10 h-10 flex items-center justify-center transition-all duration-300"
+                            data-modal-hide="post-modal">
+                        <i class="fa-solid fa-xmark text-lg"></i>
                     </button>
                 </div>
                 
-                <!-- Modal body -->
+                <!-- Modal Body -->
                 <div class="p-6 overflow-y-auto max-h-[calc(90vh-120px)]">
                     <!-- Messages Display -->
                     {% if messages %}
                         {% for message in messages %}
-                            <div class="mb-4 p-4 rounded-lg {% if message.tags == 'error' %}bg-red-50 border border-red-200 text-red-700{% else %}bg-green-50 border border-green-200 text-green-700{% endif %}">
+                            <div class="mb-4 p-4 rounded-xl {% if message.tags == 'error' %}bg-red-50 border border-red-200 text-red-700{% else %}bg-green-50 border border-green-200 text-green-700{% endif %}">
                                 <div class="flex items-center">
                                     {% if message.tags == 'error' %}
-                                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
-                                        </svg>
+                                        <i class="fa-solid fa-circle-exclamation text-red-500 mr-3"></i>
                                     {% else %}
-                                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                        </svg>
+                                        <i class="fa-solid fa-circle-check text-green-500 mr-3"></i>
                                     {% endif %}
-                                    {{ message }}
+                                    <span class="font-medium">{{ message }}</span>
                                 </div>
                             </div>
                         {% endfor %}
@@ -260,131 +319,98 @@
                     <form action="{% url 'user-dashboard' %}" method="post" enctype="multipart/form-data" class="space-y-6" id="articleForm">
                         {% csrf_token %}
                         
-                        <!-- Main Form Fields -->
-                        <div class="space-y-6">
-                            <!-- Article Title -->
-                            <div>
-                                <label for="title" class="block mb-2 text-sm font-medium text-gray-900">
-                                    <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
-                                    </svg>
-                                    Article Title
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Title Field -->
+                            <div class="md:col-span-2">
+                                <label for="title" class="block text-sm font-medium text-gray-700 mb-2">
+                                    <span class="flex items-center space-x-2">
+                                        <i class="fa-solid fa-heading text-teal-600"></i>
+                                        <span>Article Title</span>
+                                    </span>
                                 </label>
-                                <div class="relative">
-                                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
-                                        </svg>
-                                    </div>
-                                    <input type="text" name="title" id="title" required
-                                           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full pl-10 p-2.5" 
-                                           placeholder="Enter article title">
-                                </div>
+                                <input type="text" name="title" id="title" required
+                                       class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 focus:outline-none transition-all duration-300"
+                                       placeholder="Enter a compelling title...">
                             </div>
 
                             <!-- Sub Title -->
                             <div>
-                                <label for="sub_title" class="block mb-2 text-sm font-medium text-gray-900">
-                                    <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                                    </svg>
-                                    Sub Title (Optional)
+                                <label for="sub_title" class="block text-sm font-medium text-gray-700 mb-2">
+                                    <span class="flex items-center space-x-2">
+                                        <i class="fa-solid fa-text-height text-teal-600"></i>
+                                        <span>Sub Title (Optional)</span>
+                                    </span>
                                 </label>
-                                <div class="relative">
-                                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                                        </svg>
-                                    </div>
-                                    <input type="text" name="sub_title" id="sub_title"
-                                           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full pl-10 p-2.5" 
-                                           placeholder="Enter sub title (optional)">
-                                </div>
+                                <input type="text" name="sub_title" id="sub_title"
+                                       class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 focus:outline-none transition-all duration-300"
+                                       placeholder="Brief description...">
                             </div>
 
-                            <!-- Slug Field -->
+                            <!-- Slug -->
                             <div>
-                                <label for="slug" class="block mb-2 text-sm font-medium text-gray-900">
-                                    <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                                    </svg>
-                                    Slug (Optional)
+                                <label for="slug" class="block text-sm font-medium text-gray-700 mb-2">
+                                    <span class="flex items-center space-x-2">
+                                        <i class="fa-solid fa-link text-teal-600"></i>
+                                        <span>Slug (Optional)</span>
+                                    </span>
                                 </label>
-                                <div class="relative">
-                                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                                        </svg>
-                                    </div>
-                                    <input type="text" name="slug" id="slug"
-                                           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full pl-10 p-2.5" 
-                                           placeholder="Enter slug (optional)">
-                                </div>
+                                <input type="text" name="slug" id="slug"
+                                       class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 focus:outline-none transition-all duration-300"
+                                       placeholder="custom-url-slug">
                             </div>
 
                             <!-- Article Content -->
-                            <div>
-                                <label for="article_content" class="block mb-2 text-sm font-medium text-gray-900">
-                                    <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                                    </svg>
-                                    Article Content
+                            <div class="md:col-span-2">
+                                <label for="article_content" class="block text-sm font-medium text-gray-700 mb-2">
+                                    <span class="flex items-center space-x-2">
+                                        <i class="fa-solid fa-file-lines text-teal-600"></i>
+                                        <span>Article Content</span>
+                                    </span>
                                 </label>
-                                <div class="relative">
-                                    <div class="absolute top-3 left-0 flex items-center pl-3 pointer-events-none">
-                                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                                        </svg>
-                                    </div>
-                                    <textarea name="article_content" id="article_content" rows="6" required
-                                              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full pl-10 p-2.5" 
-                                              placeholder="Write your article content here..."></textarea>
-                                </div>
+                                <textarea name="article_content" id="article_content" rows="6" required
+                                          class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 focus:outline-none transition-all duration-300 resize-none"
+                                          placeholder="Write your amazing content here..."></textarea>
                             </div>
 
-                            <!-- Article Image -->
-                            <div>
-                                <label for="image" class="block mb-2 text-sm font-medium text-gray-900">
-                                    <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                                    </svg>
-                                    Article Image (Optional)
+                            <!-- Image Upload -->
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    <span class="flex items-center space-x-2">
+                                        <i class="fa-solid fa-image text-teal-600"></i>
+                                        <span>Article Image (Optional)</span>
+                                    </span>
                                 </label>
-                                <div class="relative">
-                                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                                        </svg>
+                                <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-200 border-dashed rounded-2xl hover:border-teal-300 transition-all duration-300">
+                                    <div class="space-y-1 text-center">
+                                        <i class="fa-solid fa-cloud-arrow-up text-gray-400 text-3xl"></i>
+                                        <div class="flex text-sm text-gray-600">
+                                            <label for="image" class="relative cursor-pointer bg-white rounded-md font-medium text-teal-600 hover:text-teal-500 focus-within:outline-none">
+                                                <span>Upload an image</span>
+                                                <input id="image" name="image" type="file" class="sr-only" accept="image/*">
+                                            </label>
+                                            <p class="pl-1">or drag and drop</p>
+                                        </div>
+                                        <p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
                                     </div>
-                                    <input type="file" name="image" id="image" 
-                                           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full pl-10 p-2.5" 
-                                           accept="image/*">
                                 </div>
                             </div>
                         </div>
-                        
+
                         <input type="hidden" name="create_article" value="create_article">
                         
                         <!-- Form Actions -->
-                        <div class="flex space-x-3 pt-4">
+                        <div class="flex space-x-3 pt-6 border-t border-gray-100">
                             <button type="submit" name="create_article" 
-                                    class="flex-1 inline-flex items-center justify-center px-6 py-3 bg-teal-600 text-white text-sm font-medium rounded-lg hover:bg-teal-700 transition-all focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
+                                    class="flex-1 inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-teal-500 to-teal-600 text-white text-sm font-medium rounded-xl hover:from-teal-600 hover:to-teal-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 shadow-lg hover:shadow-xl"
                                     id="submitBtn">
-                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" id="uploadIcon">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
-                                </svg>
-                                <span id="submitText">Create Article</span>
-                                <svg class="hidden w-5 h-5 animate-spin ml-2" fill="none" viewBox="0 0 24 24" id="loadingIcon">
-                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                </svg>
+                                <i class="fa-solid fa-cloud-arrow-up mr-2" id="uploadIcon"></i>
+                                <span id="submitText">Publish Article</span>
+                                <i class="fa-solid fa-spinner fa-spin ml-2 hidden" id="loadingIcon"></i>
                             </button>
                             <button type="button" 
-                                    class="flex-1 inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-all focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+                                    class="flex-1 inline-flex items-center justify-center px-6 py-3 border-2 border-gray-200 text-gray-700 text-sm font-medium rounded-xl hover:border-gray-300 hover:bg-gray-50 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
                                     data-modal-hide="post-modal">
-                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                                </svg>
+                                <i class="fa-solid fa-xmark mr-2"></i>
                                 Cancel
                             </button>
                         </div>
@@ -394,35 +420,33 @@
         </div>
     </div>
 
-    <!--Delete post Modal-->
+    <!-- Delete Article Modals -->
     {% for article in article_page_obj %}
-    <div id="popup-modal-{{article.id}}" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div id="popup-modal-{{article.id}}" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full backdrop-blur-sm">
         <div class="relative p-4 w-full max-w-md max-h-full">
-            <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
-                <button type="button" class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="popup-modal-{{article.id}}">
-                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                    </svg>
-                    <span class="sr-only">Close modal</span>
-                </button>
-                <div class="p-4 md:p-5 text-center">
-                    <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-                    </svg>
-                    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Are you sure you want to delete this post?</h3>
-                    <form action="" method="post" clas="">
+            <div class="relative bg-white rounded-2xl shadow-2xl">
+                <div class="p-6 text-center">
+                    <div class="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fa-solid fa-triangle-exclamation text-red-500 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Delete Article</h3>
+                    <p class="text-gray-600 mb-6">Are you sure you want to delete "<span class="font-semibold">{{ article.title|truncatewords:5 }}</span>"? This action cannot be undone.</p>
+                    <form action="{% url "user-post-delete" article.id %}" method="post" class="space-y-3">
                         {% csrf_token %}
-                        <button type="submit" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
-                            Yes, I'm sure
+                        <button type="submit" 
+                                class="w-full py-3 bg-red-600 text-white font-medium rounded-xl hover:bg-red-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                            Yes, Delete Article
                         </button>
-                        <button data-modal-hide="popup-modal-{{article.id}}" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">No, cancel</button>
+                        <button data-modal-hide="popup-modal-{{article.id}}" type="button" 
+                                class="w-full py-3 border-2 border-gray-200 text-gray-700 font-medium rounded-xl hover:border-gray-300 hover:bg-gray-50 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                            Cancel
+                        </button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
     {% endfor %}
-
 
     <style>
         .line-clamp-2 {
@@ -437,47 +461,32 @@
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
+        
+        .bg-grid-white\/10 {
+            background-image: linear-gradient(to right, rgba(255,255,255,.1) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255,255,255,.1) 1px, transparent 1px);
+        }
+        
+        .bg-grid-16 {
+            background-size: 16px 16px;
+        }
     </style>
-
 
     <script>
         // Auto-trigger toasts for Django messages
         document.addEventListener('DOMContentLoaded', function() {
-            // Wait for toast system to be available
-            const waitForToast = () => {
-                if (window.showToast) {
-                    // Check for Django messages in the page
-                    const djangoMessages = document.querySelectorAll('#message-container .p-4, .alert, .messages li, [class*="alert-"]');
-                    
-                    djangoMessages.forEach(messageEl => {
-                        const message = messageEl.textContent.trim();
-                        let type = 'info';
-                        
-                        // Determine type based on classes
-                        if (messageEl.classList.contains('bg-red-50') || messageEl.classList.contains('error')) {
-                            type = 'error';
-                        } else if (messageEl.classList.contains('bg-green-50') || messageEl.classList.contains('success')) {
-                            type = 'success';
-                        } else if (messageEl.classList.contains('bg-yellow-50') || messageEl.classList.contains('warning')) {
-                            type = 'warning';
-                        }
-                        
-                        // Show toast notification
-                        window.showToast(message, type);
-                        
-                        // Hide original message after a short delay
-                        setTimeout(() => {
-                            messageEl.style.display = 'none';
-                        }, 100);
+            const messageContainer = document.getElementById('message-container');
+            if (messageContainer) {
+                // Auto-hide messages after 5 seconds
+                setTimeout(() => {
+                    const messages = messageContainer.querySelectorAll('div');
+                    messages.forEach(msg => {
+                        msg.style.opacity = '0';
+                        msg.style.transform = 'translateX(100%)';
+                        setTimeout(() => msg.remove(), 300);
                     });
-                } else {
-                    // Retry after a short delay if toast system isn't ready
-                    setTimeout(waitForToast, 100);
-                }
-            };
-            
-            // Start the process
-            waitForToast();
+                }, 5000);
+            }
         });
 
         // Form submission with loading state
@@ -492,17 +501,28 @@
                 articleForm.addEventListener('submit', function(e) {
                     // Show loading state
                     submitBtn.disabled = true;
-                    submitText.textContent = 'Creating...';
+                    submitText.textContent = 'Publishing...';
                     uploadIcon.classList.add('hidden');
                     loadingIcon.classList.remove('hidden');
                     
                     // Add loading styles
                     submitBtn.classList.add('opacity-75', 'cursor-not-allowed');
-                    
-                    // Optional: Add a small delay to show the loading state
-                    setTimeout(() => {
-                        // Form will submit normally
-                    }, 100);
+                });
+            }
+
+            // Image preview functionality
+            const imageInput = document.getElementById('image');
+            if (imageInput) {
+                imageInput.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            // You could add image preview functionality here
+                            console.log('Image selected:', file.name);
+                        }
+                        reader.readAsDataURL(file);
+                    }
                 });
             }
         });

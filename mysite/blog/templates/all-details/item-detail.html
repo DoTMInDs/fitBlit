@@ -4,253 +4,464 @@
 {% block title %}{{ item.title }}{% endblock  %}
 {% block content %}
     {% include "partials/nav.html" %}
-    
+    {% if messages %}
+    <div class="fixed top-4 right-4 z-50 space-y-2" id="message-container">
+        {% for message in messages %}
+        <div class="toast-notification {% if message.tags == 'error' %}bg-gradient-to-r from-red-500 to-rose-500{% elif message.tags == 'success' %}bg-gradient-to-r from-teal-500 to-emerald-500{% elif message.tags == 'warning' %}bg-gradient-to-r from-amber-500 to-orange-500{% else %}bg-gradient-to-r from-blue-500 to-indigo-500{% endif %} text-white px-6 py-4 rounded-xl shadow-xl transform transition-all duration-500">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    {% if message.tags == 'error' %}
+                    <i class="fa-solid fa-circle-exclamation mr-3 text-lg"></i>
+                    {% elif message.tags == 'success' %}
+                    <i class="fa-solid fa-circle-check mr-3 text-lg"></i>
+                    {% elif message.tags == 'warning' %}
+                    <i class="fa-solid fa-triangle-exclamation mr-3 text-lg"></i>
+                    {% else %}
+                    <i class="fa-solid fa-circle-info mr-3 text-lg"></i>
+                    {% endif %}
+                    <span class="font-medium">{{ message }}</span>
+                </div>
+                <button class="ml-4 text-white/80 hover:text-white toast-close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
     <!-- Mobile-First Product Detail Page -->
     <div class="min-h-screen bg-gray-50">
-        <!-- Header with Back Button -->
-        <div class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-10">
-            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex items-center justify-between h-16">
+        <!-- Mobile Header with Sticky Actions -->
+        <div class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-20 md:relative md:shadow-none md:border-b-0">
+            <div class="max-w-6xl mx-auto px-3 sm:px-4">
+                <!-- Mobile Top Bar -->
+                <div class="flex items-center justify-between h-14 md:hidden">
+                    <!-- Back Button -->
                     <button onclick="goBack()" 
-                            class="inline-flex items-center px-3 py-2 text-sm font-medium text-teal-700 bg-white border border-teal-300 rounded-lg hover:bg-teal-50 transition-colors">
-                        <i class="fa-solid fa-arrow-left mr-2"></i>
-                        Back
+                            class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 active:scale-95 transition-all">
+                        <i class="fa-solid fa-arrow-left text-gray-600"></i>
                     </button>
-                    <div class="flex items-center space-x-2">
-                        <button class="p-2 rounded-full hover:bg-teal-50 transition-colors">
-                            <i class="fa-regular fa-heart text-teal-600"></i>
-                        </button>
-                        <button class="p-2 rounded-full hover:bg-teal-50 transition-colors">
-                            <i class="fa-solid fa-share text-teal-600"></i>
-                        </button>
-                        {% if item.user == request.user %}
-                            <button id="productEditTrigger" 
-                                    class="inline-flex items-center px-3 py-2 text-sm font-medium text-teal-700 bg-white border border-teal-300 rounded-lg hover:bg-teal-50 transition-colors">
-                                <i class="fa-solid fa-edit mr-2"></i>
-                                Edit
-                            </button>
-                        {% endif %}
+                    
+                    <!-- Title - Truncated -->
+                    <div class="flex-1 px-3 min-w-0">
+                        <h1 class="text-sm font-medium text-gray-900 truncate text-center">
+                            {{ item.title|truncatechars:30 }}
+                        </h1>
                     </div>
+                    
+                    <!-- Action Icons -->
+                    <div class="flex items-center space-x-1">
+                        <button class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-100 active:scale-95">
+                            <i class="fa-regular fa-heart text-gray-600"></i>
+                        </button>
+                        <button class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-100 active:scale-95">
+                            <i class="fa-solid fa-share text-gray-600"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Desktop Breadcrumb & Actions -->
+                <div class="flex items-center justify-between py-4">
+                    <nav class="flex items-center text-sm text-gray-600">
+                        <a href="{% url 'home' %}" class="hover:text-teal-600 transition-colors">
+                            Home
+                        </a>
+                        <i class="fa-solid fa-chevron-right mx-2 text-xs"></i>
+                        <a href="{% url 'all-items' %}" class="hover:text-teal-600 transition-colors">
+                            Marketplace
+                        </a>
+                        <i class="fa-solid fa-chevron-right mx-2 text-xs"></i>
+                        <span class="text-gray-900 font-medium truncate max-w-xs">
+                            {{ item.title }}
+                        </span>
+                    </nav>
                 </div>
             </div>
         </div>
 
         <!-- Main Content -->
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <main class="max-w-6xl mx-auto px-3 sm:px-4 py-4 md:py-6">
+            <div class="space-y-4 md:space-y-0 md:grid md:grid-cols-3 md:gap-6">
                 <!-- Product Images Section -->
-                <div class="lg:col-span-2">
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                        <!-- Main Product Image -->
+                <div class="md:col-span-2">
+                    <!-- Image Gallery - Mobile Carousel -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-4 md:mb-6">
+                        <!-- Main Image with Swipe Area -->
                         <div class="relative">
-                            {% if item.image %}
-                                <div class="aspect-square overflow-hidden">
+                            <div class="aspect-square bg-gray-100">
+                                {% if item.image %}
                                     <img src="{{ item.image.url }}" 
                                          class="w-full h-full object-cover" 
-                                         alt="{{ item.title }}">
-                                </div>
-                            {% endif %}
-                            
-                            <!-- Image Gallery -->
-                            {% if item.images.all %}
-                                <div class="p-4 border-t border-gray-100">
-                                    <div class="flex space-x-2 overflow-x-auto">
-                                        {% for image in item.images.all %}
-                                            <div class="flex-shrink-0">
-                                                <img src="{{ image.image.url }}" 
-                                                     class="w-20 h-20 rounded-lg object-cover border-2 border-gray-200 hover:border-teal-500 transition-colors cursor-pointer" 
-                                                     alt="Product image">
-                                            </div>
-                                        {% endfor %}
+                                         alt="{{ item.title }}"
+                                         loading="lazy">
+                                {% else %}
+                                    <div class="w-full h-full flex items-center justify-center">
+                                        <i class="fa-solid fa-image text-gray-400 text-4xl"></i>
                                     </div>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Image Counter -->
+                            {% if item.images.all %}
+                                <div class="absolute top-3 right-3 bg-black/60 text-white text-xs px-2 py-1 rounded-full">
+                                    <span id="current-image">1</span>/<span id="total-images">{{ item.images.all|length|add:1 }}</span>
                                 </div>
                             {% endif %}
                         </div>
+                        
+                        <!-- Thumbnail Strip -->
+                        {% if item.images.all %}
+                            <div class="p-3 border-t border-gray-100">
+                                <div class="flex space-x-2 overflow-x-auto pb-1" id="thumbnail-container">
+                                    <!-- Main Image Thumbnail -->
+                                    <div class="flex-shrink-0">
+                                        <div class="w-16 h-16 rounded-lg overflow-hidden border-2 border-teal-500 cursor-pointer"
+                                             data-index="0">
+                                            {% if item.image %}
+                                                <img src="{{ item.image.url }}" 
+                                                     class="w-full h-full object-cover"
+                                                     loading="lazy">
+                                            {% else %}
+                                                <div class="w-full h-full bg-gray-200 flex items-center justify-center">
+                                                    <i class="fa-solid fa-image text-gray-400"></i>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Additional Images -->
+                                    {% for image in item.images.all %}
+                                        <div class="flex-shrink-0">
+                                            <div class="w-16 h-16 rounded-lg overflow-hidden border-2 border-gray-200 hover:border-teal-500 transition-colors cursor-pointer"
+                                                 data-index="{{ forloop.counter }}">
+                                                <img src="{{ image.image.url }}" 
+                                                     class="w-full h-full object-cover"
+                                                     loading="lazy">
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
 
-                        <!-- Product Info -->
-                        <div class="p-4 sm:p-6">
-                            <div class="flex items-center justify-between mb-4">
-                                <div class="flex items-center space-x-4 text-sm text-gray-600">
+                    <!-- Product Details Card -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-4 md:mb-0">
+                        <div class="p-4 md:p-6">
+                            <!-- Title & Meta -->
+                            <div class="mb-4">
+                                <h1 class="text-xl font-bold text-gray-900 mb-3 md:text-2xl">
+                                    {{ item.title }}
+                                </h1>
+                                
+                                <!-- Meta Info -->
+                                <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600">
                                     <div class="flex items-center">
-                                        <i class="fa-solid fa-location-dot mr-2"></i>
-                                        <span>{{ item.location }}</span>
+                                        <i class="fa-solid fa-location-dot mr-1.5 text-teal-600"></i>
+                                        <span class="truncate max-w-[150px]">{{ item.location }}</span>
                                     </div>
                                     <div class="flex items-center">
-                                        <i class="fa-solid fa-calendar mr-2"></i>
+                                        <i class="fa-solid fa-calendar mr-1.5 text-teal-600"></i>
                                         <span>{{ item.date_posted|date:"M d, Y" }}</span>
                                     </div>
-                                </div>
-                                <div class="flex items-center text-sm text-gray-600">
-                                    <i class="fa-solid fa-eye mr-2"></i>
-                                    <span>45 views</span>
+                                    <div class="flex items-center ml-auto">
+                                        <i class="fa-solid fa-eye mr-1.5 text-teal-600"></i>
+                                        <span>45 views</span>
+                                    </div>
                                 </div>
                             </div>
 
-                            <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
-                                {{ item.title }}
-                            </h1>
+                            <!-- Price Display -->
+                            <div class="mb-6 p-4 bg-gradient-to-r from-teal-50 to-cyan-50 rounded-lg border border-teal-100">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <div class="text-2xl font-bold text-gray-900 md:text-3xl">
+                                            GHS {{ item.price }}
+                                        </div>
+                                        {% if item.market_price %}
+                                            <div class="text-sm text-gray-600 mt-1">
+                                                Market: GHS {{ item.market_price }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-emerald-500 to-teal-500 text-white">
+                                        {{ item.item_status }}
+                                    </span>
+                                </div>
+                            </div>
 
-                            <div class="prose prose-gray max-w-none">
-                                <p class="text-gray-700 text-base leading-relaxed">
-                                    {{ item.description }}
-                                </p>
+                            <!-- Description -->
+                            <div class="mb-6">
+                                <h3 class="text-lg font-semibold text-gray-900 mb-3">Description</h3>
+                                <div class="prose prose-gray max-w-none">
+                                    <p class="text-gray-700 text-base leading-relaxed whitespace-pre-line">
+                                        {{ item.description }}
+                                    </p>
+                                </div>
                             </div>
 
                             <!-- Product Tags -->
-                            <div class="mt-6 flex flex-wrap gap-2">
-                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gradient-to-r from-teal-500 to-cyan-500 text-white">
+                            <div class="flex flex-wrap gap-2">
+                                <span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-gradient-to-r from-teal-500 to-cyan-500 text-white">
+                                    <i class="fa-solid fa-tag mr-1.5 text-xs"></i>
                                     {{ item.item_type }}
                                 </span>
-                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gradient-to-r from-emerald-500 to-teal-500 text-white">
-                                    {{ item.item_status }}
+                                <span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-gray-100 text-gray-800 border border-gray-200">
+                                    <i class="fa-solid fa-handshake mr-1.5 text-xs"></i>
+                                    Negotiable
                                 </span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Product Actions & Seller Info -->
-                <div class="space-y-6">
-                    <!-- Price Card -->
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                        <div class="p-4 sm:p-6">
+                <!-- Right Column - Actions & Info -->
+                <div class="space-y-4 md:space-y-6">
+                    <!-- Contact Card - Sticky on Mobile -->
+                    <div class="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden md:shadow-sm">
+                        <div class="p-4 md:p-6">
+                            <!-- Contact Info -->
                             <div class="mb-4">
-                                <h2 class="text-3xl font-bold text-gray-900 mb-2">
-                                    GHS {{ item.price }}
-                                </h2>
-                                <div class="flex items-center space-x-2 mb-4">
-                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-emerald-500 to-teal-500 text-white">
-                                        Negotiable
-                                    </span>
-                                    <span class="text-sm text-gray-600">
-                                        Market: GHS {{ item.market_price }}
-                                    </span>
+                                <h3 class="text-lg font-semibold text-gray-900 mb-3">Contact Seller</h3>
+                                <div class="space-y-3">
+                                    <!-- Phone Button -->
+                                    <a href="tel:{{ item.contact }}"
+                                       class="flex items-center justify-center w-full px-4 py-3 bg-gradient-to-r from-teal-500 to-cyan-500 text-white text-sm font-medium rounded-lg hover:from-teal-600 hover:to-cyan-600 transition-all active:scale-95 shadow-md">
+                                        <i class="fa-solid fa-phone mr-2"></i>
+                                        Call {{ item.contact|truncatechars:15 }}
+                                    </a>
+                                    
+                                    <!-- Message Button -->
+                                    <button class="flex items-center justify-center w-full px-4 py-3 border border-teal-300 text-teal-700 text-sm font-medium rounded-lg hover:bg-teal-50 transition-colors active:scale-95">
+                                        <i class="fa-solid fa-message mr-2"></i>
+                                        Send Message
+                                    </button>
+                                    
+                                    <!-- WhatsApp Button -->
+                                    <button class="flex items-center justify-center w-full px-4 py-3 bg-green-500 text-white text-sm font-medium rounded-lg hover:bg-green-600 transition-colors active:scale-95">
+                                        <i class="fa-brands fa-whatsapp mr-2"></i>
+                                        WhatsApp
+                                    </button>
                                 </div>
                             </div>
-
-                            <!-- Action Buttons -->
-                            <div class="space-y-3">
-                                <button class="w-full inline-flex items-center justify-center px-4 py-3 bg-gradient-to-r from-teal-500 to-cyan-500 text-white text-sm font-medium rounded-lg hover:from-teal-600 hover:to-cyan-600 transition-all">
-                                    <i class="fa-solid fa-phone mr-2"></i>
-                                    {{ item.contact }}
+                            
+                            <!-- Quick Actions -->
+                            <div class="flex space-x-2 pt-4 border-t border-gray-100">
+                                <button class="flex-1 flex items-center justify-center p-2 text-gray-600 hover:text-teal-600 hover:bg-teal-50 rounded-lg transition-colors active:scale-95">
+                                    <i class="fa-regular fa-heart mr-1.5"></i>
+                                    <span class="text-xs">Save</span>
                                 </button>
-                                <button class="w-full inline-flex items-center justify-center px-4 py-3 border border-teal-300 text-teal-700 text-sm font-medium rounded-lg hover:bg-teal-50 transition-colors">
-                                    <i class="fa-solid fa-phone mr-2"></i>
-                                    Call Now
+                                <button class="flex-1 flex items-center justify-center p-2 text-gray-600 hover:text-teal-600 hover:bg-teal-50 rounded-lg transition-colors active:scale-95">
+                                    <i class="fa-solid fa-share mr-1.5"></i>
+                                    <span class="text-xs">Share</span>
                                 </button>
-                                <button class="w-full inline-flex items-center justify-center px-4 py-3 border border-teal-300 text-teal-700 text-sm font-medium rounded-lg hover:bg-teal-50 transition-colors">
-                                    <i class="fa-solid fa-message mr-2"></i>
-                                    Send Message
+                                <button class="flex-1 flex items-center justify-center p-2 text-gray-600 hover:text-teal-600 hover:bg-teal-50 rounded-lg transition-colors active:scale-95">
+                                    <i class="fa-solid fa-flag mr-1.5"></i>
+                                    <span class="text-xs">Report</span>
                                 </button>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Seller Info -->
+                    <!-- Seller Info Card -->
                     <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                        <div class="p-4 sm:p-6">
+                        <div class="p-4 md:p-6">
                             <h3 class="text-lg font-semibold text-gray-900 mb-4">Seller Information</h3>
                             <div class="flex items-center space-x-3">
                                 <div class="flex-shrink-0">
                                     {% if item.user.profilemodel.image %}
                                         <img src="{{ item.user.profilemodel.image.url }}" 
-                                             class="w-12 h-12 rounded-full object-cover" 
-                                             alt="{{ item.user.username }}">
+                                             class="w-12 h-12 rounded-full object-cover border-2 border-teal-100"
+                                             alt="{{ item.user.username }}"
+                                             loading="lazy">
                                     {% else %}
-                                        <img src="{% static 'images/default.png' %}" 
-                                             class="w-12 h-12 rounded-full object-cover" 
-                                             alt="{{ item.user.username }}">
+                                        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-teal-400 to-cyan-500 flex items-center justify-center border-2 border-teal-100">
+                                            <i class="fa-solid fa-user text-white"></i>
+                                        </div>
                                     {% endif %}
                                 </div>
                                 <div class="flex-1 min-w-0">
-                                    <h4 class="text-sm font-medium text-gray-900">
-                                        {{ item.user }}
+                                    <h4 class="text-sm font-medium text-gray-900 truncate">
+                                        {{ item.user.username }}
                                     </h4>
-                                    <p class="text-sm text-gray-600">
-                                        Typically replies within minutes
+                                    <p class="text-xs text-gray-600 mt-1">
+                                        <i class="fa-solid fa-circle text-teal-500 text-xs mr-1"></i>
+                                        Active now
                                     </p>
+                                    <p class="text-xs text-gray-600 mt-1">
+                                        <i class="fa-solid fa-clock text-gray-400 text-xs mr-1"></i>
+                                        Replies within minutes
+                                    </p>
+                                </div>
+                                <a href="#" class="text-teal-600 hover:text-teal-700 p-2">
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </a>
+                            </div>
+                            
+                            <!-- Seller Stats -->
+                            <div class="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-gray-100">
+                                <div class="text-center p-2 bg-gray-50 rounded-lg">
+                                    <div class="text-sm font-semibold text-gray-900">24</div>
+                                    <div class="text-xs text-gray-600">Items</div>
+                                </div>
+                                <div class="text-center p-2 bg-gray-50 rounded-lg">
+                                    <div class="text-sm font-semibold text-gray-900">98%</div>
+                                    <div class="text-xs text-gray-600">Rating</div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Safety Tips -->
+                    <!-- Safety Tips Card -->
                     <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                        <div class="p-4 sm:p-6">
-                            <h3 class="text-lg font-semibold text-gray-900 mb-4">
-                                <i class="fa-solid fa-shield-alt mr-2 text-teal-600"></i>
-                                Safety Tips
-                            </h3>
-                            <ul class="space-y-2 text-sm text-gray-700">
+                        <div class="p-4 md:p-6">
+                            <div class="flex items-center mb-4">
+                                <div class="w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center mr-3">
+                                    <i class="fa-solid fa-shield-alt text-teal-600"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-semibold text-gray-900">Safety Tips</h3>
+                                    <p class="text-xs text-gray-600">Stay safe while shopping</p>
+                                </div>
+                            </div>
+                            <ul class="space-y-3">
                                 <li class="flex items-start">
-                                    <i class="fa-solid fa-check text-teal-600 mr-2 mt-1"></i>
-                                    <span>Avoid sending any prepayments</span>
+                                    <div class="flex-shrink-0 w-6 h-6 rounded-full bg-teal-100 flex items-center justify-center mr-3 mt-0.5">
+                                        <i class="fa-solid fa-check text-teal-600 text-xs"></i>
+                                    </div>
+                                    <span class="text-sm text-gray-700">Meet in safe public places</span>
                                 </li>
                                 <li class="flex items-start">
-                                    <i class="fa-solid fa-check text-teal-600 mr-2 mt-1"></i>
-                                    <span>Meet with the seller at a safe public place</span>
+                                    <div class="flex-shrink-0 w-6 h-6 rounded-full bg-teal-100 flex items-center justify-center mr-3 mt-0.5">
+                                        <i class="fa-solid fa-check text-teal-600 text-xs"></i>
+                                    </div>
+                                    <span class="text-sm text-gray-700">Inspect item before payment</span>
                                 </li>
                                 <li class="flex items-start">
-                                    <i class="fa-solid fa-check text-teal-600 mr-2 mt-1"></i>
-                                    <span>Inspect what you're going to buy to make sure it's what you need</span>
+                                    <div class="flex-shrink-0 w-6 h-6 rounded-full bg-teal-100 flex items-center justify-center mr-3 mt-0.5">
+                                        <i class="fa-solid fa-check text-teal-600 text-xs"></i>
+                                    </div>
+                                    <span class="text-sm text-gray-700">Avoid prepayments</span>
                                 </li>
                                 <li class="flex items-start">
-                                    <i class="fa-solid fa-check text-teal-600 mr-2 mt-1"></i>
-                                    <span>Check all the docs and only pay if you're satisfied</span>
+                                    <div class="flex-shrink-0 w-6 h-6 rounded-full bg-teal-100 flex items-center justify-center mr-3 mt-0.5">
+                                        <i class="fa-solid fa-check text-teal-600 text-xs"></i>
+                                    </div>
+                                    <span class="text-sm text-gray-700">Check all documentation</span>
                                 </li>
                             </ul>
                         </div>
                     </div>
                 </div>
             </div>
+        </main>
+
+        <!-- Floating Edit Button (Only shows if user owns item) -->
+        {% if item.user == request.user %}
+        <div class="fixed bottom-20 right-4 md:bottom-8 md:right-8 z-40">
+            <button type="button" 
+                    data-modal-target="edit-product-modal" 
+                    data-modal-toggle="edit-product-modal"
+                    class="flex items-center justify-center w-14 h-14 md:w-16 md:h-16 bg-gradient-to-r from-teal-500 to-cyan-500 text-white rounded-full shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 group">
+                <i class="fa-solid fa-edit text-lg md:text-xl"></i>
+                <span class="absolute -top-8 right-0 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                    Edit Item
+                </span>
+            </button>
+        </div>
+        {% endif %}
+
+        <!-- Mobile Bottom Action Bar -->
+        <div class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-30">
+            <div class="flex items-center p-3">
+                <div class="flex-1 mr-3">
+                    <div class="text-sm font-bold text-gray-900">GHS {{ item.price }}</div>
+                    <div class="text-xs text-gray-600">{{ item.item_status }}</div>
+                </div>
+                <div class="flex space-x-2">
+                    <button class="w-10 h-10 rounded-full flex items-center justify-center border border-gray-300 hover:bg-gray-50 active:scale-95">
+                        <i class="fa-regular fa-heart text-gray-600"></i>
+                    </button>
+                    <a href="tel:{{ item.contact }}"
+                       class="flex-1 inline-flex items-center justify-center px-4 py-2 bg-gradient-to-r from-teal-500 to-cyan-500 text-white text-sm font-medium rounded-lg hover:from-teal-600 hover:to-cyan-600 transition-all active:scale-95">
+                        <i class="fa-solid fa-phone mr-2"></i>
+                        Call
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Edit Product Modal -->
-    <div class="hidden fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-50" id="productEditModal">
-        <div class="flex items-center justify-center min-h-screen p-4">
-            <div class="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-hidden">
-                <div class="flex items-center justify-between p-6 border-b border-gray-200">
-                    <h2 class="text-xl font-semibold text-gray-900">
-                        <i class="fa-solid fa-edit mr-2 text-teal-600"></i>
-                        Edit Product
-                    </h2>
-                    <button type="button" class="edit-modal-close p-2 rounded-full hover:bg-teal-50 transition-colors">
-                        <i class="fa-solid fa-times text-teal-600"></i>
+    <!-- Flowbite Modal for Edit Product -->
+    <div id="edit-product-modal" tabindex="-1" aria-hidden="true" 
+         class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div class="relative p-3 sm:p-4 w-full max-w-2xl max-h-full">
+            <!-- Modal content -->
+            <div class="relative bg-white rounded-xl shadow-lg md:rounded-2xl">
+                <!-- Modal header -->
+                <div class="flex items-center justify-between p-4 md:p-6 border-b border-gray-200 rounded-t-xl md:rounded-t-2xl bg-gradient-to-r from-teal-50 to-cyan-50">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0 w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center mr-3">
+                            <i class="fa-solid fa-edit text-teal-600"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg md:text-xl font-semibold text-gray-900">
+                                Edit Product
+                            </h3>
+                            <p class="text-xs md:text-sm text-gray-600">Update your listing information</p>
+                        </div>
+                    </div>
+                    <button type="button" 
+                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center transition-all active:scale-95"
+                            data-modal-hide="edit-product-modal">
+                        <i class="fa-solid fa-times"></i>
+                        <span class="sr-only">Close modal</span>
                     </button>
                 </div>
-                <div class="p-6 overflow-y-auto max-h-[calc(90vh-120px)]">
+                
+                <!-- Modal body -->
+                <div class="p-4 md:p-6 space-y-4 max-h-[60vh] overflow-y-auto">
                     <form action="" method="post" enctype="multipart/form-data" class="space-y-6">
                         {% csrf_token %}
                         <div class="space-y-4">
                             {{ e_form|crispy }}
                         </div>
                         <div class="border border-gray-200 rounded-lg p-4">
-                            <h3 class="text-lg font-medium text-gray-900 mb-4">Product Images</h3>
+                            <h3 class="text-sm font-medium text-gray-900 mb-4 flex items-center">
+                                <i class="fa-solid fa-images mr-2 text-teal-600"></i>
+                                Product Images
+                            </h3>
                             {{ image_form|crispy }}
                         </div>
                         <input type="hidden" name="e_form" value="e_form">
-                        <div class="flex space-x-3">
-                            <button type="submit" 
-                                    class="flex-1 inline-flex items-center justify-center px-4 py-2 bg-gradient-to-r from-teal-500 to-cyan-500 text-white text-sm font-medium rounded-lg hover:from-teal-600 hover:to-cyan-600 transition-all">
-                                <i class="fa-solid fa-save mr-2"></i>
-                                Save Changes
-                            </button>
-                            <button type="button" 
-                                    class="edit-modal-close flex-1 inline-flex items-center justify-center px-4 py-2 border border-teal-300 text-teal-700 text-sm font-medium rounded-lg hover:bg-teal-50 transition-colors">
-                                Cancel
-                            </button>
-                        </div>
                     </form>
+                </div>
+                
+                <!-- Modal footer -->
+                <div class="flex items-center p-4 md:p-6 border-t border-gray-200 rounded-b-xl md:rounded-b-2xl space-x-3">
+                    <button type="submit" 
+                            form="edit-product-form"
+                            class="flex-1 inline-flex items-center justify-center px-4 py-3 bg-gradient-to-r from-teal-500 to-cyan-500 text-white text-sm font-medium rounded-lg hover:from-teal-600 hover:to-cyan-600 transition-all active:scale-95">
+                        <i class="fa-solid fa-save mr-2"></i>
+                        Save Changes
+                    </button>
+                    <button type="button" 
+                            data-modal-hide="edit-product-modal"
+                            class="flex-1 inline-flex items-center justify-center px-4 py-3 border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors active:scale-95">
+                        <i class="fa-solid fa-times mr-2"></i>
+                        Cancel
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Footer - Hidden on Mobile -->
-    <div class="hidden md:block">
-        {% include "partials/footer.html" %}
-    </div>
+    <!-- Footer -->
+    {% include "partials/footer.html" %}
+
+    <!-- Add Flowbite Modal JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
 
     <script>
         function goBack() {
@@ -258,40 +469,193 @@
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            // Product Modal Toggle
-            const productEditBtn = document.getElementById('productEditTrigger');
-            const productEditModal = document.getElementById('productEditModal');
-            const closeBtns = document.querySelectorAll('.edit-modal-close');
-
-            // Toggle modal
-            if(productEditBtn && productEditModal) {
-                productEditBtn.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    productEditModal.classList.toggle('hidden');
-                });
+            // Initialize Flowbite modal
+            const modalEl = document.getElementById('edit-product-modal');
+            const modal = new Modal(modalEl);
+            
+            // Wrap form in edit-product-form ID for modal submission
+            const form = document.querySelector('#edit-product-modal form');
+            if (form) {
+                form.id = 'edit-product-form';
             }
 
-            // Close modal
-            closeBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    productEditModal.classList.add('hidden');
+            // Image Gallery Functionality
+            const thumbnails = document.querySelectorAll('#thumbnail-container > div');
+            const mainImage = document.querySelector('.aspect-square img');
+            const currentImageSpan = document.getElementById('current-image');
+            const totalImagesSpan = document.getElementById('total-images');
+            
+            if (thumbnails.length > 0 && mainImage) {
+                // Set total images count
+                if (totalImagesSpan) {
+                    totalImagesSpan.textContent = thumbnails.length;
+                }
+                
+                // Thumbnail click handler
+                thumbnails.forEach((thumb, index) => {
+                    thumb.addEventListener('click', function() {
+                        const img = this.querySelector('img');
+                        if (img && img.src) {
+                            mainImage.src = img.src;
+                            
+                            // Update active thumbnail
+                            thumbnails.forEach(t => {
+                                t.querySelector('div').classList.remove('border-teal-500');
+                                t.querySelector('div').classList.add('border-gray-200');
+                            });
+                            this.querySelector('div').classList.remove('border-gray-200');
+                            this.querySelector('div').classList.add('border-teal-500');
+                            
+                            // Update counter
+                            if (currentImageSpan) {
+                                currentImageSpan.textContent = index + 1;
+                            }
+                        }
+                    });
                 });
-            });
-
-            // Close when clicking outside
-            document.addEventListener('click', function(e) {
-                if(!e.target.closest('#productEditModal') && 
-                   !e.target.closest('#productEditTrigger')) {
-                    productEditModal.classList.add('hidden');
+                
+                // Touch swipe for mobile image gallery
+                let startX = 0;
+                let endX = 0;
+                const imageContainer = mainImage.parentElement;
+                
+                if (imageContainer) {
+                    imageContainer.addEventListener('touchstart', (e) => {
+                        startX = e.touches[0].clientX;
+                    }, { passive: true });
+                    
+                    imageContainer.addEventListener('touchend', (e) => {
+                        endX = e.changedTouches[0].clientX;
+                        const diff = startX - endX;
+                        
+                        // Minimum swipe distance
+                        if (Math.abs(diff) > 50) {
+                            const currentIndex = parseInt(currentImageSpan.textContent) - 1;
+                            let newIndex;
+                            
+                            if (diff > 0) {
+                                // Swiped left - next image
+                                newIndex = (currentIndex + 1) % thumbnails.length;
+                            } else {
+                                // Swiped right - previous image
+                                newIndex = (currentIndex - 1 + thumbnails.length) % thumbnails.length;
+                            }
+                            
+                            // Trigger click on new thumbnail
+                            thumbnails[newIndex].click();
+                        }
+                    }, { passive: true });
                 }
-            });
-
-            // Close on ESC key
-            document.addEventListener('keydown', function(e) {
-                if(e.key === 'Escape') {
-                    productEditModal.classList.add('hidden');
+            }
+            
+            // Add padding to bottom for mobile action bar
+            const mobileActionBar = document.querySelector('.md\\:hidden.fixed.bottom-0');
+            if (mobileActionBar && window.innerWidth < 768) {
+                const mainContent = document.querySelector('main');
+                if (mainContent) {
+                    mainContent.style.paddingBottom = '80px';
                 }
-            });
+            }
+            
+            // Adjust floating button position on mobile
+            const floatingButton = document.querySelector('.fixed.bottom-20');
+            if (floatingButton && window.innerWidth < 768) {
+                // Add extra padding for floating button
+                document.body.style.paddingBottom = '140px';
+            }
         });
+
+        const toastContainer = document.getElementById('message-container');
+            if (toastContainer) {
+                const toasts = toastContainer.querySelectorAll('.toast-notification');
+                toasts.forEach((toast, index) => {
+                    // Auto-remove toasts after 5 seconds
+                    setTimeout(() => {
+                        toast.style.animation = 'slideOutRight 0.5s ease-out forwards';
+                        setTimeout(() => toast.remove(), 500);
+                    }, 5000 + (index * 500));
+                    
+                    // Add close button functionality
+                    const closeBtn = toast.querySelector('.toast-close');
+                    if (closeBtn) {
+                        closeBtn.addEventListener('click', () => {
+                            toast.style.animation = 'slideOutRight 0.5s ease-out forwards';
+                            setTimeout(() => toast.remove(), 500);
+                        });
+                    }
+                });
+                
+                // Add slideOutRight animation
+                const style = document.createElement('style');
+                style.textContent = `
+                    @keyframes slideOutRight {
+                        from {
+                            transform: translateX(0);
+                            opacity: 1;
+                        }
+                        to {
+                            transform: translateX(100%);
+                            opacity: 0;
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
     </script>
+    
+    <!-- Mobile-First CSS -->
+    <style>
+        /* Improve touch targets */
+        button, 
+        .clickable {
+            min-height: 44px;
+            min-width: 44px;
+        }
+        
+        /* Better scrolling on mobile */
+        .overflow-y-auto {
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        /* Prevent text size adjustment on mobile */
+        @media screen and (max-width: 768px) {
+            input, 
+            select, 
+            textarea {
+                font-size: 16px !important;
+            }
+        }
+        
+        /* Smooth transitions */
+        .transition-all {
+            transition-duration: 200ms;
+        }
+        
+        /* Floating button animation */
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+        
+        .fixed.bottom-20 {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        /* Adjust z-index for mobile bottom bar */
+        .z-30 {
+            z-index: 30;
+        }
+        
+        .z-40 {
+            z-index: 40;
+        }
+        
+        .z-50 {
+            z-index: 50;
+        }
+    </style>
 {% endblock %}

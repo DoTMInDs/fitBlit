@@ -44,8 +44,16 @@ def sign_up(request):
     if request.method == "POST":
         form = CreateUserForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('login')
+            user = form.save(commit=False)
+            user.username = form.cleaned_data.get('username')
+            user.set_password(form.cleaned_data.get('password1'))
+            user.save()
+
+            if user is not None:
+                login(request, user)
+                return redirect('home')
+            else:
+                messages.error(request, "Please input a valid username and password")
        
     context = {'form':form}
     return render(request, 'users/sign_up.html', context)
@@ -122,7 +130,11 @@ def user_dashboard_edit(request, pk):
                     image_file.name = 'temp.jpg'  # Or any fake name with correct extension
                 form.instance.image = image_file
             form.save()
+            messages.success(request, 'post updated successfully!')
             return redirect('user-dashboard')
+        else:
+            for error in form.errors:
+                print("Form error:", error, form.errors[error])
     else:
         form = PostEditForm(instance=article)
    
@@ -135,10 +147,9 @@ def user_dashboard_edit(request, pk):
 @login_required
 def user_post_delete(request, pk):
     articles = ArticlePostModel.objects.get(id=pk)
+
     if request.method == 'POST':
         articles.delete()
-        return redirect('home')
-    context = {
-        'articles': articles,
-    }
-    return render(request, 'dashboard/user_post_delete.html', context)
+        messages.success(request, 'post deleted successfully!')
+        return redirect('user-dashboard')
+    return redirect('user-dashboard')
