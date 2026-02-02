@@ -274,3 +274,18 @@ INFO 2026-02-02 04:42:50,315 basehttp 49560 41268 - Broken pipe from ('127.0.0.1
 INFO 2026-02-02 04:42:50,317 basehttp 49560 28052 - Broken pipe from ('127.0.0.1', 59651)
 INFO 2026-02-02 04:42:50,318 basehttp 49560 33084 - Broken pipe from ('127.0.0.1', 52721)
 INFO 2026-02-02 04:42:50,325 basehttp 49560 40880 "GET /manifest.json HTTP/1.1" 200 709
+INFO 2026-02-02 05:01:51,130 autoreload 40588 46892 Watching for file changes with StatReloader
+INFO 2026-02-02 05:02:07,150 autoreload 40588 46892 C:\Users\HP\OneDrive\Documents\essetech\fitblit\fitBlit\mysite\mysite\settings.py changed, reloading.
+INFO 2026-02-02 05:02:08,574 autoreload 14832 49240 Watching for file changes with StatReloader
+INFO 2026-02-02 05:02:53,480 autoreload 14832 49240 C:\Users\HP\OneDrive\Documents\essetech\fitblit\fitBlit\mysite\mysite\settings.py changed, reloading.
+INFO 2026-02-02 05:02:54,890 autoreload 43176 36784 Watching for file changes with StatReloader
+INFO 2026-02-02 05:03:14,144 autoreload 43176 36784 C:\Users\HP\OneDrive\Documents\essetech\fitblit\fitBlit\mysite\mysite\settings.py changed, reloading.
+INFO 2026-02-02 05:03:15,458 autoreload 46760 46164 Watching for file changes with StatReloader
+INFO 2026-02-02 05:06:12,348 autoreload 46760 46164 C:\Users\HP\OneDrive\Documents\essetech\fitblit\fitBlit\mysite\mysite\settings.py changed, reloading.
+INFO 2026-02-02 05:06:13,578 autoreload 38056 16892 Watching for file changes with StatReloader
+INFO 2026-02-02 05:06:16,225 autoreload 38056 16892 C:\Users\HP\OneDrive\Documents\essetech\fitblit\fitBlit\mysite\mysite\settings.py changed, reloading.
+INFO 2026-02-02 05:06:17,602 autoreload 19976 15072 Watching for file changes with StatReloader
+INFO 2026-02-02 05:06:20,246 autoreload 19976 15072 C:\Users\HP\OneDrive\Documents\essetech\fitblit\fitBlit\mysite\mysite\settings.py changed, reloading.
+INFO 2026-02-02 05:06:21,611 autoreload 41848 7076 Watching for file changes with StatReloader
+INFO 2026-02-02 05:07:36,429 autoreload 41848 7076 C:\Users\HP\OneDrive\Documents\essetech\fitblit\fitBlit\mysite\mysite\settings.py changed, reloading.
+INFO 2026-02-02 05:07:37,798 autoreload 28732 43812 Watching for file changes with StatReloader
